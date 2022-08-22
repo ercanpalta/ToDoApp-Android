@@ -9,9 +9,12 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ercanpalta.todo.adapter.HomeAdapter
+import com.ercanpalta.todo.adapter.ListAdapter
 import com.ercanpalta.todo.databinding.FragmentHomeBinding
+import com.ercanpalta.todo.model.TaskList
 import com.ercanpalta.todo.model.ToDo
 import com.ercanpalta.todo.viewmodel.HomeViewModel
+import java.util.Collections.addAll
 
 class HomeFragment : Fragment() {
 
@@ -43,11 +46,22 @@ class HomeFragment : Fragment() {
             listToDo.addAll(it)
         }
 
-        val adapter = HomeAdapter(listToDo)
-        binding.rvHome.adapter = adapter
-        val layoutManager = LinearLayoutManager(this.context, LinearLayoutManager.VERTICAL, false)
-        binding.rvHome.layoutManager = LinearLayoutManager(context)
-        binding.rvHome.addItemDecoration(DividerItemDecoration(context,layoutManager.orientation))
+        val listList:ArrayList<TaskList<ToDo>> = arrayListOf()
+        homeViewModel.listList.observe(viewLifecycleOwner) {
+            listList.addAll(it)
+        }
+
+        val homeAdapter = HomeAdapter(listToDo)
+        binding.rvHome.adapter = homeAdapter
+        val homeLayoutManager = LinearLayoutManager(this.context, LinearLayoutManager.VERTICAL, false)
+        binding.rvHome.layoutManager = homeLayoutManager
+        binding.rvHome.addItemDecoration(DividerItemDecoration(context,homeLayoutManager.orientation))
+
+
+        val listAdapter = ListAdapter(listList)
+        binding.rvHomeList.adapter = listAdapter
+        val listLayoutManager = LinearLayoutManager(this.context, LinearLayoutManager.HORIZONTAL, false)
+        binding.rvHomeList.layoutManager = listLayoutManager
 
         homeViewModel.updateData()
 
