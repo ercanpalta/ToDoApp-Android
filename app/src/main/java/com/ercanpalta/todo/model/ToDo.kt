@@ -1,5 +1,7 @@
 package com.ercanpalta.todo.model
 
-data class ToDo(var task:String, var isCompleted: Boolean = false){
+import com.ercanpalta.todo.enums.Priority
+
+data class ToDo(var task:String, var priority: Priority = Priority.LOW, var isCompleted: Boolean = false){
     var uid = 0
 }
