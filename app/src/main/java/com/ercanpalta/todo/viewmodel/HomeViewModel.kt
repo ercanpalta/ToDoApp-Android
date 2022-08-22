@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.ercanpalta.todo.R
+import com.ercanpalta.todo.enums.Priority
 import com.ercanpalta.todo.model.TaskList
 import com.ercanpalta.todo.model.ToDo
 
@@ -20,9 +21,9 @@ class HomeViewModel : ViewModel() {
 
 
     fun updateData(){
-        val todo1 = ToDo("Todo1")
-        val todo2 = ToDo("Todo2")
-        val todo3 = ToDo("Todo3")
+        val todo1 = ToDo("Todo1", Priority.HIGH)
+        val todo2 = ToDo("Todo2", Priority.MEDIUM)
+        val todo3 = ToDo("Todo3", Priority.LOW)
         val todo4 = ToDo("Todo4")
 
         val list1 = TaskList<ToDo>("All", Color.CYAN)
