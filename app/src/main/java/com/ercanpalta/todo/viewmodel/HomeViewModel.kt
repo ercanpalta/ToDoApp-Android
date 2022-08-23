@@ -14,8 +14,8 @@ class HomeViewModel : ViewModel() {
     private val _toDoList = MutableLiveData<List<ToDo>>()
     val toDoList:LiveData<List<ToDo>> = _toDoList
 
-    private val _listList = MutableLiveData<List<TaskList<ToDo>>>()
-    val listList:LiveData<List<TaskList<ToDo>>> = _listList
+    private val _listList = MutableLiveData<List<TaskList>>()
+    val listList:LiveData<List<TaskList>> = _listList
 
 
 
@@ -25,14 +25,14 @@ class HomeViewModel : ViewModel() {
         val todo3 = ToDo("Todo3", Priority.LOW)
         val todo4 = ToDo("Todo4")
 
-        val list1 = TaskList<ToDo>("All", R.color.list_color_all)
-        val list2 = TaskList<ToDo>("School", R.color.list_color_blue)
-        val list3 = TaskList<ToDo>("Work", R.color.list_color_pink)
-        val list4 = TaskList<ToDo>("Business", R.color.list_color_orange)
-        val list5 = TaskList<ToDo>("Business", R.color.list_color_purple)
-        val list6 = TaskList<ToDo>("New List", R.color.list_color_yellow)
+        val list1 = TaskList("All", R.color.list_color_all)
+        val list2 = TaskList("School", R.color.list_color_blue)
+        val list3 = TaskList("Work", R.color.list_color_pink)
+        val list4 = TaskList("Business", R.color.list_color_orange)
+        val list5 = TaskList("Business", R.color.list_color_purple)
+        val list6 = TaskList("New List", R.color.list_color_yellow)
 
-        val list_list = listOf<TaskList<ToDo>>(list1,list2,list3,list4,list5,list6)
+        val list_list = listOf<TaskList>(list1,list2,list3,list4,list5,list6)
         _listList.value = list_list
 
         val list_todo = listOf<ToDo>(todo1,todo2,todo3,todo4)

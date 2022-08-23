@@ -46,7 +46,7 @@ class HomeFragment : Fragment() {
             listToDo.addAll(it)
         }
 
-        val listList:ArrayList<TaskList<ToDo>> = arrayListOf()
+        val listList:ArrayList<TaskList> = arrayListOf()
         homeViewModel.listList.observe(viewLifecycleOwner) {
             listList.addAll(it)
         }

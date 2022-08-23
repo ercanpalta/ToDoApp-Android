@@ -1,6 +1,5 @@
 package com.ercanpalta.todo.adapter
 
-import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,9 +9,8 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.ercanpalta.todo.R
 import com.ercanpalta.todo.model.TaskList
-import com.ercanpalta.todo.model.ToDo
 
-class ListAdapter(private val dataSet: ArrayList<TaskList<ToDo>>): RecyclerView.Adapter<ListAdapter.ViewHolder>() {
+class ListAdapter(private val dataSet: ArrayList<TaskList>): RecyclerView.Adapter<ListAdapter.ViewHolder>() {
 
     class ViewHolder(view: View): RecyclerView.ViewHolder(view){
         val textView: TextView
