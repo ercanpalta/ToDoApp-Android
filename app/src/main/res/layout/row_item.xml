@@ -33,34 +33,29 @@
                 tools:text="Task to do" />
 
 
-            <LinearLayout
-                android:id="@+id/priority_layout"
+            <androidx.cardview.widget.CardView
+                android:id="@+id/priority_card"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="20dp"
-                android:orientation="horizontal"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="0dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" >
+                app:layout_constraintTop_toTopOf="parent">
 
-                <ImageView
-                    android:id="@+id/imageView1"
-                    android:visibility="invisible"
+                <TextView
+                    android:id="@+id/priority_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_star_20"/>
-                <ImageView
-                    android:id="@+id/imageView2"
-                    android:visibility="invisible"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_star_20"/>
-                <ImageView
-                    android:id="@+id/imageView3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_star_20"/>
-            </LinearLayout>
+                    android:textColor="@color/white"
+                    android:textSize="12sp"
+                    android:layout_marginVertical="5dp"
+                    android:layout_marginHorizontal="10dp"
+                    android:background="@android:color/transparent"
+                    tools:text="LOW" />
+
+            </androidx.cardview.widget.CardView>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
