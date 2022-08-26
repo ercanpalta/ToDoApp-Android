@@ -8,6 +8,7 @@ import com.ercanpalta.todo.R
 import com.ercanpalta.todo.enums.Priority
 import com.ercanpalta.todo.model.TaskList
 import com.ercanpalta.todo.model.ToDo
+import kotlin.collections.ArrayList
 
 class HomeViewModel : ViewModel() {
 
@@ -37,5 +38,9 @@ class HomeViewModel : ViewModel() {
 
         val list_todo = listOf<ToDo>(todo1,todo2,todo3,todo4)
         _toDoList.value = list_todo
+    }
+
+    fun addTask(newTask:ToDo){
+
     }
 }

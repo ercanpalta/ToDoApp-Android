@@ -29,10 +29,7 @@ class MainActivity : AppCompatActivity() {
         binding.appBarMain.toolbar.setTitle("DEneme")
         binding.appBarMain.toolbar.setTitleTextColor(getColor(R.color.black))
 
-        binding.appBarMain.fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
-        }
+
         val drawerLayout: DrawerLayout = binding.drawerLayout
         val navView: NavigationView = binding.navView
         val navController = findNavController(R.id.nav_host_fragment_content_main)
@@ -45,6 +42,16 @@ class MainActivity : AppCompatActivity() {
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+
+        binding.appBarMain.fab.setOnClickListener {
+            navController.navigate(R.id.action_nav_home_to_addFragment)
+            binding.appBarMain.fab.hide()
+        }
+
+    }
+
+    fun showFab(){
+        binding.appBarMain.fab.show()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
