@@ -13,6 +13,9 @@
     <color name="medium">#FFF1B963</color>
     <color name="high">#FFE46161</color>
 
+    <color name="header">#2D2D2D</color>
+    <color name="edit_text">#10716C6C</color>
+
     <color name="list_color_all">#FF073B4C</color>
     <color name="list_color_purple">#FFb388eb</color>
     <color name="list_color_blue">#FF118ab2</color>

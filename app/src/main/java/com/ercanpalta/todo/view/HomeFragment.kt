@@ -4,24 +4,26 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.cardview.widget.CardView
+import androidx.core.content.ContextCompat
+import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.ercanpalta.todo.MainActivity
+import com.ercanpalta.todo.R
 import com.ercanpalta.todo.adapter.HomeAdapter
 import com.ercanpalta.todo.adapter.ListAdapter
 import com.ercanpalta.todo.databinding.FragmentHomeBinding
 import com.ercanpalta.todo.model.TaskList
 import com.ercanpalta.todo.model.ToDo
 import com.ercanpalta.todo.viewmodel.HomeViewModel
-import java.util.Collections.addAll
 
 class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
 
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding get() = _binding!!
     private lateinit var homeViewModel:HomeViewModel
 
@@ -31,7 +33,6 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         homeViewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
-
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
@@ -44,6 +45,7 @@ class HomeFragment : Fragment() {
         val listToDo:ArrayList<ToDo> = arrayListOf()
         homeViewModel.toDoList.observe(viewLifecycleOwner) {
             listToDo.addAll(it)
+            binding.rvHome.adapter?.notifyDataSetChanged()
         }
 
         val listList:ArrayList<TaskList> = arrayListOf()
@@ -58,14 +60,22 @@ class HomeFragment : Fragment() {
         binding.rvHome.addItemDecoration(DividerItemDecoration(context,homeLayoutManager.orientation))
 
 
-        val listAdapter = ListAdapter(listList)
+        val listAdapter = ListAdapter(listList, this@HomeFragment)
         binding.rvHomeList.adapter = listAdapter
         val listLayoutManager = LinearLayoutManager(this.context, LinearLayoutManager.HORIZONTAL, false)
         binding.rvHomeList.layoutManager = listLayoutManager
-
         homeViewModel.updateData()
+    }
 
 
+    fun scrollToStart(){
+        binding.rvHomeList.scrollToPosition(1)
+    }
+
+
+    override fun onResume() {
+        super.onResume()
+        (activity as MainActivity?)?.showFab()
     }
 
     override fun onDestroyView() {
