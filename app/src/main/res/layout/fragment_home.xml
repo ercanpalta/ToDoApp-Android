@@ -25,4 +25,39 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/rv_home_list" />
+
+    <ImageView
+        android:id="@+id/no_data"
+        android:layout_width="360dp"
+        android:layout_height="270dp"
+        android:visibility="invisible"
+        android:padding="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rv_home_list"
+        app:srcCompat="@drawable/ic_empty" />
+
+    <TextView
+        android:id="@+id/no_data_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        android:textStyle="bold"
+        android:textColor="@color/header"
+        android:textSize="24sp"
+        app:layout_constraintTop_toBottomOf="@id/no_data"
+        app:layout_constraintStart_toStartOf="@id/no_data"
+        app:layout_constraintEnd_toEndOf="@id/no_data"
+        android:text="@string/no_task"/>
+
+    <TextView
+        android:id="@+id/no_data_detail_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        android:layout_marginTop="10dp"
+        app:layout_constraintTop_toBottomOf="@id/no_data_text"
+        app:layout_constraintStart_toStartOf="@id/no_data_text"
+        app:layout_constraintEnd_toEndOf="@id/no_data_text"
+        android:text="@string/no_task_detail"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
