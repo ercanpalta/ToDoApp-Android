@@ -45,12 +45,23 @@ class HomeFragment : Fragment() {
         val listToDo:ArrayList<ToDo> = arrayListOf()
         homeViewModel.toDoList.observe(viewLifecycleOwner) {
             listToDo.addAll(it)
+            if(listToDo.isEmpty()){
+                binding.noData.visibility = View.VISIBLE
+                binding.noDataText.visibility = View.VISIBLE
+                binding.noDataDetailText.visibility = View.VISIBLE
+            }
             binding.rvHome.adapter?.notifyDataSetChanged()
         }
 
         val listList:ArrayList<TaskList> = arrayListOf()
+        val listAll = TaskList("All", R.color.list_color_all)
+        val listNew = TaskList("New List", R.color.list_color_yellow)
         homeViewModel.listList.observe(viewLifecycleOwner) {
+            listList.clear()
+            listList.add(listAll)
             listList.addAll(it)
+            listList.add(listNew)
+            binding.rvHomeList.adapter?.notifyDataSetChanged()
         }
 
         val homeAdapter = HomeAdapter(listToDo)
@@ -64,7 +75,9 @@ class HomeFragment : Fragment() {
         binding.rvHomeList.adapter = listAdapter
         val listLayoutManager = LinearLayoutManager(this.context, LinearLayoutManager.HORIZONTAL, false)
         binding.rvHomeList.layoutManager = listLayoutManager
+
         homeViewModel.updateData()
+
     }
 
 
