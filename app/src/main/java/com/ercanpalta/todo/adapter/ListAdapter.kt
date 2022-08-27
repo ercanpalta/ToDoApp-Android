@@ -6,7 +6,6 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
-import androidx.core.view.setPadding
 import androidx.recyclerview.widget.RecyclerView
 import com.ercanpalta.todo.R
 import com.ercanpalta.todo.model.TaskList
@@ -28,7 +27,7 @@ class ListAdapter(private val dataSet: ArrayList<TaskList>, val fragment: HomeFr
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.list_item, parent, false)
 
-        return ListAdapter.ViewHolder(view)
+        return ViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -37,9 +36,11 @@ class ListAdapter(private val dataSet: ArrayList<TaskList>, val fragment: HomeFr
 
         holder.itemView.setOnClickListener {
             if(holder.textView.text != "All" && holder.textView.text != "New List"){
-                Collections.swap(dataSet, holder.adapterPosition, 1);
-                notifyItemMoved(holder.adapterPosition, 1);
+                Collections.swap(dataSet, holder.adapterPosition, 1)
+                notifyItemMoved(holder.adapterPosition, 1)
                 fragment.scrollToStart()
+            }else if(holder.textView.text == "New List"){
+                fragment.navigateToAddList()
             }
         }
     }

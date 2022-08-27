@@ -10,7 +10,7 @@ import com.ercanpalta.todo.model.ToDo
 interface ToDoDao {
 
     @Insert
-    suspend fun insert(todo:ToDo):Long
+    suspend fun insertTask(todo:ToDo):Long
 
     @Insert
     suspend fun  insertList(list : TaskList):Long
