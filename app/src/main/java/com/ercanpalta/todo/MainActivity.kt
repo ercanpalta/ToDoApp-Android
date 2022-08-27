@@ -45,13 +45,17 @@ class MainActivity : AppCompatActivity() {
 
         binding.appBarMain.fab.setOnClickListener {
             navController.navigate(R.id.action_nav_home_to_addFragment)
-            binding.appBarMain.fab.hide()
+            hideFab()
         }
 
     }
 
     fun showFab(){
         binding.appBarMain.fab.show()
+    }
+
+    fun hideFab(){
+        binding.appBarMain.fab.hide()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

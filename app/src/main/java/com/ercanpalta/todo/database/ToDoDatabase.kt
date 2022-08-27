@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 import com.ercanpalta.todo.model.TaskList
 import com.ercanpalta.todo.model.ToDo
 
-@Database(entities = arrayOf(ToDo::class,TaskList::class), version = 1)
+@Database(entities = [ToDo::class, TaskList::class], version = 1)
 abstract class ToDoDatabase:RoomDatabase() {
         abstract fun  dao(): ToDoDao
 

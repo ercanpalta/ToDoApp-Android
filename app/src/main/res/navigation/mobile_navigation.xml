@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_nav_home_to_addFragment"
             app:destination="@id/addFragment" />
+        <action
+            android:id="@+id/action_nav_home_to_addListFragment"
+            app:destination="@id/addListFragment" />
     </fragment>
     <fragment
         android:id="@+id/addFragment"
@@ -21,6 +24,17 @@
         tools:layout="@layout/fragment_add" >
         <action
             android:id="@+id/action_addFragment_to_nav_home"
+            app:destination="@id/nav_home"
+            app:popUpTo="@id/nav_home"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/addListFragment"
+        android:name="com.ercanpalta.todo.view.AddListFragment"
+        android:label="@string/list_add"
+        tools:layout="@layout/fragment_add_list" >
+        <action
+            android:id="@+id/action_addListFragment_to_nav_home"
             app:destination="@id/nav_home"
             app:popUpTo="@id/nav_home"
             app:popUpToInclusive="true" />

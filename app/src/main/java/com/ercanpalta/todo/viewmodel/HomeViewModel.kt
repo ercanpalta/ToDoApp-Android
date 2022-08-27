@@ -2,8 +2,10 @@ package com.ercanpalta.todo.viewmodel
 
 
 import android.app.Application
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.ercanpalta.todo.R
 import com.ercanpalta.todo.database.ToDoDatabase
 import com.ercanpalta.todo.model.TaskList
 import com.ercanpalta.todo.model.ToDo
@@ -27,6 +29,7 @@ class HomeViewModel(application: Application) : BaseViewModel(application){
         launch {
             if((GregorianCalendar().get(Calendar.SECOND) - lastUpdateTime) < refreshTime){
                 getDataFromRoom()
+                val listAll = TaskList("All", R.color.list_color_all)
                 println("refreshed from Room")
             }else{
                 getDataFromFirebase()
@@ -47,9 +50,11 @@ class HomeViewModel(application: Application) : BaseViewModel(application){
         getDataFromRoom()
     }
 
+
+    // Database functions
     fun addTask(newTask:ToDo){
         launch {
-            dao.insert(newTask)
+            dao.insertTask(newTask)
         }
     }
 
@@ -64,4 +69,5 @@ class HomeViewModel(application: Application) : BaseViewModel(application){
             dao.insertAllLists(*lists)
         }
     }
+
 }

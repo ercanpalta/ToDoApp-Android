@@ -4,11 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ercanpalta.todo.MainActivity
@@ -44,6 +46,7 @@ class HomeFragment : Fragment() {
 
         val listToDo:ArrayList<ToDo> = arrayListOf()
         homeViewModel.toDoList.observe(viewLifecycleOwner) {
+            listToDo.clear()
             listToDo.addAll(it)
             if(listToDo.isEmpty()){
                 binding.noData.visibility = View.VISIBLE
@@ -83,6 +86,12 @@ class HomeFragment : Fragment() {
 
     fun scrollToStart(){
         binding.rvHomeList.scrollToPosition(1)
+    }
+
+    fun navigateToAddList(){
+        val action = HomeFragmentDirections.actionNavHomeToAddListFragment()
+        findNavController().navigate(action)
+        (activity as MainActivity?)?.hideFab()
     }
 
 

@@ -25,4 +25,19 @@
     <string name="add">Add</string>
     <string name="no_task">No Task Yet</string>
     <string name="no_task_detail">Add new todos and keep track on them</string>
+    <string name="list_name">List Name</string>
+    <string name="create_new_list">Create New List</string>
+    <string name="purple">Purple</string>
+    <string name="blue">Blue</string>
+    <string name="green">Green</string>
+    <string name="yellow">Yellow</string>
+    <string name="red">Red</string>
+    <string name="brown">Brown</string>
+    <string name="pink">Pink</string>
+    <string name="orange">Orange</string>
+    <string name="cancel">Cancel</string>
+    <string name="color">Color</string>
+    <string name="please_enter">Please enter name for list</string>
+    <string name="list_add">Add New List</string>
+    <string name="already_have">You already have a list with this name!</string>
 </resources>
