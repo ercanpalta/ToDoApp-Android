@@ -4,10 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import androidx.cardview.widget.CardView
-import androidx.core.content.ContextCompat
-import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -18,6 +14,7 @@ import com.ercanpalta.todo.R
 import com.ercanpalta.todo.adapter.HomeAdapter
 import com.ercanpalta.todo.adapter.ListAdapter
 import com.ercanpalta.todo.databinding.FragmentHomeBinding
+import com.ercanpalta.todo.enums.FilterType
 import com.ercanpalta.todo.model.TaskList
 import com.ercanpalta.todo.model.ToDo
 import com.ercanpalta.todo.viewmodel.HomeViewModel
@@ -28,6 +25,7 @@ class HomeFragment : Fragment() {
 
     private val binding get() = _binding!!
     private lateinit var homeViewModel:HomeViewModel
+    private lateinit var homeAdapter: HomeAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -53,7 +51,7 @@ class HomeFragment : Fragment() {
                 binding.noDataText.visibility = View.VISIBLE
                 binding.noDataDetailText.visibility = View.VISIBLE
             }
-            binding.rvHome.adapter?.notifyDataSetChanged()
+            homeAdapter.filter.filter("")
         }
 
         val listList:ArrayList<TaskList> = arrayListOf()
@@ -67,7 +65,7 @@ class HomeFragment : Fragment() {
             binding.rvHomeList.adapter?.notifyDataSetChanged()
         }
 
-        val homeAdapter = HomeAdapter(listToDo)
+        homeAdapter = HomeAdapter(listToDo)
         binding.rvHome.adapter = homeAdapter
         val homeLayoutManager = LinearLayoutManager(this.context, LinearLayoutManager.VERTICAL, false)
         binding.rvHome.layoutManager = homeLayoutManager
@@ -86,6 +84,15 @@ class HomeFragment : Fragment() {
 
     fun scrollToStart(){
         binding.rvHomeList.scrollToPosition(1)
+    }
+    
+
+    fun filterList(filterText:String, filterType: FilterType){
+        when(filterType){
+            FilterType.List -> homeAdapter.filter.filter(filterText + "L")
+            FilterType.Priority -> homeAdapter.filter.filter(filterText + "P")
+            FilterType.Text -> homeAdapter.filter.filter(filterText + "T")
+        }
     }
 
     fun navigateToAddList(){

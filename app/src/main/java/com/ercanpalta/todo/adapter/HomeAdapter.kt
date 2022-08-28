@@ -1,23 +1,23 @@
 package com.ercanpalta.todo.adapter
 
-import android.graphics.Color
-import android.graphics.drawable.Icon
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.CheckBox
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.TextView
+import android.widget.*
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
-import androidx.core.view.get
 import androidx.recyclerview.widget.RecyclerView
 import com.ercanpalta.todo.R
 import com.ercanpalta.todo.enums.Priority
 import com.ercanpalta.todo.model.ToDo
 
-class HomeAdapter (private val dataSet: ArrayList<ToDo>): RecyclerView.Adapter<HomeAdapter.ViewHolder>() {
+class HomeAdapter (private val dataSet: ArrayList<ToDo>): RecyclerView.Adapter<HomeAdapter.ViewHolder>(), Filterable {
+
+    val filteredList = ArrayList<ToDo>()
+
+    init {
+        filteredList.addAll(dataSet)
+    }
 
     class ViewHolder(view: View): RecyclerView.ViewHolder(view){
         val textView: TextView
@@ -40,7 +40,7 @@ class HomeAdapter (private val dataSet: ArrayList<ToDo>): RecyclerView.Adapter<H
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.textView.text = dataSet[position].task
+        holder.textView.text = filteredList[position].task
         holder.checkBox.setOnClickListener {
             if(it is CheckBox){
                 val checked: Boolean = it.isChecked
@@ -53,7 +53,7 @@ class HomeAdapter (private val dataSet: ArrayList<ToDo>): RecyclerView.Adapter<H
             }
         }
 
-        when(dataSet[position].priority){
+        when(filteredList[position].priority){
             Priority.LOW ->{
                 holder.priorityText.setText(R.string.low_priority)
                 holder.priorityCard.setCardBackgroundColor(ContextCompat.getColor(holder.itemView.context, R.color.low))
@@ -70,7 +70,44 @@ class HomeAdapter (private val dataSet: ArrayList<ToDo>): RecyclerView.Adapter<H
     }
 
     override fun getItemCount(): Int {
-        return dataSet.size
+        return filteredList.size
+    }
+
+    override fun getFilter(): Filter {
+        return object : Filter(){
+            override fun performFiltering(p0: CharSequence?): FilterResults {
+                val filterTextWithType = p0.toString()
+                filteredList.clear()
+
+                if (filterTextWithType.isEmpty()){
+                    filteredList.addAll(dataSet)
+                }else{
+                    val filterType = filterTextWithType.get(filterTextWithType.lastIndex)
+                    val filterText = filterTextWithType.dropLast(1)
+                    if (filterType == 'L'){
+                        if(filterText == "All"){
+                            filteredList.addAll(dataSet)
+                        }else{
+                            for (data in dataSet){
+                                if(data.listName == filterText){
+                                    filteredList.add(data)
+                                }
+                            }
+                        }
+
+                    }
+
+                }
+                val filterResult = FilterResults()
+                filterResult.values = filteredList
+                return  filterResult
+            }
+
+            override fun publishResults(p0: CharSequence?, p1: FilterResults?) {
+                notifyDataSetChanged()
+            }
+
+        }
     }
 
 }

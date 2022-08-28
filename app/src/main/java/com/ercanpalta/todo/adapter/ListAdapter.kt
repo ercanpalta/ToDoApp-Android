@@ -8,6 +8,7 @@ import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.ercanpalta.todo.R
+import com.ercanpalta.todo.enums.FilterType
 import com.ercanpalta.todo.model.TaskList
 import com.ercanpalta.todo.view.HomeFragment
 import java.util.*
@@ -35,10 +36,13 @@ class ListAdapter(private val dataSet: ArrayList<TaskList>, val fragment: HomeFr
         holder.colorCard.setCardBackgroundColor(ContextCompat.getColor(holder.itemView.context, dataSet[position].color))
 
         holder.itemView.setOnClickListener {
-            if(holder.textView.text != "All" && holder.textView.text != "New List"){
-                Collections.swap(dataSet, holder.adapterPosition, 1)
-                notifyItemMoved(holder.adapterPosition, 1)
-                fragment.scrollToStart()
+            if(holder.textView.text != "New List"){
+                if(holder.adapterPosition > 2){
+                    Collections.swap(dataSet, holder.adapterPosition, 1)
+                    notifyItemMoved(holder.adapterPosition, 1)
+                    fragment.scrollToStart()
+                }
+                fragment.filterList(holder.textView.text.toString(), FilterType.List)
             }else if(holder.textView.text == "New List"){
                 fragment.navigateToAddList()
             }
