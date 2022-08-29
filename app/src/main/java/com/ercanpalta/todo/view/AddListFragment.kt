@@ -5,12 +5,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.ercanpalta.todo.R
-import com.ercanpalta.todo.database.ToDoDatabase
 import com.ercanpalta.todo.databinding.FragmentAddListBinding
-import com.ercanpalta.todo.databinding.FragmentHomeBinding
 import com.ercanpalta.todo.model.TaskList
 import com.ercanpalta.todo.viewmodel.HomeViewModel
 
@@ -19,7 +17,7 @@ class AddListFragment : Fragment() {
     private var _binding: FragmentAddListBinding? = null
 
     private val binding get() = _binding!!
-    private lateinit var homeViewModel: HomeViewModel
+    private val homeViewModel: HomeViewModel by activityViewModels()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,7 +28,6 @@ class AddListFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        homeViewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
         _binding = FragmentAddListBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
@@ -57,7 +54,6 @@ class AddListFragment : Fragment() {
             if (listName.isNotEmpty()){
                 val newList = TaskList(listName,listColor)
                 homeViewModel.addTaskList(newList)
-                println(listName)
             }
 
             val action = AddListFragmentDirections.actionAddListFragmentToNavHome()

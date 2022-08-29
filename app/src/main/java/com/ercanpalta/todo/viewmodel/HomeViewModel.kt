@@ -23,6 +23,8 @@ class HomeViewModel(application: Application) : BaseViewModel(application){
     private var lastUpdateTime = GregorianCalendar().get(Calendar.SECOND)
     private var refreshTime = 10
 
+    var currentListName = "All"
+
     private val dao = ToDoDatabase(getApplication()).dao()
 
     fun updateData(){
@@ -56,6 +58,7 @@ class HomeViewModel(application: Application) : BaseViewModel(application){
         launch {
             dao.insertTask(newTask)
         }
+        updateData()
     }
 
     fun addTaskList(newList:TaskList){

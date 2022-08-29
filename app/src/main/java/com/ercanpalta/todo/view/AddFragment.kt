@@ -6,8 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.findNavController
+import androidx.fragment.app.activityViewModels
 import com.ercanpalta.todo.R
 import com.ercanpalta.todo.databinding.FragmentAddBinding
 import com.ercanpalta.todo.enums.Priority
@@ -21,13 +20,12 @@ class AddFragment : Fragment() {
     private var _binding: FragmentAddBinding? = null
 
     private val binding get() = _binding!!
-    private lateinit var homeViewModel: HomeViewModel
+    private val homeViewModel: HomeViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        homeViewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
         _binding = FragmentAddBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
@@ -39,9 +37,12 @@ class AddFragment : Fragment() {
 
         val listList:ArrayList<TaskList> = arrayListOf()
         homeViewModel.listList.observe(viewLifecycleOwner) {
+            listList.clear()
             listList.addAll(it)
             val chipGroup = binding.chipList
+            chipGroup.removeAllViews()
             for (list in listList){
+                println(listList.size)
                 if (list.name != "All" && list.name != "New List"){
                     val chip = Chip(context)
                     chip.apply {
@@ -60,13 +61,12 @@ class AddFragment : Fragment() {
 
         }
 
-        homeViewModel.updateData()
-
         binding.addButton.setOnClickListener {
             val name = binding.editField.nameText.text.toString()
+            val description = binding.editField.descriptionText.text.toString()
             val priorityChipId = binding.priorityChipsLayout.priorityChipsGroup.checkedChipId
             val listChipId = binding.chipList.checkedChipId
-            var listChip = "All"
+            var listChip = homeViewModel.currentListName
             if(listChipId != -1){
                 listChip = binding.chipList.findViewById<Chip>(listChipId).text.toString()
             }
@@ -81,11 +81,11 @@ class AddFragment : Fragment() {
             }
 
             val task = ToDo(name,priority,false,listChip)
+            task.description = description
 
             homeViewModel.addTask(task)
-
-            val action = AddFragmentDirections.actionAddFragmentToNavHome()
-            findNavController().navigate(action)
+            binding.editField.nameText.text?.clear()
+            binding.editField.descriptionText.text?.clear()
         }
 
     }

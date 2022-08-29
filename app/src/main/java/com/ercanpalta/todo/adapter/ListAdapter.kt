@@ -42,6 +42,7 @@ class ListAdapter(private val dataSet: ArrayList<TaskList>, val fragment: HomeFr
                     notifyItemMoved(holder.adapterPosition, 1)
                     fragment.scrollToStart()
                 }
+                fragment.changeCurrentListName(holder.textView.text.toString())
                 fragment.filterList(holder.textView.text.toString(), FilterType.List)
             }else if(holder.textView.text == "New List"){
                 fragment.navigateToAddList()

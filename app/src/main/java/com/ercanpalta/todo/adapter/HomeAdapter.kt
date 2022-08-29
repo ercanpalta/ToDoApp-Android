@@ -10,8 +10,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ercanpalta.todo.R
 import com.ercanpalta.todo.enums.Priority
 import com.ercanpalta.todo.model.ToDo
+import com.ercanpalta.todo.view.HomeFragment
 
-class HomeAdapter (private val dataSet: ArrayList<ToDo>): RecyclerView.Adapter<HomeAdapter.ViewHolder>(), Filterable {
+class HomeAdapter (private val dataSet: ArrayList<ToDo>, val fragment: HomeFragment): RecyclerView.Adapter<HomeAdapter.ViewHolder>(), Filterable {
 
     val filteredList = ArrayList<ToDo>()
 
@@ -98,6 +99,13 @@ class HomeAdapter (private val dataSet: ArrayList<ToDo>): RecyclerView.Adapter<H
                     }
 
                 }
+
+                if(filteredList.isEmpty()){
+                    fragment.showNoDataText()
+                }else{
+                    fragment.hideNoDataText()
+                }
+
                 val filterResult = FilterResults()
                 filterResult.values = filteredList
                 return  filterResult
