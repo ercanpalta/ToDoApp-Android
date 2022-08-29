@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import com.ercanpalta.todo.R
@@ -39,32 +40,15 @@ class AddFragment : Fragment() {
         homeViewModel.listList.observe(viewLifecycleOwner) {
             listList.clear()
             listList.addAll(it)
-            val chipGroup = binding.chipList
-            chipGroup.removeAllViews()
-            for (list in listList){
-                println(listList.size)
-                if (list.name != "All" && list.name != "New List"){
-                    val chip = Chip(context)
-                    chip.apply {
-                        id = View.generateViewId()
-                        text = list.name
-                        setTextSize(16f)
-                        isCheckable = true
-                        setTextColor(ContextCompat.getColor(this.context,R.color.white))
-                        textAlignment = View.TEXT_ALIGNMENT_CENTER
-                        setChipBackgroundColorResource(list.color)
-                    }
-                    chipGroup.addView(chip)
-                }
-
-            }
-
+            addListChips(listList)
         }
+
+        addPriorityChips()
 
         binding.addButton.setOnClickListener {
             val name = binding.editField.nameText.text.toString()
             val description = binding.editField.descriptionText.text.toString()
-            val priorityChipId = binding.priorityChipsLayout.priorityChipsGroup.checkedChipId
+            val priorityChipId = binding.priorityChipsGroup.checkedChipId
             val listChipId = binding.chipList.checkedChipId
             var listChip = homeViewModel.currentListName
             if(listChipId != -1){
@@ -73,20 +57,94 @@ class AddFragment : Fragment() {
 
 
             var priority = Priority.LOW
-
-            when(priorityChipId){
-                R.id.chip_low -> priority = Priority.LOW
-                R.id.chip_medium -> priority = Priority.MEDIUM
-                R.id.chip_high-> priority = Priority.HIGH
+            if(priorityChipId != -1){
+                when(priorityChipId){
+                    R.id.chip_low -> priority = Priority.LOW
+                    R.id.chip_medium -> priority = Priority.MEDIUM
+                    R.id.chip_high-> priority = Priority.HIGH
+                }
             }
+
 
             val task = ToDo(name,priority,false,listChip)
             task.description = description
 
-            homeViewModel.addTask(task)
-            binding.editField.nameText.text?.clear()
-            binding.editField.descriptionText.text?.clear()
+            if (name.isNotEmpty() && description.isNotEmpty()){
+                homeViewModel.addTask(task)
+                binding.editField.nameText.text?.clear()
+                binding.editField.descriptionText.text?.clear()
+                binding.priorityChipsGroup.check(R.id.chip_low)
+                binding.chipList.clearCheck()
+            }else{
+                Toast.makeText(this.requireContext(),R.string.please_enter_task,Toast.LENGTH_LONG).show()
+            }
+
+
         }
+
+    }
+
+    fun addListChips(listList:ArrayList<TaskList>){
+        val chipGroup = binding.chipList
+        chipGroup.removeAllViews()
+        for (list in listList){
+            println(listList.size)
+            if (list.name != "All" && list.name != "New List"){
+                val chip = Chip(context)
+                chip.apply {
+                    id = View.generateViewId()
+                    text = list.name
+                    setTextSize(16f)
+                    isCheckable = true
+                    setTextColor(ContextCompat.getColor(this.context,R.color.white))
+                    textAlignment = View.TEXT_ALIGNMENT_CENTER
+                    setChipBackgroundColorResource(list.color)
+                }
+                chipGroup.addView(chip)
+            }
+
+        }
+    }
+
+    fun addPriorityChips(){
+        val chipGroup = binding.priorityChipsGroup
+        chipGroup.removeAllViews()
+
+
+        val chipLow = Chip(context)
+        val chipMedium= Chip(context)
+        val chipHigh = Chip(context)
+        chipLow.apply {
+            id = R.id.chip_low
+            text = getString(R.string.low_priority)
+            setTextSize(16f)
+            isCheckable = true
+            setTextColor(ContextCompat.getColor(this.context,R.color.white))
+            textAlignment = View.TEXT_ALIGNMENT_CENTER
+            setChipBackgroundColorResource(R.color.low)
+        }
+        chipMedium.apply {
+            id = R.id.chip_medium
+            text = getString(R.string.medium_priority)
+            setTextSize(16f)
+            isCheckable = true
+            setTextColor(ContextCompat.getColor(this.context,R.color.white))
+            textAlignment = View.TEXT_ALIGNMENT_CENTER
+            setChipBackgroundColorResource(R.color.medium)
+        }
+        chipHigh.apply {
+            id = R.id.chip_high
+            text = getString(R.string.high_priority)
+            setTextSize(16f)
+            isCheckable = true
+            setTextColor(ContextCompat.getColor(this.context,R.color.white))
+            textAlignment = View.TEXT_ALIGNMENT_CENTER
+            setChipBackgroundColorResource(R.color.high)
+        }
+
+        chipGroup.addView(chipLow)
+        chipGroup.addView(chipMedium)
+        chipGroup.addView(chipHigh)
 
     }
 

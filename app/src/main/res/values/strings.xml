@@ -40,4 +40,5 @@
     <string name="please_enter">Please enter name for list</string>
     <string name="list_add">Add New List</string>
     <string name="already_have">You already have a list with this name!</string>
+    <string name="please_enter_task">Please enter name and description!</string>
 </resources>

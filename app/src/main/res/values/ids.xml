@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="chip_low" type="id"/>
+    <item name="chip_medium" type="id"/>
+    <item name="chip_high" type="id"/>
+</resources>
