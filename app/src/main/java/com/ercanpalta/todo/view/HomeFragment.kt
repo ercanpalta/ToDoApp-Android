@@ -83,6 +83,7 @@ class HomeFragment : Fragment() {
 
         binding.mainPane.fab.setOnClickListener {
             binding.slidingPaneLayout.openPane()
+            binding.secondPane.getFragment<AddFragment>().clearInputs()
         }
 
         binding.slidingPaneLayout.lockMode = SlidingPaneLayout.LOCK_MODE_LOCKED
