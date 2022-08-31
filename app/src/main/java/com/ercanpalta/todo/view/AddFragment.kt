@@ -71,7 +71,6 @@ class AddFragment : Fragment() {
 
             if (name.isNotEmpty() && description.isNotEmpty()){
                 homeViewModel.addTask(task)
-                clearInputs()
             }else{
                 Toast.makeText(this.requireContext(),R.string.please_enter_task,Toast.LENGTH_LONG).show()
             }
@@ -80,14 +79,6 @@ class AddFragment : Fragment() {
         }
 
     }
-
-    fun clearInputs(){
-        binding.editField.nameText.text?.clear()
-        binding.editField.descriptionText.text?.clear()
-        binding.priorityChipsGroup.clearCheck()
-        binding.chipList.clearCheck()
-    }
-
 
     fun addListChips(listList:ArrayList<TaskList>){
         val chipGroup = binding.chipList

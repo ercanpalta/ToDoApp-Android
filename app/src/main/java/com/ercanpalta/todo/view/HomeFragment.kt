@@ -1,5 +1,6 @@
 package com.ercanpalta.todo.view
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,8 +10,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.slidingpanelayout.widget.SlidingPaneLayout
-import com.ercanpalta.todo.MainActivity
+import androidx.recyclerview.widget.RecyclerView
 import com.ercanpalta.todo.R
 import com.ercanpalta.todo.adapter.HomeAdapter
 import com.ercanpalta.todo.adapter.ListAdapter
@@ -18,7 +18,6 @@ import com.ercanpalta.todo.databinding.FragmentHomeBinding
 import com.ercanpalta.todo.enums.FilterType
 import com.ercanpalta.todo.model.TaskList
 import com.ercanpalta.todo.model.ToDo
-import com.ercanpalta.todo.util.CustomOnBackPressedCallback
 import com.ercanpalta.todo.viewmodel.HomeViewModel
 
 class HomeFragment : Fragment() {
@@ -53,7 +52,6 @@ class HomeFragment : Fragment() {
                 hideNoDataText()
             }
             filterList(homeViewModel.currentListName, FilterType.List)
-            binding.slidingPaneLayout.closePane()
         }
 
         val listList:ArrayList<TaskList> = arrayListOf()
@@ -64,46 +62,36 @@ class HomeFragment : Fragment() {
             listList.add(listAll)
             listList.addAll(it)
             listList.add(listNew)
-            binding.mainPane.rvHomeList.adapter?.notifyDataSetChanged()
+            binding.rvHomeList.adapter?.notifyDataSetChanged()
         }
 
         homeAdapter = HomeAdapter(listToDo, this@HomeFragment)
-        binding.mainPane.rvHome.adapter = homeAdapter
+        homeAdapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
+        binding.rvHome.adapter = homeAdapter
         val homeLayoutManager = LinearLayoutManager(this.context, LinearLayoutManager.VERTICAL, false)
-        binding.mainPane.rvHome.layoutManager = homeLayoutManager
-        binding.mainPane.rvHome.addItemDecoration(DividerItemDecoration(context,homeLayoutManager.orientation))
-
+        binding.rvHome.layoutManager = homeLayoutManager
+        //binding.rvHome.addItemDecoration(DividerItemDecoration(context,homeLayoutManager.orientation))
 
         val listAdapter = ListAdapter(listList, this@HomeFragment)
-        binding.mainPane.rvHomeList.adapter = listAdapter
+        listAdapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
+        binding.rvHomeList.adapter = listAdapter
         val listLayoutManager = LinearLayoutManager(this.context, LinearLayoutManager.HORIZONTAL, false)
-        binding.mainPane.rvHomeList.layoutManager = listLayoutManager
+        binding.rvHomeList.layoutManager = listLayoutManager
 
         homeViewModel.updateData()
 
-        binding.mainPane.fab.setOnClickListener {
-            binding.slidingPaneLayout.openPane()
-            binding.secondPane.getFragment<AddFragment>().clearInputs()
+        binding.fab.setOnClickListener {
+            val action = HomeFragmentDirections.actionNavHomeToAddFragment()
+            findNavController().navigate(action)
         }
-
-        binding.slidingPaneLayout.lockMode = SlidingPaneLayout.LOCK_MODE_LOCKED
-        // Connect the SlidingPaneLayout to the system back button.
-        requireActivity().onBackPressedDispatcher.addCallback(
-            viewLifecycleOwner,
-            CustomOnBackPressedCallback(binding.slidingPaneLayout)
-        )
-    }
-
-    fun scrollToStart(){
-        binding.mainPane.rvHomeList.scrollToPosition(1)
     }
 
     fun showNoDataText(){
-        binding.mainPane.noData.noDataLayout.visibility = View.VISIBLE
+        binding.noData.noDataLayout.visibility = View.VISIBLE
     }
 
     fun hideNoDataText(){
-        binding.mainPane.noData.noDataLayout.visibility = View.INVISIBLE
+        binding.noData.noDataLayout.visibility = View.INVISIBLE
     }
 
     fun changeCurrentListName(listName:String){

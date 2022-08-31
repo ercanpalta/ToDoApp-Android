@@ -1,5 +1,6 @@
 package com.ercanpalta.todo.adapter
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,66 +9,73 @@ import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.ercanpalta.todo.R
+import com.ercanpalta.todo.databinding.RowItemBinding
 import com.ercanpalta.todo.enums.Priority
 import com.ercanpalta.todo.model.ToDo
 import com.ercanpalta.todo.view.HomeFragment
 
 class HomeAdapter (private val dataSet: ArrayList<ToDo>, val fragment: HomeFragment): RecyclerView.Adapter<HomeAdapter.ViewHolder>(), Filterable {
 
+    private lateinit var context: Context
     val filteredList = ArrayList<ToDo>()
 
     init {
         filteredList.addAll(dataSet)
     }
 
-    class ViewHolder(view: View): RecyclerView.ViewHolder(view){
-        val textView: TextView
-        var checkBox = CheckBox(view.context)
-        var priorityText: TextView
-        var priorityCard: CardView
+    class ViewHolder(private var binding:RowItemBinding): RecyclerView.ViewHolder(binding.root){
 
-        init {
-            textView = view.findViewById(R.id.task_text)
-            checkBox = view.findViewById(R.id.checkbox)
-            priorityText = view.findViewById((R.id.priority_text))
-            priorityCard = view.findViewById((R.id.priority_card))
+        fun bind(task:ToDo , position: Int, fragment:HomeFragment, context: Context){
+            binding.taskText.text = task.task
+            binding.detailText.text = task.description
+            binding.checkbox.setOnClickListener {
+                if(it is CheckBox){
+                    val checked: Boolean = it.isChecked
+                    if (checked){
+                        println("checked")
+                    }else{
+                        println("unChecked")
+                    }
+
+                }
+            }
+
+            binding.root.setOnClickListener {
+                val detail = binding.detailText
+                if (detail.visibility == View.GONE){
+                    detail.visibility = View.VISIBLE
+                }else{
+                    detail.visibility = View.GONE
+                }
+
+            }
+
+            when(task.priority){
+                Priority.LOW ->{
+                    binding.priorityText.setText(R.string.low_priority)
+                    binding.priorityCard.setCardBackgroundColor(ContextCompat.getColor(context, R.color.low))
+                }
+                Priority.MEDIUM -> {
+                    binding.priorityText.setText(R.string.medium_priority)
+                    binding.priorityCard.setCardBackgroundColor(ContextCompat.getColor(context, R.color.medium))
+                }
+                Priority.HIGH ->{
+                    binding.priorityText.setText(R.string.high_priority)
+                    binding.priorityCard.setCardBackgroundColor(ContextCompat.getColor(context, R.color.high))
+                }
+            }
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.row_item, parent, false)
-
-        return ViewHolder(view)
+        val binding = RowItemBinding.inflate(LayoutInflater.from(parent.context),parent,false)
+        context = parent.context
+        return ViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.textView.text = filteredList[position].task
-        holder.checkBox.setOnClickListener {
-            if(it is CheckBox){
-                val checked: Boolean = it.isChecked
-                if (checked){
-                    println("checked")
-                }else{
-                    println("unChecked")
-                }
-
-            }
-        }
-
-        when(filteredList[position].priority){
-            Priority.LOW ->{
-                holder.priorityText.setText(R.string.low_priority)
-                holder.priorityCard.setCardBackgroundColor(ContextCompat.getColor(holder.itemView.context, R.color.low))
-            }
-            Priority.MEDIUM -> {
-                holder.priorityText.setText(R.string.medium_priority)
-                holder.priorityCard.setCardBackgroundColor(ContextCompat.getColor(holder.itemView.context, R.color.medium))
-            }
-            Priority.HIGH ->{
-                holder.priorityText.setText(R.string.high_priority)
-                holder.priorityCard.setCardBackgroundColor(ContextCompat.getColor(holder.itemView.context, R.color.high))
-            }
-        }
+        val task = filteredList[position]
+        holder.bind(task,position,fragment,context)
     }
 
     override fun getItemCount(): Int {

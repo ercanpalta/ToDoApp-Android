@@ -16,7 +16,6 @@
     <string name="high_priority">HIGH</string>
 
     <string name="create_header">Create new task</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="task_name">Task Name</string>
     <string name="task_description">Task Description</string>
