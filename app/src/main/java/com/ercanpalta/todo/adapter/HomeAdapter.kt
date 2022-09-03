@@ -1,11 +1,12 @@
 package com.ercanpalta.todo.adapter
 
 import android.content.Context
+import android.graphics.Color
+import android.graphics.Paint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.ercanpalta.todo.R
@@ -28,12 +29,27 @@ class HomeAdapter (private val dataSet: ArrayList<ToDo>, val fragment: HomeFragm
         fun bind(task:ToDo , position: Int, fragment:HomeFragment, context: Context){
             binding.taskText.text = task.task
             binding.detailText.text = task.description
+
+            if (task.isCompleted){
+                binding.checkbox.isChecked = true
+                binding.strikethroughText.visibility = View.VISIBLE
+                binding.checkbox.alpha = 0.7f
+            }else{
+                binding.checkbox.isChecked = false
+                binding.strikethroughText.visibility = View.INVISIBLE
+            }
+
             binding.checkbox.setOnClickListener {
                 if(it is CheckBox){
                     val checked: Boolean = it.isChecked
                     if (checked){
+                        binding.strikethroughText.visibility = View.VISIBLE
+                        binding.checkbox.alpha = 0.7f
+                        fragment.updateCompletion(task.uid,true)
                         println("checked")
                     }else{
+                        binding.strikethroughText.visibility = View.INVISIBLE
+                        fragment.updateCompletion(task.uid,false)
                         println("unChecked")
                     }
 

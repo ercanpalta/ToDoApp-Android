@@ -67,6 +67,12 @@ class HomeViewModel(application: Application) : BaseViewModel(application){
         }
     }
 
+    fun updateCompletion(uid:Int, isCompleted:Boolean){
+        launch {
+            dao.updateCompletion(uid, isCompleted)
+        }
+    }
+
     fun addAllLists(vararg lists: TaskList){
         launch {
             dao.insertAllLists(*lists)
