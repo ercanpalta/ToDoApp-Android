@@ -98,6 +98,8 @@ class HomeFragment : Fragment() {
         homeViewModel.currentListName = listName
     }
 
+
+
     fun filterList(filterText:String, filterType: FilterType){
         when(filterType){
             FilterType.List -> homeAdapter.filter.filter(filterText + "L")
@@ -109,6 +111,10 @@ class HomeFragment : Fragment() {
     fun navigateToAddList(){
         val action = HomeFragmentDirections.actionNavHomeToAddListFragment()
         findNavController().navigate(action)
+    }
+
+    fun updateCompletion(uid:Int, isCompleted:Boolean){
+        homeViewModel.updateCompletion(uid, isCompleted)
     }
 
     override fun onResume() {
