@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import com.ercanpalta.todo.R
 import com.ercanpalta.todo.databinding.FragmentAddBinding
 import com.ercanpalta.todo.enums.Priority
@@ -71,6 +72,8 @@ class AddFragment : Fragment() {
 
             if (name.isNotEmpty() && description.isNotEmpty()){
                 homeViewModel.addTask(task)
+                val action = AddFragmentDirections.actionAddFragmentToNavHome()
+                findNavController().navigate(action)
             }else{
                 Toast.makeText(this.requireContext(),R.string.please_enter_task,Toast.LENGTH_LONG).show()
             }

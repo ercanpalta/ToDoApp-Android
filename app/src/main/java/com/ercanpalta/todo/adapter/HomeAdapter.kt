@@ -40,7 +40,8 @@ class HomeAdapter (private val dataSet: ArrayList<ToDo>, val fragment: HomeFragm
             }
 
             binding.checkbox.setOnClickListener {
-                if(it is CheckBox){
+                val menu = binding.longclickMenu
+                if(it is CheckBox ){
                     val checked: Boolean = it.isChecked
                     if (checked){
                         binding.strikethroughText.visibility = View.VISIBLE
@@ -58,12 +59,40 @@ class HomeAdapter (private val dataSet: ArrayList<ToDo>, val fragment: HomeFragm
 
             binding.root.setOnClickListener {
                 val detail = binding.detailText
-                if (detail.visibility == View.GONE){
-                    detail.visibility = View.VISIBLE
-                }else{
-                    detail.visibility = View.GONE
+                val menu = binding.longclickMenu
+                if(menu.visibility == View.GONE){
+                    fragment.clearAllSelections()
+                    if (detail.visibility == View.GONE){
+                        detail.visibility = View.VISIBLE
+                    }else{
+                        detail.visibility = View.GONE
+                    }
                 }
 
+
+            }
+
+            binding.root.setOnLongClickListener {
+                fragment.clearAllSelections()
+                val detail = binding.detailText
+                val menu = binding.longclickMenu
+                if (menu.visibility == View.GONE){
+                    detail.visibility = View.GONE
+                    menu.visibility = View.VISIBLE
+                }
+                return@setOnLongClickListener true
+            }
+
+            binding.closeButton.setOnClickListener {
+                binding.longclickMenu.visibility = View.GONE
+            }
+
+            binding.deleteButton.setOnClickListener {
+                fragment.deleteTask(task.uid, position)
+            }
+
+            binding.editButton.setOnClickListener {
+                println("Edit")
             }
 
             when(task.priority){
@@ -91,7 +120,8 @@ class HomeAdapter (private val dataSet: ArrayList<ToDo>, val fragment: HomeFragm
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val task = filteredList[position]
-        holder.bind(task,position,fragment,context)
+        val adapterPosition = holder.absoluteAdapterPosition
+        holder.bind(task,adapterPosition,fragment,context)
     }
 
     override fun getItemCount(): Int {

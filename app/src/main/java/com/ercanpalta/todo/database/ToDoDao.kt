@@ -30,6 +30,9 @@ interface ToDoDao {
     @Query("DELETE FROM TaskList")
     suspend fun deleteAllTaskLists()
 
+    @Query("DELETE FROM ToDo WHERE uid= :uid")
+    suspend fun deleteTask(uid:Int)
+
     @Query("UPDATE TODO SET isCompleted= :isCompleted WHERE uid= :uid")
     suspend fun updateCompletion(uid:Int, isCompleted:Boolean)
 

@@ -27,4 +27,8 @@
     <style name="DrawerIconStyle" parent="Widget.AppCompat.DrawerArrowToggle">
         <item name="color">@android:color/darker_gray</item>
     </style>
+
+    <style name="MyDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="colorOnPrimary">@color/list_color_red</item>
+    </style>
 </resources>
