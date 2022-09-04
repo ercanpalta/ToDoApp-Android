@@ -9,6 +9,7 @@
 
     <string name="menu_home">Home</string>
     <string name="menu_add">Add New Task</string>
+    <string name="menu_edit">Edit Task</string>
 
     <string name="low_priority">LOW</string>
     <string name="medium_priority">MED</string>
@@ -42,4 +43,6 @@
     <string name="please_enter_task">Please enter name and description!</string>
     <string name="ask_delete">Are you sure you want to delete?</string>
     <string name="delete">Delete</string>
+    <string name="save">Save</string>
+    <string name="edit_header">Edit Task</string>
 </resources>

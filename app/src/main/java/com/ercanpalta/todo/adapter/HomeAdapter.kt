@@ -92,7 +92,7 @@ class HomeAdapter (private val dataSet: ArrayList<ToDo>, val fragment: HomeFragm
             }
 
             binding.editButton.setOnClickListener {
-                println("Edit")
+                fragment.moveToEditTask(task.uid)
             }
 
             when(task.priority){
