@@ -134,6 +134,11 @@ class HomeFragment : Fragment() {
         builder.show()
     }
 
+    fun moveToEditTask(uid: Int){
+        val action = HomeFragmentDirections.actionNavHomeToEditFragment(uid)
+        findNavController().navigate(action)
+    }
+
     fun clearAllSelections(){
         val itemCount = binding.rvHome.adapter?.itemCount
         for(i in 0..itemCount!!){

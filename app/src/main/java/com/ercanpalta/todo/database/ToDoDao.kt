@@ -3,6 +3,7 @@ package com.ercanpalta.todo.database
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Update
 import com.ercanpalta.todo.model.TaskList
 import com.ercanpalta.todo.model.ToDo
 
@@ -18,6 +19,24 @@ interface ToDoDao {
     @Insert
     suspend fun  insertAllLists(vararg lists: TaskList) : List<Long>
 
+    @Query("SELECT * FROM todo WHERE uid= :uid")
+    suspend fun getTask(uid: Int): ToDo
+
+    @Query("SELECT * FROM tasklist WHERE uid= :uid")
+    suspend fun getTaskList(uid: Int): TaskList
+
+    @Update
+    fun updateTask(task: ToDo)
+
+    @Update
+    fun updateTaskList(taskList: TaskList)
+
+    @Query("DELETE FROM ToDo WHERE uid= :uid")
+    suspend fun deleteTask(uid:Int)
+
+    @Query("DELETE FROM TaskList WHERE uid= :uid")
+    suspend fun deleteTaskList(uid:Int)
+
     @Query("SELECT * FROM todo")
     suspend fun getAllTasks(): List<ToDo>
 
@@ -30,8 +49,6 @@ interface ToDoDao {
     @Query("DELETE FROM TaskList")
     suspend fun deleteAllTaskLists()
 
-    @Query("DELETE FROM ToDo WHERE uid= :uid")
-    suspend fun deleteTask(uid:Int)
 
     @Query("UPDATE TODO SET isCompleted= :isCompleted WHERE uid= :uid")
     suspend fun updateCompletion(uid:Int, isCompleted:Boolean)

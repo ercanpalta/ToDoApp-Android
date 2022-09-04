@@ -24,7 +24,7 @@ abstract class ToDoDatabase:RoomDatabase() {
 
             private fun createDatabase(context: Context) = Room.databaseBuilder(
                 context.applicationContext, ToDoDatabase::class.java, "toDoDatabase"
-            ).build()
+            ).allowMainThreadQueries().build()
 
         }
 
