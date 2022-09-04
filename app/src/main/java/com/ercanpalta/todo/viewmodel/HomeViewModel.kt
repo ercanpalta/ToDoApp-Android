@@ -61,6 +61,12 @@ class HomeViewModel(application: Application) : BaseViewModel(application){
         updateData()
     }
 
+    fun deleteTask(uid: Int){
+        launch {
+            dao.deleteTask(uid)
+        }
+    }
+
     fun addTaskList(newList:TaskList){
         launch {
             dao.insertList(newList)

@@ -1,14 +1,14 @@
 package com.ercanpalta.todo.view
 
-import android.graphics.Color
+import android.app.AlertDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ercanpalta.todo.R
@@ -27,6 +27,7 @@ class HomeFragment : Fragment() {
     private val binding get() = _binding!!
     private val homeViewModel: HomeViewModel by activityViewModels()
     private lateinit var homeAdapter: HomeAdapter
+    val listToDo:ArrayList<ToDo> = arrayListOf()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -42,7 +43,7 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val listToDo:ArrayList<ToDo> = arrayListOf()
+
         homeViewModel.toDoList.observe(viewLifecycleOwner) {
             listToDo.clear()
             listToDo.addAll(it)
@@ -115,6 +116,33 @@ class HomeFragment : Fragment() {
 
     fun updateCompletion(uid:Int, isCompleted:Boolean){
         homeViewModel.updateCompletion(uid, isCompleted)
+    }
+
+    fun deleteTask(uid: Int, position:Int){
+        val builder = AlertDialog.Builder(this.context, R.style.MyDialogTheme)
+        builder.setTitle(R.string.delete)
+        builder.setMessage(R.string.ask_delete)
+        builder.setPositiveButton(R.string.delete) { dialog, i ->
+                homeViewModel.deleteTask(uid)
+                listToDo.removeAt(position)
+                filterList(homeViewModel.currentListName, FilterType.List)
+                homeAdapter.notifyItemRemoved(position)
+            }
+        builder.setNegativeButton(R.string.cancel){ dialog, i ->
+
+            }
+        builder.show()
+    }
+
+    fun clearAllSelections(){
+        val itemCount = binding.rvHome.adapter?.itemCount
+        for(i in 0..itemCount!!){
+            val holder = binding.rvHome.findViewHolderForAdapterPosition(i)
+            if (holder != null) {
+                val menu = holder.itemView.findViewById<View>(R.id.longclick_menu)
+                menu.visibility = View.GONE
+            }
+        }
     }
 
     override fun onResume() {

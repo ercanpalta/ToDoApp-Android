@@ -16,6 +16,7 @@
     <color name="header">#2D2D2D</color>
     <color name="edit_text">#10716C6C</color>
     <color name="cardview">#FEFBFB</color>
+    <color name="background">#CCEDEDED</color>
 
     <color name="list_color_all">#FF073B4C</color>
     <color name="list_color_purple">#FFb388eb</color>
