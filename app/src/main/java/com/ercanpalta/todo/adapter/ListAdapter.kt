@@ -21,6 +21,7 @@ class ListAdapter(private val dataSet: ArrayList<TaskList>, val fragment: HomeFr
             binding.listText.text = list.name
             binding.colorCard.setCardBackgroundColor(ContextCompat.getColor(context, list.color))
             binding.root.setOnClickListener {
+                fragment.clearAllSelections()
                 if(binding.listText.text != "New List"){
                     fragment.changeCurrentListName(binding.listText.text.toString())
                     fragment.filterList(binding.listText.text.toString(), FilterType.List)
