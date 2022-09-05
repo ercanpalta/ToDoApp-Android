@@ -118,6 +118,14 @@ class HomeFragment : Fragment() {
         homeViewModel.updateCompletion(uid, isCompleted)
     }
 
+    fun updateListToDo(task: ToDo, isCompleted: Boolean){
+        for (todo in listToDo){
+            if (todo == task){
+                task.isCompleted = isCompleted
+            }
+        }
+    }
+
     fun deleteTask(uid: Int, position:Int){
         val builder = AlertDialog.Builder(this.context, R.style.MyDialogTheme)
         builder.setTitle(R.string.delete)

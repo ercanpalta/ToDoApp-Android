@@ -44,11 +44,13 @@ class HomeAdapter (private val dataSet: ArrayList<ToDo>, val fragment: HomeFragm
                 if(it is CheckBox ){
                     val checked: Boolean = it.isChecked
                     if (checked){
+                        fragment.updateListToDo(task,checked)
                         binding.taskText.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG)
                         binding.checkbox.alpha = 0.7f
                         fragment.updateCompletion(task.uid,true)
                         println("checked")
                     }else{
+                        fragment.updateListToDo(task,checked)
                         binding.taskText.setPaintFlags(Paint.LINEAR_TEXT_FLAG)
                         fragment.updateCompletion(task.uid,false)
                         println("unChecked")
