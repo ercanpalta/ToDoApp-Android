@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.ercanpalta.todo.R
@@ -46,6 +47,16 @@ class AddFragment : Fragment() {
 
         addPriorityChips()
 
+        binding.editField.nameText.addTextChangedListener {
+            if (it != null) {
+                if (it.length > 56){
+                    binding.editField.nameField.error = getString(R.string.text_limit_error)
+                }else{
+                    binding.editField.nameField.error = null
+                }
+            }
+        }
+
         binding.addButton.setOnClickListener {
             val name = binding.editField.nameText.text.toString()
             val description = binding.editField.descriptionText.text.toString()
@@ -71,9 +82,14 @@ class AddFragment : Fragment() {
             task.description = description
 
             if (name.isNotEmpty() && description.isNotEmpty()){
-                homeViewModel.addTask(task)
-                val action = AddFragmentDirections.actionAddFragmentToNavHome()
-                findNavController().navigate(action)
+                if (name.length <= 56){
+                    binding.editField.nameField.error = null
+                    homeViewModel.addTask(task)
+                    val action = AddFragmentDirections.actionAddFragmentToNavHome()
+                    findNavController().navigate(action)
+                }else{
+                    Toast.makeText(this.requireContext(),R.string.text_limit_error, Toast.LENGTH_LONG).show()
+                }
             }else{
                 Toast.makeText(this.requireContext(),R.string.please_enter_task,Toast.LENGTH_LONG).show()
             }

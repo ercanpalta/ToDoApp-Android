@@ -45,4 +45,5 @@
     <string name="delete">Delete</string>
     <string name="save">Save</string>
     <string name="edit_header">Edit Task</string>
+    <string name="text_limit_error">You have exceeded the character limit!</string>
 </resources>

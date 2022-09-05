@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.view.iterator
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.ercanpalta.todo.R
@@ -69,6 +70,16 @@ class EditFragment : Fragment() {
             }
         }
 
+        binding.editField.nameText.addTextChangedListener {
+            if (it != null) {
+                if (it.length > 56){
+                    binding.editField.nameField.error = getString(R.string.text_limit_error)
+                }else{
+                    binding.editField.nameField.error = null
+                }
+            }
+        }
+
         binding.saveButton.setOnClickListener {
             val name = binding.editField.nameText.text.toString()
             val description = binding.editField.descriptionText.text.toString()
@@ -77,6 +88,8 @@ class EditFragment : Fragment() {
             var listChip = homeViewModel.currentListName
             if(listChipId != -1){
                 listChip = binding.chipList.findViewById<Chip>(listChipId).text.toString()
+            }else{
+                listChip = "All"
             }
 
 
@@ -97,9 +110,14 @@ class EditFragment : Fragment() {
             }
 
             if (name.isNotEmpty() && description.isNotEmpty()){
-                homeViewModel.updateTask(toDo)
-                val action = EditFragmentDirections.actionEditFragmentToNavHome()
-                findNavController().navigate(action)
+                if (name.length <= 56){
+                    homeViewModel.updateTask(toDo)
+                    val action = EditFragmentDirections.actionEditFragmentToNavHome()
+                    findNavController().navigate(action)
+                }else{
+                    Toast.makeText(this.requireContext(),R.string.text_limit_error, Toast.LENGTH_LONG).show()
+                }
+
             }else{
                 Toast.makeText(this.requireContext(),R.string.please_enter_task, Toast.LENGTH_LONG).show()
             }

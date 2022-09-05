@@ -33,24 +33,14 @@
 
             <TextView
                 android:id="@+id/task_text"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
                 app:layout_constraintBottom_toBottomOf="@id/checkbox"
                 app:layout_constraintStart_toEndOf="@id/checkbox"
                 app:layout_constraintTop_toTopOf="@id/checkbox"
+                app:layout_constraintEnd_toStartOf="@id/priority_card"
                 tools:text="Task to do" />
-
-            <com.google.android.material.divider.MaterialDivider
-                android:id="@+id/strikethrough_text"
-                android:layout_width="0dp"
-                android:layout_height="1dp"
-                android:layout_marginTop="2dp"
-                app:dividerColor="@color/black"
-                android:visibility="invisible"
-                app:layout_constraintEnd_toEndOf="@id/task_text"
-                app:layout_constraintStart_toStartOf="@id/task_text"
-                app:layout_constraintTop_toTopOf="@id/task_text"
-                app:layout_constraintBottom_toBottomOf="@id/task_text"/>
 
             <TextView
                 android:id="@+id/detail_text"
