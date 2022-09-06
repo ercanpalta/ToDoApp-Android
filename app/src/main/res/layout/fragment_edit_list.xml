@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.AddListFragment">
+    tools:context=".view.EditListFragment">
 
     <TextView
         android:id="@+id/add_list_header"
@@ -15,7 +15,7 @@
         android:textStyle="bold"
         android:textColor="@color/header"
         android:textSize="20sp"
-        android:text="@string/create_new_list"
+        android:text="@string/edit_list"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
@@ -75,16 +75,30 @@
 
 
     <Button
-        android:id="@+id/add_list_button"
+        android:id="@+id/delete_list_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:padding="10dp"
+        android:text="@string/delete"
+        app:strokeColor="@color/list_color_red"
+        style="?attr/materialButtonOutlinedStyle"
+        android:textColor="@color/list_color_red"
+        app:layout_constraintTop_toBottomOf="@+id/divider"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/save_button"/>
+
+    <Button
+        android:id="@+id/save_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:backgroundTint="@color/list_color_all"
         android:textColor="@color/white"
         android:padding="10dp"
-        android:text="@string/add"
+        android:text="@string/save"
         app:layout_constraintTop_toBottomOf="@+id/divider"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@id/delete_list_button"
         app:layout_constraintEnd_toEndOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

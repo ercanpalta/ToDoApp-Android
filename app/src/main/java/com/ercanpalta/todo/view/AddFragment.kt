@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.core.view.iterator
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -43,7 +44,17 @@ class AddFragment : Fragment() {
             listList.clear()
             listList.addAll(it)
             addListChips(listList)
+
+            val chipListIterator = binding.chipList.iterator()
+            while(chipListIterator.hasNext()){
+                val listId = chipListIterator.next().id
+                if(binding.chipList.findViewById<Chip>(listId).text.toString() == homeViewModel.currentListName){
+                    binding.chipList.check(listId)
+                }
+            }
         }
+
+
 
         addPriorityChips()
 
@@ -109,7 +120,7 @@ class AddFragment : Fragment() {
                 chip.apply {
                     id = View.generateViewId()
                     text = list.name
-                    setTextSize(16f)
+                    textSize = 16f
                     isCheckable = true
                     setTextColor(ContextCompat.getColor(this.context,R.color.white))
                     textAlignment = View.TEXT_ALIGNMENT_CENTER

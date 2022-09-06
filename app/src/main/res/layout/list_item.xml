@@ -34,6 +34,59 @@
                     tools:text="Task to do" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/longclick_menu"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:translationZ="90dp"
+                android:clickable="true"
+                android:background="@color/background"
+                android:visibility="gone"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/edit_card"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    app:cardCornerRadius="12dp"
+                    android:layout_marginEnd="10dp"
+                    app:cardBackgroundColor="@color/list_color_blue"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/close_card">
+                    <ImageButton
+                        android:id="@+id/edit_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@android:color/transparent"
+                        android:src="@drawable/ic_edit_24"/>
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/close_card"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    app:cardCornerRadius="12dp"
+                    app:cardBackgroundColor="#656565"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/edit_card"
+                    app:layout_constraintEnd_toEndOf="parent">
+                    <ImageButton
+                        android:id="@+id/close_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="10dp"
+                        android:backgroundTint="@android:color/transparent"
+                        android:src="@drawable/ic_close_24" />
+                </androidx.cardview.widget.CardView>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>
     </androidx.cardview.widget.CardView>
 

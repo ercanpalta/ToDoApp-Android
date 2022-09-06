@@ -142,8 +142,14 @@ class HomeFragment : Fragment() {
         builder.show()
     }
 
+
     fun moveToEditTask(uid: Int){
         val action = HomeFragmentDirections.actionNavHomeToEditFragment(uid)
+        findNavController().navigate(action)
+    }
+
+    fun moveToEditTaskList(uid: Int){
+        val action = HomeFragmentDirections.actionNavHomeToEditListFragment(uid)
         findNavController().navigate(action)
     }
 
@@ -151,6 +157,17 @@ class HomeFragment : Fragment() {
         val itemCount = binding.rvHome.adapter?.itemCount
         for(i in 0..itemCount!!){
             val holder = binding.rvHome.findViewHolderForAdapterPosition(i)
+            if (holder != null) {
+                val menu = holder.itemView.findViewById<View>(R.id.longclick_menu)
+                menu.visibility = View.GONE
+            }
+        }
+    }
+
+    fun clearAllListSelections(){
+        val itemCount = binding.rvHomeList.adapter?.itemCount
+        for(i in 0..itemCount!!){
+            val holder = binding.rvHomeList.findViewHolderForAdapterPosition(i)
             if (holder != null) {
                 val menu = holder.itemView.findViewById<View>(R.id.longclick_menu)
                 menu.visibility = View.GONE

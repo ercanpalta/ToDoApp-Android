@@ -7,9 +7,9 @@ import androidx.room.PrimaryKey
 @Entity
 data class TaskList(
     @ColumnInfo
-    val name:String,
+    var name:String,
     @ColumnInfo
-    val color: Int ){
+    var color: Int ){
     @PrimaryKey(autoGenerate = true)
     var uid = 0
 }

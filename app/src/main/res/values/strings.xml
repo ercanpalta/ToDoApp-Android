@@ -45,5 +45,11 @@
     <string name="delete">Delete</string>
     <string name="save">Save</string>
     <string name="edit_header">Edit Task</string>
+    <string name="edit_list">Edit List</string>
     <string name="text_limit_error">You have exceeded the character limit!</string>
+    <string name="menu_edit_list">Edit List</string>
+    <string name="please_enter_list">Please enter name!</string>
+    <string name="delete_list">Delete list?</string>
+    <string name="delete_warning">You\'ll lose all tasks inside the list!</string>
+    <string name="not_editable">This list is not editable</string>
 </resources>

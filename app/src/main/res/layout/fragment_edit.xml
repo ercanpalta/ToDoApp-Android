@@ -12,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/edit_header"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="60dp"
         android:textStyle="bold"
         android:textColor="@color/header"
         android:textSize="24sp"
@@ -48,7 +48,7 @@
         android:id="@+id/priority_chips_group"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         app:singleSelection="true"
         app:layout_constraintTop_toBottomOf="@id/priority_header"
         app:layout_constraintStart_toStartOf="@id/priority_header"/>
@@ -69,7 +69,7 @@
         android:id="@+id/chip_list"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         app:singleSelection="true"
         app:layout_constraintStart_toStartOf="@id/list_header"
         app:layout_constraintTop_toBottomOf="@id/list_header"/>
