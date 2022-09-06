@@ -53,5 +53,8 @@ interface ToDoDao {
     @Query("UPDATE TODO SET isCompleted= :isCompleted WHERE uid= :uid")
     suspend fun updateCompletion(uid:Int, isCompleted:Boolean)
 
+    @Query("DELETE FROM todo WHERE listName= :listName")
+    fun deleteAllTasksInsideList(listName:String)
+
 
 }

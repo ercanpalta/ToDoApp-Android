@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.ercanpalta.todo.R
@@ -51,13 +52,21 @@ class AddListFragment : Fragment() {
                 else -> {R.color.list_color_orange}
             }
 
-            if (listName.isNotEmpty()){
-                val newList = TaskList(listName,listColor)
-                homeViewModel.addTaskList(newList)
-            }
 
-            val action = AddListFragmentDirections.actionAddListFragmentToNavHome()
-            findNavController().navigate(action)
+
+            if (listName.isNotEmpty()){
+                if (listName.length <= 20){
+                    val newList = TaskList(listName,listColor)
+                    homeViewModel.addTaskList(newList)
+
+                    val action = AddListFragmentDirections.actionAddListFragmentToNavHome()
+                    findNavController().navigate(action)
+                }else{
+                    Toast.makeText(this.requireContext(),R.string.text_limit_error, Toast.LENGTH_LONG).show()
+                }
+            }else{
+                Toast.makeText(this.requireContext(),R.string.please_enter_list, Toast.LENGTH_LONG).show()
+            }
         }
 
     }

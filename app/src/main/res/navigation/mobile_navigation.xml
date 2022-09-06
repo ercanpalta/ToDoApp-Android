@@ -19,6 +19,9 @@
         <action
             android:id="@+id/action_nav_home_to_editFragment"
             app:destination="@id/editFragment" />
+        <action
+            android:id="@+id/action_nav_home_to_editListFragment"
+            app:destination="@id/editListFragment" />
     </fragment>
     <fragment
         android:id="@+id/addFragment"
@@ -49,6 +52,20 @@
         tools:layout="@layout/fragment_edit" >
         <action
             android:id="@+id/action_editFragment_to_nav_home"
+            app:destination="@id/nav_home"
+            app:popUpTo="@id/nav_home"
+            app:popUpToInclusive="true" />
+        <argument
+            android:name="uid"
+            app:argType="integer" />
+    </fragment>
+    <fragment
+        android:id="@+id/editListFragment"
+        android:name="com.ercanpalta.todo.view.EditListFragment"
+        android:label="@string/menu_edit_list"
+        tools:layout="@layout/fragment_edit_list" >
+        <action
+            android:id="@+id/action_editListFragment_to_nav_home"
             app:destination="@id/nav_home"
             app:popUpTo="@id/nav_home"
             app:popUpToInclusive="true" />

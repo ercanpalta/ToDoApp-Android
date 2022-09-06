@@ -23,6 +23,9 @@ class HomeViewModel(application: Application) : BaseViewModel(application){
     private val _toDo = MutableLiveData<ToDo>()
     val toDo:LiveData<ToDo> = _toDo
 
+    private val _taskList = MutableLiveData<TaskList>()
+    val taskList:LiveData<TaskList> = _taskList
+
     private var lastUpdateTime = GregorianCalendar().get(Calendar.SECOND)
     private var refreshTime = 10
 
@@ -88,11 +91,38 @@ class HomeViewModel(application: Application) : BaseViewModel(application){
         }
     }
 
+    fun getTaskList(uid: Int){
+        launch {
+            _taskList.value = dao.getTaskList(uid)
+        }
+    }
 
     fun addTaskList(newList:TaskList){
         launch {
             dao.insertList(newList)
         }
+    }
+
+    fun updateTaskList(list:TaskList){
+        launch {
+            dao.updateTaskList(list)
+        }
+        updateData()
+    }
+
+    fun deleteTaskList(uid: Int){
+        launch {
+            dao.deleteTaskList(uid)
+        }
+        updateData()
+    }
+
+    fun deleteAllTasksInsideList(listName:String){
+        launch {
+            dao.deleteAllTasksInsideList(listName)
+        }
+        currentListName = "All"
+        updateData()
     }
 
     fun updateCompletion(uid:Int, isCompleted:Boolean){

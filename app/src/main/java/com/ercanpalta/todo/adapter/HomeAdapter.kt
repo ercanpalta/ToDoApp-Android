@@ -70,8 +70,7 @@ class HomeAdapter (private val dataSet: ArrayList<ToDo>, val fragment: HomeFragm
                         detail.visibility = View.GONE
                     }
                 }
-
-
+                fragment.clearAllListSelections()
             }
 
             binding.root.setOnLongClickListener {
