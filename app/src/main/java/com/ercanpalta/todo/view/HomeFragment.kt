@@ -19,6 +19,8 @@ import com.ercanpalta.todo.enums.FilterType
 import com.ercanpalta.todo.model.TaskList
 import com.ercanpalta.todo.model.ToDo
 import com.ercanpalta.todo.viewmodel.HomeViewModel
+import java.util.*
+import kotlin.collections.ArrayList
 
 class HomeFragment : Fragment() {
 
@@ -100,7 +102,6 @@ class HomeFragment : Fragment() {
     }
 
 
-
     fun filterList(filterText:String, filterType: FilterType){
         when(filterType){
             FilterType.List -> homeAdapter.filter.filter(filterText + "L")
@@ -126,13 +127,25 @@ class HomeFragment : Fragment() {
         }
     }
 
-    fun deleteTask(uid: Int, position:Int){
+    fun moveDown(position: Int, task:ToDo){
+        homeAdapter.filteredList.remove(task)
+        homeAdapter.filteredList.add(task)
+        homeAdapter.notifyItemMoved(position,homeAdapter.itemCount-1)
+    }
+
+    fun moveUp(position: Int, task:ToDo){
+        homeAdapter.filteredList.remove(task)
+        homeAdapter.filteredList.add(0,task)
+        homeAdapter.notifyItemMoved(position,0)
+    }
+
+    fun deleteTask(task: ToDo, position:Int){
         val builder = AlertDialog.Builder(this.context, R.style.MyDialogTheme)
         builder.setTitle(R.string.delete)
         builder.setMessage(R.string.ask_delete)
         builder.setPositiveButton(R.string.delete) { dialog, i ->
-                homeViewModel.deleteTask(uid)
-                listToDo.removeAt(position)
+                homeViewModel.deleteTask(task.uid)
+                listToDo.remove(task)
                 filterList(homeViewModel.currentListName, FilterType.List)
                 homeAdapter.notifyItemRemoved(position)
             }
