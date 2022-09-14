@@ -1,7 +1,6 @@
 package com.ercanpalta.todo.adapter
 
 import android.content.Context
-import android.graphics.Color
 import android.graphics.Paint
 import android.view.LayoutInflater
 import android.view.View
@@ -19,6 +18,7 @@ class HomeAdapter (private val dataSet: ArrayList<ToDo>, val fragment: HomeFragm
 
     private lateinit var context: Context
     val filteredList = ArrayList<ToDo>()
+    val completedList = ArrayList<ToDo>()
 
     init {
         filteredList.addAll(dataSet)
@@ -26,33 +26,34 @@ class HomeAdapter (private val dataSet: ArrayList<ToDo>, val fragment: HomeFragm
 
     class ViewHolder(private var binding:RowItemBinding): RecyclerView.ViewHolder(binding.root){
 
-        fun bind(task:ToDo , position: Int, fragment:HomeFragment, context: Context){
+        fun bind(task:ToDo, fragment:HomeFragment, context: Context){
             binding.taskText.text = task.task
             binding.detailText.text = task.description
 
             if (task.isCompleted){
                 binding.checkbox.isChecked = true
-                binding.taskText.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG)
+                binding.taskText.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
                 binding.checkbox.alpha = 0.7f
             }else{
                 binding.checkbox.isChecked = false
-                binding.taskText.setPaintFlags(Paint.LINEAR_TEXT_FLAG)
+                binding.taskText.paintFlags = Paint.LINEAR_TEXT_FLAG
             }
 
             binding.checkbox.setOnClickListener {
-                val menu = binding.longclickMenu
                 if(it is CheckBox ){
                     val checked: Boolean = it.isChecked
                     if (checked){
                         fragment.updateListToDo(task,checked)
-                        binding.taskText.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG)
+                        binding.taskText.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
                         binding.checkbox.alpha = 0.7f
                         fragment.updateCompletion(task.uid,true)
+                        fragment.moveDown(this.absoluteAdapterPosition,task)
                         println("checked")
                     }else{
                         fragment.updateListToDo(task,checked)
-                        binding.taskText.setPaintFlags(Paint.LINEAR_TEXT_FLAG)
+                        binding.taskText.paintFlags = Paint.LINEAR_TEXT_FLAG
                         fragment.updateCompletion(task.uid,false)
+                        fragment.moveUp(this.absoluteAdapterPosition,task)
                         println("unChecked")
                     }
 
@@ -89,7 +90,8 @@ class HomeAdapter (private val dataSet: ArrayList<ToDo>, val fragment: HomeFragm
             }
 
             binding.deleteButton.setOnClickListener {
-                fragment.deleteTask(task.uid, position)
+                fragment.deleteTask(task, this.absoluteAdapterPosition)
+                fragment.clearAllSelections()
             }
 
             binding.editButton.setOnClickListener {
@@ -121,8 +123,7 @@ class HomeAdapter (private val dataSet: ArrayList<ToDo>, val fragment: HomeFragm
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val task = filteredList[position]
-        val adapterPosition = holder.absoluteAdapterPosition
-        holder.bind(task,adapterPosition,fragment,context)
+        holder.bind(task,fragment,context)
     }
 
     override fun getItemCount(): Int {
@@ -134,6 +135,7 @@ class HomeAdapter (private val dataSet: ArrayList<ToDo>, val fragment: HomeFragm
             override fun performFiltering(p0: CharSequence?): FilterResults {
                 val filterTextWithType = p0.toString()
                 filteredList.clear()
+                completedList.clear()
 
                 if (filterTextWithType.isEmpty()){
                     filteredList.addAll(dataSet)
@@ -142,13 +144,25 @@ class HomeAdapter (private val dataSet: ArrayList<ToDo>, val fragment: HomeFragm
                     val filterText = filterTextWithType.dropLast(1)
                     if (filterType == 'L'){
                         if(filterText == "All"){
-                            filteredList.addAll(dataSet)
-                        }else{
-                            for (data in dataSet){
-                                if(data.listName == filterText){
+                            for(data in dataSet){
+                                if (data.isCompleted){
+                                    completedList.add(data)
+                                }else{
                                     filteredList.add(data)
                                 }
                             }
+                            filteredList.addAll(completedList)
+                        }else{
+                            for (data in dataSet){
+                                if(data.listName == filterText){
+                                    if (data.isCompleted){
+                                        completedList.add(data)
+                                    }else{
+                                        filteredList.add(data)
+                                    }
+                                }
+                            }
+                            filteredList.addAll(completedList)
                         }
 
                     }
