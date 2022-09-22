@@ -12,7 +12,6 @@ import com.ercanpalta.todo.databinding.ListItemBinding
 import com.ercanpalta.todo.enums.FilterType
 import com.ercanpalta.todo.model.TaskList
 import com.ercanpalta.todo.view.HomeFragment
-import java.util.*
 import kotlin.collections.ArrayList
 
 class ListAdapter(private val dataSet: ArrayList<TaskList>, val fragment: HomeFragment): RecyclerView.Adapter<ListAdapter.ViewHolder>() {
