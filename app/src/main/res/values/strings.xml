@@ -59,6 +59,5 @@
         <item>Does not repeat</item>
         <item>Daily</item>
         <item>Weekly</item>
-        <item>Monthly</item>
     </string-array>
 </resources>

@@ -58,12 +58,25 @@ class MainActivity : AppCompatActivity() {
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
 
-    fun setReminder(timeInMillis: Long) {
+    fun setReminder(timeInMillis: Long, title:String, content:String, repeat: String) {
         val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val intent = Intent(this@MainActivity, ReminderReceiver::class.java)
-        val pendingIntent = PendingIntent.getBroadcast(this@MainActivity, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+        intent.putExtra("title",title)
+        intent.putExtra("content",content)
 
-        alarmManager.setExact(AlarmManager.RTC_WAKEUP,timeInMillis,pendingIntent)
+        val pendingIntent = PendingIntent.getBroadcast(this@MainActivity, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+
+        when (repeat) {
+            "Does not repeat" -> {
+                alarmManager.setExact(AlarmManager.RTC_WAKEUP,timeInMillis,pendingIntent)
+            }
+            "Daily" -> {
+                alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, timeInMillis, AlarmManager.INTERVAL_DAY, pendingIntent)
+            }
+            "Weekly" -> {
+                alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, timeInMillis, 1000 * 60 * 60 * 24 * 7, pendingIntent)
+            }
+        }
 
         Toast.makeText(this, "Reminder is set", Toast.LENGTH_SHORT).show()
     }

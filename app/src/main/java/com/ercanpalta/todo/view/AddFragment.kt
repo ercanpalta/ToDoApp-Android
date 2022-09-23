@@ -230,7 +230,8 @@ class AddFragment : Fragment() {
                     binding.editField.nameField.error = null
                     homeViewModel.addTask(task)
                     if(binding.reminderChipContainer.isNotEmpty()){
-                        (activity as MainActivity).setReminder(reminderCalendar.timeInMillis)
+                        val repeat = binding.repeatSpinner.selectedItem.toString()
+                        (activity as MainActivity).setReminder(reminderCalendar.timeInMillis, name, description, repeat)
                     }
                     val action = AddFragmentDirections.actionAddFragmentToNavHome()
                     findNavController().navigate(action)
