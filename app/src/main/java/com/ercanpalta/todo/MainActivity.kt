@@ -58,13 +58,14 @@ class MainActivity : AppCompatActivity() {
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
 
-    fun setReminder(timeInMillis: Long, title:String, content:String, repeat: String) {
+    fun setReminder(timeInMillis: Long, requestCode:Int, title:String, content:String, repeat: String) {
         val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val intent = Intent(this@MainActivity, ReminderReceiver::class.java)
         intent.putExtra("title",title)
         intent.putExtra("content",content)
 
-        val pendingIntent = PendingIntent.getBroadcast(this@MainActivity, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+        val pendingIntent = PendingIntent.getBroadcast(this@MainActivity, requestCode, intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
 
         when (repeat) {
             "Does not repeat" -> {
@@ -79,5 +80,14 @@ class MainActivity : AppCompatActivity() {
         }
 
         Toast.makeText(this, "Reminder is set", Toast.LENGTH_SHORT).show()
+    }
+
+    fun cancelReminder(requestCode:Int){
+        val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val intent = Intent(this@MainActivity, ReminderReceiver::class.java)
+        val pendingIntent = PendingIntent.getBroadcast(this@MainActivity, requestCode, intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+
+        alarmManager.cancel(pendingIntent)
     }
 }

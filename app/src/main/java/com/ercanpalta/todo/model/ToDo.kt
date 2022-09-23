@@ -14,7 +14,11 @@ data class ToDo(
     @ColumnInfo
     var isCompleted: Boolean = false,
     @ColumnInfo
-    var listName:String = "All"){
+    var listName:String = "All",
+    @ColumnInfo
+    var remindTimeInMillis : Long = 0,
+    @ColumnInfo
+    var requestCode: Int = 0){
     @PrimaryKey(autoGenerate = true)
     var uid:Int = 0
 

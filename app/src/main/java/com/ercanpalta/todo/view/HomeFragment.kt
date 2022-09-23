@@ -45,7 +45,6 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
         homeViewModel.toDoList.observe(viewLifecycleOwner) {
             listToDo.clear()
             listToDo.addAll(it)

@@ -1,5 +1,6 @@
 package com.ercanpalta.todo.view
 
+import android.content.Context.MODE_PRIVATE
 import android.os.Bundle
 import android.view.*
 import android.widget.ArrayAdapter
@@ -225,14 +226,28 @@ class AddFragment : Fragment() {
             val task = ToDo(name,priority,false,listChip)
             task.description = description
 
+            // to generate request code
+            val sharedPreferences = requireContext().getSharedPreferences("com.ercanpalta.todo",MODE_PRIVATE)
+            var requestCode = sharedPreferences.getInt("requestNumber",0)
+
+            if(requestCode < 9999){
+                requestCode += 1
+            }else{
+                requestCode = 1
+            }
+            sharedPreferences.edit().putInt("requestNumber",requestCode).apply()
+
+
             if (name.isNotEmpty() && description.isNotEmpty()){
                 if (name.length <= 56){
                     binding.editField.nameField.error = null
-                    homeViewModel.addTask(task)
                     if(binding.reminderChipContainer.isNotEmpty()){
                         val repeat = binding.repeatSpinner.selectedItem.toString()
-                        (activity as MainActivity).setReminder(reminderCalendar.timeInMillis, name, description, repeat)
+                        task.remindTimeInMillis = reminderCalendar.timeInMillis
+                        task.requestCode = requestCode
+                        (activity as MainActivity).setReminder(reminderCalendar.timeInMillis, requestCode, name, description, repeat)
                     }
+                    homeViewModel.addTask(task)
                     val action = AddFragmentDirections.actionAddFragmentToNavHome()
                     findNavController().navigate(action)
                 }else{
