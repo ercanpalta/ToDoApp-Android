@@ -13,6 +13,9 @@ import com.ercanpalta.todo.databinding.RowItemBinding
 import com.ercanpalta.todo.enums.Priority
 import com.ercanpalta.todo.model.ToDo
 import com.ercanpalta.todo.view.HomeFragment
+import com.google.android.material.chip.Chip
+import java.util.Calendar
+import java.util.GregorianCalendar
 
 class HomeAdapter (private val dataSet: ArrayList<ToDo>, val fragment: HomeFragment): RecyclerView.Adapter<HomeAdapter.ViewHolder>(), Filterable {
 
@@ -39,6 +42,20 @@ class HomeAdapter (private val dataSet: ArrayList<ToDo>, val fragment: HomeFragm
                 binding.taskText.paintFlags = Paint.LINEAR_TEXT_FLAG
             }
 
+            if (task.requestCode != -1){
+                binding.reminderIcon.visibility = View.VISIBLE
+
+                // to add reminder time info to the row item
+                val calendar = Calendar.getInstance()
+                calendar.timeInMillis = task.remindTimeInMillis
+
+                val reminderText = TextView(context)
+                reminderText.textSize = 12f
+                reminderText.setTextColor(context.getColor(android.R.color.darker_gray))
+                reminderText.text = calendar.time.toString().dropLast(18)
+                binding.reminderChipContainer.addView(reminderText)
+            }
+
             binding.checkbox.setOnClickListener {
                 if(it is CheckBox ){
                     val checked: Boolean = it.isChecked
@@ -63,12 +80,16 @@ class HomeAdapter (private val dataSet: ArrayList<ToDo>, val fragment: HomeFragm
             binding.root.setOnClickListener {
                 val detail = binding.detailText
                 val menu = binding.longclickMenu
+                val chipContainer = binding.reminderChipContainer
+
                 if(menu.visibility == View.GONE){
                     fragment.clearAllSelections()
                     if (detail.visibility == View.GONE){
                         detail.visibility = View.VISIBLE
+                        chipContainer.visibility = View.VISIBLE
                     }else{
                         detail.visibility = View.GONE
+                        chipContainer.visibility = View.GONE
                     }
                 }
                 fragment.clearAllListSelections()

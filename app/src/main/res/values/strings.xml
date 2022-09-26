@@ -54,6 +54,10 @@
     <string name="time">Pick a time</string>
     <string name="add_reminder">Add reminder</string>
     <string name="apply">Apply</string>
+    <string name="edit">Edit</string>
+    <string name="close">Close</string>
+    <string name="progress">In progress</string>
+    <string name="my_tasks">My tasks</string>
 
     <string-array name="repeat">
         <item>Does not repeat</item>

@@ -18,7 +18,7 @@ data class ToDo(
     @ColumnInfo
     var remindTimeInMillis : Long = 0,
     @ColumnInfo
-    var requestCode: Int = 0){
+    var requestCode: Int = -1){
     @PrimaryKey(autoGenerate = true)
     var uid:Int = 0
 

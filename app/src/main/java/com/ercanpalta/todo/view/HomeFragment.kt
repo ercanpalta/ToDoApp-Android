@@ -118,6 +118,10 @@ class HomeFragment : Fragment() {
         homeViewModel.updateCompletion(uid, isCompleted)
     }
 
+    fun refreshRvHome(){
+        binding.rvHome.adapter?.notifyDataSetChanged()
+    }
+
     fun updateListToDo(task: ToDo, isCompleted: Boolean){
         for (todo in listToDo){
             if (todo == task){

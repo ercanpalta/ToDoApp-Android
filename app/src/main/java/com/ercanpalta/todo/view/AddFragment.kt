@@ -190,7 +190,7 @@ class AddFragment : Fragment() {
                 setOnCloseIconClickListener {
                     binding.reminderChipContainer.removeAllViews()
                 }
-                setChipIconResource(R.drawable.ic_alarm_24)
+                setChipIconResource(R.drawable.ic_alarm_16)
                 setTextColor(ContextCompat.getColor(this.context,R.color.white))
                 textAlignment = View.TEXT_ALIGNMENT_CENTER
                 setChipBackgroundColorResource(android.R.color.darker_gray)
@@ -245,7 +245,7 @@ class AddFragment : Fragment() {
                         val repeat = binding.repeatSpinner.selectedItem.toString()
                         task.remindTimeInMillis = reminderCalendar.timeInMillis
                         task.requestCode = requestCode
-                        (activity as MainActivity).setReminder(reminderCalendar.timeInMillis, requestCode, name, description, repeat)
+                        (activity as MainActivity).setReminder(task, repeat)
                     }
                     homeViewModel.addTask(task)
                     val action = AddFragmentDirections.actionAddFragmentToNavHome()

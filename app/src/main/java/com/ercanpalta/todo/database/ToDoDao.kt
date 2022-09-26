@@ -26,10 +26,10 @@ interface ToDoDao {
     suspend fun getTaskList(uid: Int): TaskList
 
     @Update
-    fun updateTask(task: ToDo)
+    suspend fun updateTask(task: ToDo)
 
     @Update
-    fun updateTaskList(taskList: TaskList)
+    suspend fun updateTaskList(taskList: TaskList)
 
     @Query("DELETE FROM ToDo WHERE uid= :uid")
     suspend fun deleteTask(uid:Int)
@@ -52,6 +52,9 @@ interface ToDoDao {
 
     @Query("UPDATE TODO SET isCompleted= :isCompleted WHERE uid= :uid")
     suspend fun updateCompletion(uid:Int, isCompleted:Boolean)
+
+    @Query("UPDATE TODO SET requestCode= -1 WHERE requestCode= :requestCode")
+    suspend fun updateRequestCode(requestCode:Int)
 
     @Query("DELETE FROM todo WHERE listName= :listName")
     fun deleteAllTasksInsideList(listName:String)

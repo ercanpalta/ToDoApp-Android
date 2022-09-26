@@ -1,5 +1,6 @@
 package com.ercanpalta.todo
 
+import android.annotation.SuppressLint
 import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
@@ -15,6 +16,7 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
 import com.ercanpalta.todo.databinding.ActivityMainBinding
+import com.ercanpalta.todo.model.ToDo
 import com.ercanpalta.todo.receiver.ReminderReceiver
 
 class MainActivity : AppCompatActivity() {
@@ -58,24 +60,26 @@ class MainActivity : AppCompatActivity() {
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
 
-    fun setReminder(timeInMillis: Long, requestCode:Int, title:String, content:String, repeat: String) {
+    fun setReminder(task:ToDo, repeat: String) {
         val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val intent = Intent(this@MainActivity, ReminderReceiver::class.java)
-        intent.putExtra("title",title)
-        intent.putExtra("content",content)
+        intent.putExtra("title",task.task)
+        intent.putExtra("content",task.description)
+        intent.putExtra("repeat",repeat)
+        intent.putExtra("request_code",task.requestCode)
 
-        val pendingIntent = PendingIntent.getBroadcast(this@MainActivity, requestCode, intent,
+        val pendingIntent = PendingIntent.getBroadcast(this@MainActivity, task.requestCode, intent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
 
         when (repeat) {
             "Does not repeat" -> {
-                alarmManager.setExact(AlarmManager.RTC_WAKEUP,timeInMillis,pendingIntent)
+                alarmManager.setExact(AlarmManager.RTC_WAKEUP,task.remindTimeInMillis,pendingIntent)
             }
             "Daily" -> {
-                alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, timeInMillis, AlarmManager.INTERVAL_DAY, pendingIntent)
+                alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, task.remindTimeInMillis, AlarmManager.INTERVAL_DAY, pendingIntent)
             }
             "Weekly" -> {
-                alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, timeInMillis, 1000 * 60 * 60 * 24 * 7, pendingIntent)
+                alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, task.remindTimeInMillis, 1000 * 60 * 60 * 24 * 7, pendingIntent)
             }
         }
 
