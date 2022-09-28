@@ -5,12 +5,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.ercanpalta.todo.MainActivity
 import com.ercanpalta.todo.R
 import com.ercanpalta.todo.adapter.HomeAdapter
 import com.ercanpalta.todo.adapter.ListAdapter
@@ -19,7 +19,7 @@ import com.ercanpalta.todo.enums.FilterType
 import com.ercanpalta.todo.model.TaskList
 import com.ercanpalta.todo.model.ToDo
 import com.ercanpalta.todo.viewmodel.HomeViewModel
-import java.util.*
+import com.google.android.material.card.MaterialCardView
 import kotlin.collections.ArrayList
 
 class HomeFragment : Fragment() {
@@ -29,7 +29,7 @@ class HomeFragment : Fragment() {
     private val binding get() = _binding!!
     private val homeViewModel: HomeViewModel by activityViewModels()
     private lateinit var homeAdapter: HomeAdapter
-    val listToDo:ArrayList<ToDo> = arrayListOf()
+    private val listToDo:ArrayList<ToDo> = arrayListOf()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -37,9 +37,8 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
-        val root: View = binding.root
 
-        return root
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -86,6 +85,7 @@ class HomeFragment : Fragment() {
             val action = HomeFragmentDirections.actionNavHomeToAddFragment()
             findNavController().navigate(action)
         }
+        binding.myTasksText.text = getString(R.string.my_tasks_format,homeViewModel.currentListName.lowercase())
     }
 
     fun showNoDataText(){
@@ -98,6 +98,12 @@ class HomeFragment : Fragment() {
 
     fun changeCurrentListName(listName:String){
         homeViewModel.currentListName = listName
+        binding.myTasksText.text = getString(R.string.my_tasks_format,listName.lowercase())
+    }
+
+    fun cancelReminder(requestCode:Int){
+        (activity as MainActivity).cancelReminder(requestCode)
+        homeViewModel.updateRequestCode(requestCode)
     }
 
 
@@ -116,10 +122,6 @@ class HomeFragment : Fragment() {
 
     fun updateCompletion(uid:Int, isCompleted:Boolean){
         homeViewModel.updateCompletion(uid, isCompleted)
-    }
-
-    fun refreshRvHome(){
-        binding.rvHome.adapter?.notifyDataSetChanged()
     }
 
     fun updateListToDo(task: ToDo, isCompleted: Boolean){
@@ -146,13 +148,13 @@ class HomeFragment : Fragment() {
         val builder = AlertDialog.Builder(this.context, R.style.MyDialogTheme)
         builder.setTitle(R.string.delete)
         builder.setMessage(R.string.ask_delete)
-        builder.setPositiveButton(R.string.delete) { dialog, i ->
+        builder.setPositiveButton(R.string.delete) { _, _ ->
                 homeViewModel.deleteTask(task.uid)
                 listToDo.remove(task)
                 filterList(homeViewModel.currentListName, FilterType.List)
                 homeAdapter.notifyItemRemoved(position)
             }
-        builder.setNegativeButton(R.string.cancel){ dialog, i ->
+        builder.setNegativeButton(R.string.cancel){ _, _ ->
 
             }
         builder.show()
@@ -187,6 +189,8 @@ class HomeFragment : Fragment() {
             if (holder != null) {
                 val menu = holder.itemView.findViewById<View>(R.id.longclick_menu)
                 menu.visibility = View.GONE
+                val cardView = holder.itemView.findViewById<MaterialCardView>(R.id.colorCard)
+                cardView.strokeWidth = 6
             }
         }
     }

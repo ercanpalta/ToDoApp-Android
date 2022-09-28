@@ -131,6 +131,12 @@ class HomeViewModel(application: Application) : BaseViewModel(application){
         }
     }
 
+    fun updateRequestCode(requestCode:Int){
+        launch {
+            dao.updateRequestCode(requestCode)
+        }
+    }
+
     fun addAllLists(vararg lists: TaskList){
         launch {
             dao.insertAllLists(*lists)

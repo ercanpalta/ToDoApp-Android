@@ -15,6 +15,7 @@
     <string name="time_format">%1$s:%2$s</string>
     <string name="date_format">%1$s %2$s %3$s</string>
     <string name="date_time_format">%1$s   %2$s</string>
+    <string name="my_tasks_format">My %1$s tasks</string>
 
     <string name="create_header">Create new task</string>
     <string name="task_name">Task Name</string>
@@ -58,6 +59,7 @@
     <string name="close">Close</string>
     <string name="progress">In progress</string>
     <string name="my_tasks">My tasks</string>
+    <string name="wrong_time">The time you chose has passed</string>
 
     <string-array name="repeat">
         <item>Does not repeat</item>
