@@ -81,7 +81,7 @@ class AddFragment : Fragment() {
         val menuHost: MenuHost = requireActivity()
         menuHost.addMenuProvider(object : MenuProvider {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-                menuInflater.inflate(R.menu.add_fragment_menu, menu)
+                menuInflater.inflate(R.menu.fragment_menu, menu)
             }
 
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
@@ -226,22 +226,22 @@ class AddFragment : Fragment() {
             val task = ToDo(name,priority,false,listChip)
             task.description = description
 
-            // to generate request code
-            val sharedPreferences = requireContext().getSharedPreferences("com.ercanpalta.todo",MODE_PRIVATE)
-            var requestCode = sharedPreferences.getInt("requestNumber",0)
-
-            if(requestCode < 9999){
-                requestCode += 1
-            }else{
-                requestCode = 1
-            }
-            sharedPreferences.edit().putInt("requestNumber",requestCode).apply()
-
 
             if (name.isNotEmpty() && description.isNotEmpty()){
                 if (name.length <= 56){
                     binding.editField.nameField.error = null
                     if(binding.reminderChipContainer.isNotEmpty()){
+                        // to generate request code
+                        val sharedPreferences = requireContext().getSharedPreferences("com.ercanpalta.todo",MODE_PRIVATE)
+                        var requestCode = sharedPreferences.getInt("requestNumber",0)
+
+                        if(requestCode < 9999){
+                            requestCode += 1
+                        }else{
+                            requestCode = 1
+                        }
+                        sharedPreferences.edit().putInt("requestNumber",requestCode).apply()
+
                         val repeat = binding.repeatSpinner.selectedItem.toString()
                         task.remindTimeInMillis = reminderCalendar.timeInMillis
                         task.requestCode = requestCode

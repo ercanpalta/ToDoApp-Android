@@ -35,9 +35,11 @@ class HomeAdapter (private val dataSet: ArrayList<ToDo>, val fragment: HomeFragm
                 binding.checkbox.isChecked = true
                 binding.taskText.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
                 binding.checkbox.alpha = 0.7f
+                binding.progressText.setText(R.string.done)
             }else{
                 binding.checkbox.isChecked = false
                 binding.taskText.paintFlags = Paint.LINEAR_TEXT_FLAG
+                binding.progressText.setText(R.string.progress)
             }
 
             if (task.requestCode != -1){
@@ -72,11 +74,13 @@ class HomeAdapter (private val dataSet: ArrayList<ToDo>, val fragment: HomeFragm
                         fragment.updateListToDo(task,true)
                         binding.taskText.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
                         binding.checkbox.alpha = 0.7f
+                        binding.progressText.setText(R.string.done)
                         fragment.updateCompletion(task.uid,true)
                         fragment.moveDown(this.absoluteAdapterPosition,task)
                     }else{
                         fragment.updateListToDo(task,false)
                         binding.taskText.paintFlags = Paint.LINEAR_TEXT_FLAG
+                        binding.progressText.setText(R.string.progress)
                         fragment.updateCompletion(task.uid,false)
                         fragment.moveUp(this.absoluteAdapterPosition,task)
                     }

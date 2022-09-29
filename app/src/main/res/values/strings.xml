@@ -64,6 +64,7 @@
     <string name="reminder">Reminder</string>
     <string name="hey">Hey! Let\'s start. There are tasks to complete.</string>
     <string name="current_task">Current task</string>
+    <string name="done">Done</string>
 
     <string-array name="repeat">
         <item>Does not repeat</item>
