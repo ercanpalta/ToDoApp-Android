@@ -22,6 +22,9 @@
         <action
             android:id="@+id/action_nav_home_to_editListFragment"
             app:destination="@id/editListFragment" />
+        <action
+            android:id="@+id/action_nav_home_to_reminderFragment"
+            app:destination="@id/reminderFragment" />
     </fragment>
     <fragment
         android:id="@+id/addFragment"
@@ -72,5 +75,22 @@
         <argument
             android:name="uid"
             app:argType="integer" />
+    </fragment>
+    <fragment
+        android:id="@+id/reminderFragment"
+        android:name="com.ercanpalta.todo.view.ReminderFragment"
+        android:label="@string/reminder"
+        tools:layout="@layout/fragment_reminder" >
+        <action
+            android:id="@+id/action_reminderFragment_to_nav_home"
+            app:destination="@id/nav_home"
+            app:popUpTo="@id/nav_home"
+            app:popUpToInclusive="true" />
+        <argument
+            android:name="title"
+            app:argType="string" />
+        <argument
+            android:name="content"
+            app:argType="string" />
     </fragment>
 </navigation>

@@ -8,14 +8,10 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import android.view.View
 import androidx.core.app.NotificationCompat
-import androidx.fragment.app.FragmentManager
-import androidx.navigation.Navigation
 import com.ercanpalta.todo.MainActivity
 import com.ercanpalta.todo.R
 import com.ercanpalta.todo.database.ToDoDatabase
-import com.ercanpalta.todo.view.HomeFragment
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
@@ -61,6 +57,8 @@ class ReminderReceiver: BroadcastReceiver() {
         // to open app when user clicked to the notification
         val intent = Intent(p0, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            putExtra("title",title)
+            putExtra("content",content)
         }
         val pendingIntent: PendingIntent = PendingIntent.getActivity(p0, 0, intent, PendingIntent.FLAG_IMMUTABLE)
 
@@ -78,5 +76,11 @@ class ReminderReceiver: BroadcastReceiver() {
 
 
         notificationManager.notify(0, builder.build())
+
+        // to open activity when reminder received
+        p0.startActivity(intent)
     }
+
+
+
 }

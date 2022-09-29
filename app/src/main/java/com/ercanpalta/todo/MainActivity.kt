@@ -18,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.ercanpalta.todo.databinding.ActivityMainBinding
 import com.ercanpalta.todo.model.ToDo
 import com.ercanpalta.todo.receiver.ReminderReceiver
+import com.ercanpalta.todo.view.HomeFragmentDirections
 
 class MainActivity : AppCompatActivity() {
 
@@ -46,6 +47,21 @@ class MainActivity : AppCompatActivity() {
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+
+
+        // to get task info from receiver
+        var title = "title"
+        var content = "content"
+        val intent = intent
+        intent?.extras?.apply {
+            title = this.getString("title","title")
+            content = this.getString("content","content")
+        }
+
+        if (title != "title"){
+            val action = HomeFragmentDirections.actionNavHomeToReminderFragment(title, content)
+            navController.navigate(action)
+        }
 
     }
 

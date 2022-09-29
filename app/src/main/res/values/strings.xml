@@ -60,10 +60,16 @@
     <string name="progress">In progress</string>
     <string name="my_tasks">My tasks</string>
     <string name="wrong_time">The time you chose has passed</string>
+    <string name="details">Details</string>
+    <string name="reminder">Reminder</string>
+    <string name="hey">Hey! Let\'s start. There are tasks to complete.</string>
+    <string name="current_task">Current task</string>
 
     <string-array name="repeat">
         <item>Does not repeat</item>
         <item>Daily</item>
         <item>Weekly</item>
     </string-array>
+
+
 </resources>
