@@ -1,5 +1,6 @@
 package com.ercanpalta.todo.view
 
+import android.app.AlertDialog
 import android.content.Context.MODE_PRIVATE
 import android.os.Bundle
 import android.view.*
@@ -188,7 +189,17 @@ class AddFragment : Fragment() {
                 textSize = 16f
                 isCloseIconVisible = true
                 setOnCloseIconClickListener {
-                    binding.reminderChipContainer.removeAllViews()
+                    val builder = AlertDialog.Builder(this.context, R.style.MyDialogTheme)
+                    builder.setTitle(R.string.delete_reminder)
+                    builder.setMessage(R.string.ask_delete)
+
+                    builder.setPositiveButton(R.string.delete) { _, _ ->
+                        binding.reminderChipContainer.removeAllViews()
+                    }
+                    builder.setNegativeButton(R.string.cancel){ _, _ ->
+
+                    }
+                    builder.show()
                 }
                 setChipIconResource(R.drawable.ic_alarm_16)
                 setTextColor(ContextCompat.getColor(this.context,R.color.white))

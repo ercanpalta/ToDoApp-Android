@@ -1,5 +1,6 @@
 package com.ercanpalta.todo.view
 
+import android.app.AlertDialog
 import android.content.Context
 import android.os.Bundle
 import android.view.*
@@ -15,6 +16,7 @@ import androidx.navigation.fragment.findNavController
 import com.ercanpalta.todo.MainActivity
 import com.ercanpalta.todo.R
 import com.ercanpalta.todo.databinding.FragmentEditBinding
+import com.ercanpalta.todo.enums.FilterType
 import com.ercanpalta.todo.enums.Priority
 import com.ercanpalta.todo.model.TaskList
 import com.ercanpalta.todo.model.ToDo
@@ -70,6 +72,7 @@ class EditFragment : Fragment() {
 
         addPriorityChips()
 
+        // to get lists
         val listList:ArrayList<TaskList> = arrayListOf()
         homeViewModel.listList.value?.let { listList.addAll(it) }
         addListChips(listList)
@@ -98,6 +101,39 @@ class EditFragment : Fragment() {
                 if(binding.chipList.findViewById<Chip>(listId).text.toString() == it.listName){
                     binding.chipList.check(listId)
                 }
+            }
+
+            // to add reminder chip if reminder set before
+            if (toDo.requestCode != -1){
+                val calendar = Calendar.getInstance()
+                calendar.timeInMillis = toDo.remindTimeInMillis
+
+                val chip = Chip(context)
+                chip.apply {
+                    this.id = View.generateViewId()
+                    //text = getString(R.string.date_time_format,date,time)
+                    text = calendar.time.toString().dropLast(18)
+                    textSize = 16f
+                    isCloseIconVisible = true
+                    setOnCloseIconClickListener {
+                        val builder = alertDialog()
+                        builder.setPositiveButton(R.string.delete) { _, _ ->
+                            binding.reminderChipContainer.removeAllViews()
+                            if(toDo.requestCode != -1){
+                                cancelReminder(toDo.requestCode)
+                                toDo.requestCode = -1
+                            }
+                        }
+                        builder.show()
+
+                    }
+                    setChipIconResource(R.drawable.ic_alarm_16)
+                    setTextColor(ContextCompat.getColor(this.context,R.color.white))
+                    textAlignment = View.TEXT_ALIGNMENT_CENTER
+                    setChipBackgroundColorResource(android.R.color.darker_gray)
+                }
+
+                binding.reminderChipContainer.addView(chip)
             }
         }
 
@@ -199,7 +235,11 @@ class EditFragment : Fragment() {
                 textSize = 16f
                 isCloseIconVisible = true
                 setOnCloseIconClickListener {
-                    binding.reminderChipContainer.removeAllViews()
+                    val builder = alertDialog()
+                    builder.setPositiveButton(R.string.delete) { _, _ ->
+                        binding.reminderChipContainer.removeAllViews()
+                    }
+                    builder.show()
                 }
                 setChipIconResource(R.drawable.ic_alarm_16)
                 setTextColor(ContextCompat.getColor(this.context,R.color.white))
@@ -208,7 +248,6 @@ class EditFragment : Fragment() {
             }
 
             binding.reminderChipContainer.addView(chip)
-            println(reminderCalendar.time)
 
             binding.reminderFrame.visibility = View.GONE
         }
@@ -279,6 +318,21 @@ class EditFragment : Fragment() {
 
 
 
+    }
+
+    fun cancelReminder(requestCode:Int){
+        (activity as MainActivity).cancelReminder(requestCode)
+    }
+
+    fun alertDialog():AlertDialog.Builder{
+        val builder = AlertDialog.Builder(this.context, R.style.MyDialogTheme)
+        builder.setTitle(R.string.delete_reminder)
+        builder.setMessage(R.string.ask_delete)
+
+        builder.setNegativeButton(R.string.cancel){ _, _ ->
+
+        }
+        return builder
     }
 
     fun addListChips(listList:ArrayList<TaskList>){

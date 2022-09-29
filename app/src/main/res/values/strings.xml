@@ -36,6 +36,7 @@
     <string name="pink">Pink</string>
     <string name="orange">Orange</string>
     <string name="cancel">Cancel</string>
+    <string name="delete_reminder">Delete Reminder</string>
     <string name="color">Color</string>
     <string name="list_add">Add New List</string>
     <string name="already_have_reminder">You already set a reminder before!</string>
