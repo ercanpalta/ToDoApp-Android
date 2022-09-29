@@ -6,6 +6,7 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
+import android.content.Context.MODE_PRIVATE
 import android.content.Intent
 import android.os.Build
 import androidx.core.app.NotificationCompat
@@ -60,7 +61,7 @@ class ReminderReceiver: BroadcastReceiver() {
             putExtra("title",title)
             putExtra("content",content)
         }
-        val pendingIntent: PendingIntent = PendingIntent.getActivity(p0, 0, intent, PendingIntent.FLAG_IMMUTABLE)
+        val pendingIntent: PendingIntent = PendingIntent.getActivity(p0, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
 
         // to build notification
         val builder = NotificationCompat.Builder(p0,"com.ercanpalta.todo.receiver")
@@ -78,7 +79,13 @@ class ReminderReceiver: BroadcastReceiver() {
         notificationManager.notify(0, builder.build())
 
         // to open activity when reminder received
-        p0.startActivity(intent)
+        val sharedPreferences = p0.getSharedPreferences("com.ercanpalta.todo",MODE_PRIVATE)
+        val isAppOpen = sharedPreferences.getBoolean("isAppOpen",false)
+
+        if(isAppOpen){
+            p0.startActivity(intent)
+        }
+
     }
 
 

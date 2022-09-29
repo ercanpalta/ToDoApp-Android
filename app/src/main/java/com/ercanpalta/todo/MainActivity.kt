@@ -110,4 +110,16 @@ class MainActivity : AppCompatActivity() {
 
         alarmManager.cancel(pendingIntent)
     }
+
+    override fun onPause() {
+        super.onPause()
+        val sharedPreferences = this.getSharedPreferences("com.ercanpalta.todo", MODE_PRIVATE)
+        sharedPreferences.edit().putBoolean("isAppOpen",false).apply()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val sharedPreferences = this.getSharedPreferences("com.ercanpalta.todo", MODE_PRIVATE)
+        sharedPreferences.edit().putBoolean("isAppOpen",true).apply()
+    }
 }
