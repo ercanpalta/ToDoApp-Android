@@ -111,7 +111,6 @@ class EditFragment : Fragment() {
                 val chip = Chip(context)
                 chip.apply {
                     this.id = View.generateViewId()
-                    //text = getString(R.string.date_time_format,date,time)
                     text = calendar.time.toString().dropLast(18)
                     textSize = 16f
                     isCloseIconVisible = true

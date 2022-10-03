@@ -38,21 +38,15 @@ class ReminderReceiver: BroadcastReceiver() {
         }
 
         // to get task info
-        var title = "title"
-        var content = "content"
         var requestCode = 0
-        var repeat = ""
         p1?.extras?.apply {
-            title = this.getString("title","title")
-            content = this.getString("content","content")
             requestCode = this.getInt("request_code")
-            repeat = this.getString("repeat","")
         }
 
         val dao = ToDoDatabase(p0.applicationContext).dao()
         var task:ToDo
         runBlocking {
-            task = dao.getTaskFromRequestCode(requestCode)
+            task = dao.getTaskByRequestCode(requestCode)
         }
 
         // to update reminder state
@@ -81,22 +75,21 @@ class ReminderReceiver: BroadcastReceiver() {
         // to open app when user clicked to the notification
         val intent = Intent(p0, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            putExtra("title",title)
-            putExtra("content",content)
+            putExtra("uid",task.uid)
         }
         val pendingIntent: PendingIntent = PendingIntent.getActivity(p0, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
 
         // to build notification
         val builder = NotificationCompat.Builder(p0,"com.ercanpalta.todo.receiver")
             .setSmallIcon(R.drawable.ic_launcher_foreground)
-            .setContentTitle(title)
-            .setContentText(content)
+            .setContentTitle(task.task)
+            .setContentText(task.description)
             .setPriority(NotificationCompat.PRIORITY_MAX)
             .setDefaults(Notification.DEFAULT_ALL)
             .setContentIntent(pendingIntent)
             .setAutoCancel(true)
             .setStyle(NotificationCompat.BigTextStyle()
-                .bigText(content))
+                .bigText(task.description))
 
 
         notificationManager.notify(0, builder.build())

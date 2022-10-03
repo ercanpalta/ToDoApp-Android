@@ -87,10 +87,7 @@
             app:popUpTo="@id/nav_home"
             app:popUpToInclusive="true" />
         <argument
-            android:name="title"
-            app:argType="string" />
-        <argument
-            android:name="content"
-            app:argType="string" />
+            android:name="uid"
+            app:argType="integer" />
     </fragment>
 </navigation>

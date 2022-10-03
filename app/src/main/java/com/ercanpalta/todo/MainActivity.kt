@@ -49,16 +49,14 @@ class MainActivity : AppCompatActivity() {
 
 
         // to get task info from receiver
-        var title = "title"
-        var content = "content"
+        var uid = -1
         val intent = intent
         intent?.extras?.apply {
-            title = this.getString("title","title")
-            content = this.getString("content","content")
+            uid = this.getInt("uid",-1)
         }
 
-        if (title != "title"){
-            val action = HomeFragmentDirections.actionNavHomeToReminderFragment(title, content)
+        if (uid != -1){
+            val action = HomeFragmentDirections.actionNavHomeToReminderFragment(uid)
             navController.navigate(action)
         }
 
@@ -78,9 +76,6 @@ class MainActivity : AppCompatActivity() {
     fun setReminder(task:ToDo) {
         val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val intent = Intent(this@MainActivity, ReminderReceiver::class.java)
-        intent.putExtra("title",task.task)
-        intent.putExtra("content",task.description)
-        intent.putExtra("repeat",task.repeat)
         intent.putExtra("request_code",task.requestCode)
 
         val pendingIntent = PendingIntent.getBroadcast(this@MainActivity, task.requestCode, intent,

@@ -23,7 +23,7 @@ interface ToDoDao {
     suspend fun getTask(uid: Int): ToDo
 
     @Query("SELECT * FROM todo WHERE requestCode= :requestCode")
-    suspend fun getTaskFromRequestCode(requestCode: Int): ToDo
+    suspend fun getTaskByRequestCode(requestCode: Int): ToDo
 
     @Query("SELECT * FROM tasklist WHERE uid= :uid")
     suspend fun getTaskList(uid: Int): TaskList
