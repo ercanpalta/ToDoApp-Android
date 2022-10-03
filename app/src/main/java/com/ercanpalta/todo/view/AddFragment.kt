@@ -182,35 +182,41 @@ class AddFragment : Fragment() {
         }
 
         binding.applyReminder.setOnClickListener {
-            val chip = Chip(context)
-            chip.apply {
-                id = View.generateViewId()
-                text = getString(R.string.date_time_format,date,time)
-                textSize = 16f
-                isCloseIconVisible = true
-                setOnCloseIconClickListener {
-                    val builder = AlertDialog.Builder(this.context, R.style.MyDialogTheme)
-                    builder.setTitle(R.string.delete_reminder)
-                    builder.setMessage(R.string.ask_delete)
+            val dateText = binding.dateText.text.toString()
+            val timeText = binding.timeText.text.toString()
+            if(dateText != "Pick a date" && timeText != "Pick a time"){
+                val chip = Chip(context)
+                chip.apply {
+                    id = View.generateViewId()
+                    text = getString(R.string.date_time_format,date,time)
+                    textSize = 16f
+                    isCloseIconVisible = true
+                    setOnCloseIconClickListener {
+                        val builder = AlertDialog.Builder(this.context, R.style.MyDialogTheme)
+                        builder.setTitle(R.string.delete_reminder)
+                        builder.setMessage(R.string.ask_delete)
 
-                    builder.setPositiveButton(R.string.delete) { _, _ ->
-                        binding.reminderChipContainer.removeAllViews()
-                    }
-                    builder.setNegativeButton(R.string.cancel){ _, _ ->
+                        builder.setPositiveButton(R.string.delete) { _, _ ->
+                            binding.reminderChipContainer.removeAllViews()
+                        }
+                        builder.setNegativeButton(R.string.cancel){ _, _ ->
 
+                        }
+                        builder.show()
                     }
-                    builder.show()
+                    setChipIconResource(R.drawable.ic_alarm_16)
+                    setTextColor(ContextCompat.getColor(this.context,R.color.white))
+                    textAlignment = View.TEXT_ALIGNMENT_CENTER
+                    setChipBackgroundColorResource(android.R.color.darker_gray)
                 }
-                setChipIconResource(R.drawable.ic_alarm_16)
-                setTextColor(ContextCompat.getColor(this.context,R.color.white))
-                textAlignment = View.TEXT_ALIGNMENT_CENTER
-                setChipBackgroundColorResource(android.R.color.darker_gray)
+
+                binding.reminderChipContainer.addView(chip)
+
+                binding.reminderFrame.visibility = View.GONE
+            }else{
+                Toast.makeText(requireContext(),R.string.please_enter_date,Toast.LENGTH_LONG).show()
             }
 
-            binding.reminderChipContainer.addView(chip)
-            println(reminderCalendar.time)
-
-            binding.reminderFrame.visibility = View.GONE
         }
 
         binding.addButton.setOnClickListener {
@@ -253,10 +259,10 @@ class AddFragment : Fragment() {
                         }
                         sharedPreferences.edit().putInt("requestNumber",requestCode).apply()
 
-                        val repeat = binding.repeatSpinner.selectedItem.toString()
+                        task.repeat = binding.repeatSpinner.selectedItem.toString()
                         task.remindTimeInMillis = reminderCalendar.timeInMillis
                         task.requestCode = requestCode
-                        (activity as MainActivity).setReminder(task, repeat)
+                        (activity as MainActivity).setReminder(task)
                     }
                     homeViewModel.addTask(task)
                     val action = AddFragmentDirections.actionAddFragmentToNavHome()

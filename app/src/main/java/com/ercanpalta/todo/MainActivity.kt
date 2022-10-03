@@ -1,6 +1,5 @@
 package com.ercanpalta.todo
 
-import android.annotation.SuppressLint
 import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
@@ -76,18 +75,18 @@ class MainActivity : AppCompatActivity() {
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
 
-    fun setReminder(task:ToDo, repeat: String) {
+    fun setReminder(task:ToDo) {
         val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val intent = Intent(this@MainActivity, ReminderReceiver::class.java)
         intent.putExtra("title",task.task)
         intent.putExtra("content",task.description)
-        intent.putExtra("repeat",repeat)
+        intent.putExtra("repeat",task.repeat)
         intent.putExtra("request_code",task.requestCode)
 
         val pendingIntent = PendingIntent.getBroadcast(this@MainActivity, task.requestCode, intent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
 
-        when (repeat) {
+        when (task.repeat) {
             "Does not repeat" -> {
                 alarmManager.setExact(AlarmManager.RTC_WAKEUP,task.remindTimeInMillis,pendingIntent)
             }

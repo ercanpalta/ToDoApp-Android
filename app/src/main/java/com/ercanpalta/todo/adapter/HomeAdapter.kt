@@ -45,6 +45,10 @@ class HomeAdapter (private val dataSet: ArrayList<ToDo>, val fragment: HomeFragm
             if (task.requestCode != -1){
                 binding.reminderIcon.visibility = View.VISIBLE
 
+                if (task.repeat != "Does not repeat"){
+                    binding.repeatIcon.visibility = View.VISIBLE
+                }
+
                 // to add reminder time info to the row item
                 val calendar = Calendar.getInstance()
                 calendar.timeInMillis = task.remindTimeInMillis
@@ -53,10 +57,12 @@ class HomeAdapter (private val dataSet: ArrayList<ToDo>, val fragment: HomeFragm
                 reminderText.textSize = 12f
                 reminderText.setTextColor(context.getColor(android.R.color.darker_gray))
                 reminderText.text = calendar.time.toString().dropLast(18)
+                binding.reminderChipContainer.removeAllViews()
                 binding.reminderChipContainer.addView(reminderText)
             }
             else{
                 binding.reminderIcon.visibility = View.GONE
+                binding.repeatIcon.visibility = View.GONE
                 binding.reminderChipContainer.removeAllViews()
             }
 
@@ -67,6 +73,7 @@ class HomeAdapter (private val dataSet: ArrayList<ToDo>, val fragment: HomeFragm
                         // to cancel reminder and hide icons about reminder
                         fragment.cancelReminder(task.requestCode)
                         binding.reminderIcon.visibility = View.GONE
+                        binding.repeatIcon.visibility = View.GONE
                         binding.reminderChipContainer.removeAllViews()
                         task.requestCode = -1
 

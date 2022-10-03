@@ -41,6 +41,7 @@
     <string name="list_add">Add New List</string>
     <string name="already_have_reminder">You already set a reminder before!</string>
     <string name="please_enter_task">Please enter name and description!</string>
+    <string name="please_enter_date">Please pick date and time!</string>
     <string name="ask_delete">Are you sure you want to delete?</string>
     <string name="delete">Delete</string>
     <string name="save">Save</string>

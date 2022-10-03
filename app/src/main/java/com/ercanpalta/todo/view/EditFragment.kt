@@ -228,28 +228,35 @@ class EditFragment : Fragment() {
         }
 
         binding.applyReminder.setOnClickListener {
-            val chip = Chip(context)
-            chip.apply {
-                id = View.generateViewId()
-                text = getString(R.string.date_time_format,date,time)
-                textSize = 16f
-                isCloseIconVisible = true
-                setOnCloseIconClickListener {
-                    val builder = alertDialog()
-                    builder.setPositiveButton(R.string.delete) { _, _ ->
-                        binding.reminderChipContainer.removeAllViews()
+            val dateText = binding.dateText.text.toString()
+            val timeText = binding.timeText.text.toString()
+            if(dateText != "Pick a date" && timeText != "Pick a time"){
+                val chip = Chip(context)
+                chip.apply {
+                    id = View.generateViewId()
+                    text = getString(R.string.date_time_format,date,time)
+                    textSize = 16f
+                    isCloseIconVisible = true
+                    setOnCloseIconClickListener {
+                        val builder = alertDialog()
+                        builder.setPositiveButton(R.string.delete) { _, _ ->
+                            binding.reminderChipContainer.removeAllViews()
+                        }
+                        builder.show()
                     }
-                    builder.show()
+                    setChipIconResource(R.drawable.ic_alarm_16)
+                    setTextColor(ContextCompat.getColor(this.context,R.color.white))
+                    textAlignment = View.TEXT_ALIGNMENT_CENTER
+                    setChipBackgroundColorResource(android.R.color.darker_gray)
                 }
-                setChipIconResource(R.drawable.ic_alarm_16)
-                setTextColor(ContextCompat.getColor(this.context,R.color.white))
-                textAlignment = View.TEXT_ALIGNMENT_CENTER
-                setChipBackgroundColorResource(android.R.color.darker_gray)
+
+                binding.reminderChipContainer.addView(chip)
+
+                binding.reminderFrame.visibility = View.GONE
+            }else{
+                Toast.makeText(requireContext(),R.string.please_enter_date,Toast.LENGTH_LONG).show()
             }
 
-            binding.reminderChipContainer.addView(chip)
-
-            binding.reminderFrame.visibility = View.GONE
         }
 
         binding.saveButton.setOnClickListener {
@@ -283,7 +290,7 @@ class EditFragment : Fragment() {
 
             if (name.isNotEmpty() && description.isNotEmpty()){
                 if (name.length <= 56){
-                    if(binding.reminderChipContainer.isNotEmpty()){
+                    if(binding.reminderChipContainer.isNotEmpty()){ // if reminder set with add button
                         // to generate request code
                         val sharedPreferences = requireContext().getSharedPreferences("com.ercanpalta.todo",
                             Context.MODE_PRIVATE
@@ -297,10 +304,10 @@ class EditFragment : Fragment() {
                         }
                         sharedPreferences.edit().putInt("requestNumber",requestCode).apply()
 
-                        val repeat = binding.repeatSpinner.selectedItem.toString()
+                        toDo.repeat = binding.repeatSpinner.selectedItem.toString()
                         toDo.remindTimeInMillis = reminderCalendar.timeInMillis
                         toDo.requestCode = requestCode
-                        (activity as MainActivity).setReminder(toDo, repeat)
+                        (activity as MainActivity).setReminder(toDo)
                     }
 
                     homeViewModel.updateTask(toDo)

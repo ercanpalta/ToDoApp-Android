@@ -13,8 +13,12 @@ import androidx.core.app.NotificationCompat
 import com.ercanpalta.todo.MainActivity
 import com.ercanpalta.todo.R
 import com.ercanpalta.todo.database.ToDoDatabase
+import com.ercanpalta.todo.model.ToDo
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import java.util.Calendar
+import java.util.Date
 
 class ReminderReceiver: BroadcastReceiver() {
 
@@ -33,7 +37,7 @@ class ReminderReceiver: BroadcastReceiver() {
             notificationManager.createNotificationChannel(channel)
         }
 
-        // to get task info from add fragment
+        // to get task info
         var title = "title"
         var content = "content"
         var requestCode = 0
@@ -45,11 +49,30 @@ class ReminderReceiver: BroadcastReceiver() {
             repeat = this.getString("repeat","")
         }
 
+        val dao = ToDoDatabase(p0.applicationContext).dao()
+        var task:ToDo
+        runBlocking {
+            task = dao.getTaskFromRequestCode(requestCode)
+        }
+
         // to update reminder state
-        if (repeat == "Does not repeat"){
-            val dao = ToDoDatabase(p0.applicationContext).dao()
+        val calendar = Calendar.getInstance()
+        calendar.timeInMillis = task.remindTimeInMillis
+        if (task.repeat == "Does not repeat"){
             GlobalScope.launch {
                 dao.updateRequestCode(requestCode)
+            }
+        }else if (task.repeat == "Daily"){
+            calendar.add(Calendar.DATE, 1)
+            task.remindTimeInMillis = calendar.timeInMillis
+            GlobalScope.launch {
+                dao.updateTask(task)
+            }
+        }else if (task.repeat == "Weekly"){
+            calendar.add(Calendar.DATE, 7)
+            task.remindTimeInMillis = calendar.timeInMillis
+            GlobalScope.launch {
+                dao.updateTask(task)
             }
         }
 
