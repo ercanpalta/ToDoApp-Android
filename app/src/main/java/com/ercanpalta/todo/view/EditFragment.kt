@@ -1,5 +1,6 @@
 package com.ercanpalta.todo.view
 
+import android.app.AlarmManager
 import android.app.AlertDialog
 import android.content.Context
 import android.os.Bundle
@@ -82,6 +83,8 @@ class EditFragment : Fragment() {
         homeViewModel.getTask(uid!!)
 
         lateinit var toDo:ToDo
+        val previousCalendar = Calendar.getInstance()
+        val reminderCalendar = Calendar.getInstance()
         homeViewModel.toDo.observe(viewLifecycleOwner){
             toDo = it
             binding.editField.nameText.setText(it.task)
@@ -105,13 +108,26 @@ class EditFragment : Fragment() {
 
             // to add reminder chip if reminder set before
             if (toDo.requestCode != -1){
-                val calendar = Calendar.getInstance()
-                calendar.timeInMillis = toDo.remindTimeInMillis
+
+                // to show previous reminder when clicked to the reminder chip
+                previousCalendar.timeInMillis = toDo.remindTimeInMillis
+                binding.dateText.text = dateText(previousCalendar)
+                var hour = previousCalendar.get(Calendar.HOUR_OF_DAY).toString()
+                var minute = previousCalendar.get(Calendar.MINUTE).toString()
+                if (previousCalendar.get(Calendar.HOUR_OF_DAY) < 10){
+                    hour = "0" + hour
+                }
+                if (previousCalendar.get(Calendar.MINUTE) < 10){
+                    minute = "0" + minute
+                }
+                binding.timeText.text = getString(R.string.time_format,hour,minute)
+                binding.repeatSpinner.setSelection(getRepeatPosition(toDo.repeat))
+
 
                 val chip = Chip(context)
                 chip.apply {
                     this.id = View.generateViewId()
-                    text = calendar.time.toString().dropLast(18)
+                    text = previousCalendar.time.toString().dropLast(18)
                     textSize = 16f
                     isCloseIconVisible = true
                     setOnCloseIconClickListener {
@@ -126,13 +142,134 @@ class EditFragment : Fragment() {
                         builder.show()
 
                     }
-                    setChipIconResource(R.drawable.ic_alarm_16)
+                    if(toDo.repeat != "Does not repeat"){
+                        setChipIconResource(R.drawable.ic_repeat_16)
+                    }else{
+                        setChipIconResource(R.drawable.ic_alarm_16)
+                    }
+                    setOnClickListener {
+                        binding.reminderFrame.visibility = View.VISIBLE
+                    }
                     setTextColor(ContextCompat.getColor(this.context,R.color.white))
                     textAlignment = View.TEXT_ALIGNMENT_CENTER
                     setChipBackgroundColorResource(android.R.color.darker_gray)
                 }
 
                 binding.reminderChipContainer.addView(chip)
+            }else{
+                previousCalendar.timeInMillis = System.currentTimeMillis()
+                binding.reminderChipContainer.removeAllViews()
+                binding.dateText.text = getString(R.string.date)
+                binding.timeText.text = getString(R.string.time)
+                binding.repeatSpinner.setSelection(0)
+            }
+
+            // to pick date
+            var date = "date"
+            binding.dateText.setOnClickListener {
+                val calendar = Calendar.getInstance()
+
+                val constraintsBuilder =
+                    CalendarConstraints.Builder()
+                        .setValidator(DateValidatorPointForward.now())
+
+                val datePicker =
+                    MaterialDatePicker.Builder.datePicker()
+                        .setTheme(R.style.DatePickerTheme)
+                        .setTitleText("Select date")
+                        .setSelection(previousCalendar.timeInMillis)
+                        .setCalendarConstraints(constraintsBuilder.build())
+                        .build()
+                datePicker.show(parentFragmentManager, "tag")
+
+                datePicker.addOnPositiveButtonClickListener {
+                    calendar.timeInMillis = datePicker.selection!!
+                    reminderCalendar.timeInMillis = datePicker.selection!!
+
+                    date = dateText(calendar)
+                    binding.dateText.text = date
+                }
+                datePicker.addOnNegativeButtonClickListener {
+                    println("negative")
+                }
+            }
+
+            // to pick time
+            var time = "time"
+            binding.timeText.setOnClickListener {
+                val picker =
+                    MaterialTimePicker.Builder()
+                        .setTimeFormat(TimeFormat.CLOCK_24H)
+                        .setHour(previousCalendar.get(Calendar.HOUR_OF_DAY))
+                        .setMinute(previousCalendar.get(Calendar.MINUTE))
+                        .setTitleText("Select time")
+                        .setTheme(R.style.TimePickerTheme)
+                        .build()
+                picker.show(parentFragmentManager, "tag")
+
+
+                picker.addOnPositiveButtonClickListener {
+                    var hour = picker.hour.toString()
+                    var minute = picker.minute.toString()
+                    if (picker.hour < 10){
+                        hour = "0" + hour
+                    }
+                    if (picker.minute < 10){
+                        minute = "0" + minute
+                    }
+
+                    time = getString(R.string.time_format,hour,minute)
+                    binding.timeText.text = time
+
+                    reminderCalendar[Calendar.HOUR] = picker.hour
+                    reminderCalendar[Calendar.MINUTE] = picker.minute
+                }
+                picker.addOnNegativeButtonClickListener {
+                    println("negative")
+                }
+            }
+
+            binding.cancelReminder.setOnClickListener {
+                binding.reminderFrame.visibility = View.GONE
+            }
+
+            binding.applyReminder.setOnClickListener {
+                val dateText = binding.dateText.text.toString()
+                val timeText = binding.timeText.text.toString()
+                if(dateText != "Pick a date" && timeText != "Pick a time"){
+                    val chip = Chip(context)
+                    chip.apply {
+                        this.id = View.generateViewId()
+                        text = getString(R.string.date_time_format,date,time)
+                        textSize = 16f
+                        isCloseIconVisible = true
+                        setOnCloseIconClickListener {
+                            val builder = alertDialog()
+                            builder.setPositiveButton(R.string.delete) { _, _ ->
+                                binding.reminderChipContainer.removeAllViews()
+                            }
+                            builder.show()
+                        }
+                        if(binding.repeatSpinner.selectedItem.toString() != "Does not repeat"){
+                            setChipIconResource(R.drawable.ic_repeat_16)
+                        }else{
+                            setChipIconResource(R.drawable.ic_alarm_16)
+                        }
+                        setOnClickListener {
+                            binding.reminderFrame.visibility = View.VISIBLE
+                        }
+                        setTextColor(ContextCompat.getColor(this.context,R.color.white))
+                        textAlignment = View.TEXT_ALIGNMENT_CENTER
+                        setChipBackgroundColorResource(android.R.color.darker_gray)
+                    }
+
+                    binding.reminderChipContainer.addView(chip)
+
+                    binding.reminderFrame.visibility = View.GONE
+                }else{
+                    Toast.makeText(requireContext(),R.string.please_enter_date,Toast.LENGTH_LONG).show()
+                }
+
             }
         }
 
@@ -151,112 +288,7 @@ class EditFragment : Fragment() {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         binding.repeatSpinner.adapter = adapter
 
-        // to pick date
-        val reminderCalendar = Calendar.getInstance()
-        var date = "date"
-        binding.dateText.setOnClickListener {
-            val calendar = Calendar.getInstance()
 
-            val constraintsBuilder =
-                CalendarConstraints.Builder()
-                    .setValidator(DateValidatorPointForward.now())
-
-            val datePicker =
-                MaterialDatePicker.Builder.datePicker()
-                    .setTheme(R.style.DatePickerTheme)
-                    .setTitleText("Select date")
-                    .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
-                    .setCalendarConstraints(constraintsBuilder.build())
-                    .build()
-            datePicker.show(parentFragmentManager, "tag")
-
-            datePicker.addOnPositiveButtonClickListener {
-                calendar.timeInMillis = datePicker.selection!!
-                reminderCalendar.timeInMillis = datePicker.selection!!
-                val monthList = arrayOf("Jan.","Feb.","Mar.", "Apr.", "May", "Jun.", "Jul.",
-                    "Aug.", "Sep.", "Oct.", "Nov.",
-                    "Dec.")
-                val day = calendar.get(Calendar.DAY_OF_MONTH).toString()
-                val month = monthList[calendar.get(Calendar.MONTH)]
-                val year = calendar.get(Calendar.YEAR).toString()
-
-                date = getString(R.string.date_format,day,month,year)
-                binding.dateText.text = date
-            }
-            datePicker.addOnNegativeButtonClickListener {
-                println("negative")
-            }
-        }
-
-        // to pick time
-        var time = "time"
-        binding.timeText.setOnClickListener {
-            val picker =
-                MaterialTimePicker.Builder()
-                    .setTimeFormat(TimeFormat.CLOCK_24H)
-                    .setHour(12)
-                    .setTitleText("Select time")
-                    .setTheme(R.style.TimePickerTheme)
-                    .build()
-            picker.show(parentFragmentManager, "tag")
-
-
-            picker.addOnPositiveButtonClickListener {
-                var hour = picker.hour.toString()
-                var minute = picker.minute.toString()
-                if (picker.hour < 10){
-                    hour = "0" + hour
-                }
-                if (picker.minute < 10){
-                    minute = "0" + minute
-                }
-
-                time = getString(R.string.time_format,hour,minute)
-                binding.timeText.text = time
-
-                reminderCalendar[Calendar.HOUR] = picker.hour
-                reminderCalendar[Calendar.MINUTE] = picker.minute
-            }
-            picker.addOnNegativeButtonClickListener {
-                println("negative")
-            }
-        }
-
-        binding.cancelReminder.setOnClickListener {
-            binding.reminderFrame.visibility = View.GONE
-        }
-
-        binding.applyReminder.setOnClickListener {
-            val dateText = binding.dateText.text.toString()
-            val timeText = binding.timeText.text.toString()
-            if(dateText != "Pick a date" && timeText != "Pick a time"){
-                val chip = Chip(context)
-                chip.apply {
-                    id = View.generateViewId()
-                    text = getString(R.string.date_time_format,date,time)
-                    textSize = 16f
-                    isCloseIconVisible = true
-                    setOnCloseIconClickListener {
-                        val builder = alertDialog()
-                        builder.setPositiveButton(R.string.delete) { _, _ ->
-                            binding.reminderChipContainer.removeAllViews()
-                        }
-                        builder.show()
-                    }
-                    setChipIconResource(R.drawable.ic_alarm_16)
-                    setTextColor(ContextCompat.getColor(this.context,R.color.white))
-                    textAlignment = View.TEXT_ALIGNMENT_CENTER
-                    setChipBackgroundColorResource(android.R.color.darker_gray)
-                }
-
-                binding.reminderChipContainer.addView(chip)
-
-                binding.reminderFrame.visibility = View.GONE
-            }else{
-                Toast.makeText(requireContext(),R.string.please_enter_date,Toast.LENGTH_LONG).show()
-            }
-
-        }
 
         binding.saveButton.setOnClickListener {
             val name = binding.editField.nameText.text.toString()
@@ -403,5 +435,26 @@ class EditFragment : Fragment() {
         chipGroup.addView(chipMedium)
         chipGroup.addView(chipHigh)
 
+    }
+
+    fun dateText(calendar: Calendar):String{
+        val monthList = arrayOf("Jan.","Feb.","Mar.", "Apr.", "May", "Jun.", "Jul.",
+            "Aug.", "Sep.", "Oct.", "Nov.",
+            "Dec.")
+        val day = calendar.get(Calendar.DAY_OF_MONTH).toString()
+        val month = monthList[calendar.get(Calendar.MONTH)]
+        val year = calendar.get(Calendar.YEAR).toString()
+
+        return getString(R.string.date_format,day,month,year)
+    }
+
+    fun getRepeatPosition(repeat:String):Int{
+        var position = -1
+        when (repeat) {
+            "Does not repeat" -> position = 0
+            "Daily" -> position = 1
+            "Weekly" -> position = 2
+        }
+        return position
     }
 }

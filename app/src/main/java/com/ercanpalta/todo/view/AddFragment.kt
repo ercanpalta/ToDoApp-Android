@@ -146,10 +146,12 @@ class AddFragment : Fragment() {
         // to pick time
         var time = "time"
         binding.timeText.setOnClickListener {
+            val currentCalendar = Calendar.getInstance()
             val picker =
                 MaterialTimePicker.Builder()
                     .setTimeFormat(TimeFormat.CLOCK_24H)
-                    .setHour(12)
+                    .setHour(currentCalendar.get(Calendar.HOUR_OF_DAY))
+                    .setMinute(currentCalendar.get(Calendar.MINUTE))
                     .setTitleText("Select time")
                     .setTheme(R.style.TimePickerTheme)
                     .build()
@@ -198,13 +200,23 @@ class AddFragment : Fragment() {
 
                         builder.setPositiveButton(R.string.delete) { _, _ ->
                             binding.reminderChipContainer.removeAllViews()
+                            binding.dateText.text = getString(R.string.date)
+                            binding.timeText.text = getString(R.string.time)
+                            binding.repeatSpinner.setSelection(0)
                         }
                         builder.setNegativeButton(R.string.cancel){ _, _ ->
 
                         }
                         builder.show()
                     }
-                    setChipIconResource(R.drawable.ic_alarm_16)
+                    if(binding.repeatSpinner.selectedItem.toString() != "Does not repeat"){
+                        setChipIconResource(R.drawable.ic_repeat_16)
+                    }else{
+                        setChipIconResource(R.drawable.ic_alarm_16)
+                    }
+                    setOnClickListener {
+                        binding.reminderFrame.visibility = View.VISIBLE
+                    }
                     setTextColor(ContextCompat.getColor(this.context,R.color.white))
                     textAlignment = View.TEXT_ALIGNMENT_CENTER
                     setChipBackgroundColorResource(android.R.color.darker_gray)

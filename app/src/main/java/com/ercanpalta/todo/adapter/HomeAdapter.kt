@@ -47,6 +47,8 @@ class HomeAdapter (private val dataSet: ArrayList<ToDo>, val fragment: HomeFragm
 
                 if (task.repeat != "Does not repeat"){
                     binding.repeatIcon.visibility = View.VISIBLE
+                }else{
+                    binding.repeatIcon.visibility = View.GONE
                 }
 
                 // to add reminder time info to the row item
