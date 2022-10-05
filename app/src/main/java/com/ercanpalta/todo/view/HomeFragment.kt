@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -86,6 +87,22 @@ class HomeFragment : Fragment() {
             findNavController().navigate(action)
         }
         binding.myTasksText.text = getString(R.string.my_tasks_format,homeViewModel.currentListName.lowercase())
+    }
+
+    override fun onPause() {
+        super.onPause()
+        val sharedPreferences = requireContext().getSharedPreferences("com.ercanpalta.todo",
+            AppCompatActivity.MODE_PRIVATE
+        )
+        sharedPreferences.edit().putBoolean("isAppOpen",false).apply()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val sharedPreferences = requireContext().getSharedPreferences("com.ercanpalta.todo",
+            AppCompatActivity.MODE_PRIVATE
+        )
+        sharedPreferences.edit().putBoolean("isAppOpen",true).apply()
     }
 
     fun showNoDataText(){
