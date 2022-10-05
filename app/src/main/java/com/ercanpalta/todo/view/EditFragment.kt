@@ -1,6 +1,5 @@
 package com.ercanpalta.todo.view
 
-import android.app.AlarmManager
 import android.app.AlertDialog
 import android.content.Context
 import android.os.Bundle
@@ -8,6 +7,7 @@ import android.view.*
 import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.core.view.*
 import androidx.core.widget.addTextChangedListener
@@ -17,7 +17,6 @@ import androidx.navigation.fragment.findNavController
 import com.ercanpalta.todo.MainActivity
 import com.ercanpalta.todo.R
 import com.ercanpalta.todo.databinding.FragmentEditBinding
-import com.ercanpalta.todo.enums.FilterType
 import com.ercanpalta.todo.enums.Priority
 import com.ercanpalta.todo.model.TaskList
 import com.ercanpalta.todo.model.ToDo
@@ -48,6 +47,17 @@ class EditFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // custom backpress
+        val callback = object : OnBackPressedCallback(false) {
+            override fun handleOnBackPressed() {
+                if (binding.reminderFrame.visibility == View.VISIBLE){
+                    binding.reminderFrame.visibility = View.GONE
+                    isEnabled = false
+                }
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
+
         // to add appbar menu icon
         val menuHost: MenuHost = requireActivity()
         menuHost.addMenuProvider(object : MenuProvider {
@@ -60,6 +70,7 @@ class EditFragment : Fragment() {
                 return when (menuItem.itemId) {
                     R.id.add_reminder -> {
                         if (binding.reminderChipContainer.isEmpty()){
+                            callback.isEnabled = true
                             binding.reminderFrame.visibility = View.VISIBLE
                         }else{
                             Toast.makeText(requireContext(),R.string.already_have_reminder,Toast.LENGTH_LONG).show()
@@ -148,6 +159,7 @@ class EditFragment : Fragment() {
                         setChipIconResource(R.drawable.ic_alarm_16)
                     }
                     setOnClickListener {
+                        callback.isEnabled = true
                         binding.reminderFrame.visibility = View.VISIBLE
                     }
                     setTextColor(ContextCompat.getColor(this.context,R.color.white))
@@ -228,6 +240,7 @@ class EditFragment : Fragment() {
             }
 
             binding.cancelReminder.setOnClickListener {
+                callback.isEnabled = false
                 binding.reminderFrame.visibility = View.GONE
             }
 
@@ -235,6 +248,7 @@ class EditFragment : Fragment() {
                 val dateText = binding.dateText.text.toString()
                 val timeText = binding.timeText.text.toString()
                 if(dateText != "Pick a date" && timeText != "Pick a time"){
+                    callback.isEnabled = false
                     val chip = Chip(context)
                     chip.apply {
                         this.id = View.generateViewId()
@@ -254,6 +268,7 @@ class EditFragment : Fragment() {
                             setChipIconResource(R.drawable.ic_alarm_16)
                         }
                         setOnClickListener {
+                            callback.isEnabled = true
                             binding.reminderFrame.visibility = View.VISIBLE
                         }
                         setTextColor(ContextCompat.getColor(this.context,R.color.white))

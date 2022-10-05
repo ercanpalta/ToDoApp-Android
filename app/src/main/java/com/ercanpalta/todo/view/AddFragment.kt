@@ -11,7 +11,6 @@ import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.core.view.*
 import androidx.core.widget.addTextChangedListener
-import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.findNavController
@@ -221,6 +220,7 @@ class AddFragment : Fragment() {
                         setChipIconResource(R.drawable.ic_alarm_16)
                     }
                     setOnClickListener {
+                        callback.isEnabled = true
                         binding.reminderFrame.visibility = View.VISIBLE
                     }
                     setTextColor(ContextCompat.getColor(this.context,R.color.white))
