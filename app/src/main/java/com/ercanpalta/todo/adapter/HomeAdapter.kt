@@ -13,6 +13,7 @@ import com.ercanpalta.todo.databinding.RowItemBinding
 import com.ercanpalta.todo.enums.Priority
 import com.ercanpalta.todo.model.ToDo
 import com.ercanpalta.todo.view.HomeFragment
+import java.util.Calendar
 
 class HomeAdapter (private val dataSet: ArrayList<ToDo>, val fragment: HomeFragment): RecyclerView.Adapter<HomeAdapter.ViewHolder>(), Filterable {
 
@@ -34,27 +35,63 @@ class HomeAdapter (private val dataSet: ArrayList<ToDo>, val fragment: HomeFragm
                 binding.checkbox.isChecked = true
                 binding.taskText.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
                 binding.checkbox.alpha = 0.7f
+                binding.progressText.setText(R.string.done)
             }else{
                 binding.checkbox.isChecked = false
                 binding.taskText.paintFlags = Paint.LINEAR_TEXT_FLAG
+                binding.progressText.setText(R.string.progress)
+            }
+
+            if (task.requestCode != -1){
+                binding.reminderIcon.visibility = View.VISIBLE
+
+                if (task.repeat != "Does not repeat"){
+                    binding.repeatIcon.visibility = View.VISIBLE
+                }else{
+                    binding.repeatIcon.visibility = View.GONE
+                }
+
+                // to add reminder time info to the row item
+                val calendar = Calendar.getInstance()
+                calendar.timeInMillis = task.remindTimeInMillis
+
+                val reminderText = TextView(context)
+                reminderText.textSize = 12f
+                reminderText.setTextColor(context.getColor(android.R.color.darker_gray))
+                reminderText.text = calendar.time.toString().dropLast(18)
+                binding.reminderChipContainer.removeAllViews()
+                binding.reminderChipContainer.addView(reminderText)
+            }
+            else{
+                binding.reminderIcon.visibility = View.GONE
+                binding.repeatIcon.visibility = View.GONE
+                binding.reminderChipContainer.removeAllViews()
             }
 
             binding.checkbox.setOnClickListener {
                 if(it is CheckBox ){
                     val checked: Boolean = it.isChecked
                     if (checked){
-                        fragment.updateListToDo(task,checked)
+                        // to cancel reminder and hide icons about reminder
+                        fragment.cancelReminder(task.requestCode)
+                        binding.reminderIcon.visibility = View.GONE
+                        binding.repeatIcon.visibility = View.GONE
+                        binding.reminderChipContainer.removeAllViews()
+                        task.requestCode = -1
+
+                        // to update completion from ui and database
+                        fragment.updateListToDo(task,true)
                         binding.taskText.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
                         binding.checkbox.alpha = 0.7f
+                        binding.progressText.setText(R.string.done)
                         fragment.updateCompletion(task.uid,true)
                         fragment.moveDown(this.absoluteAdapterPosition,task)
-                        println("checked")
                     }else{
-                        fragment.updateListToDo(task,checked)
+                        fragment.updateListToDo(task,false)
                         binding.taskText.paintFlags = Paint.LINEAR_TEXT_FLAG
+                        binding.progressText.setText(R.string.progress)
                         fragment.updateCompletion(task.uid,false)
                         fragment.moveUp(this.absoluteAdapterPosition,task)
-                        println("unChecked")
                     }
 
                 }
@@ -63,12 +100,17 @@ class HomeAdapter (private val dataSet: ArrayList<ToDo>, val fragment: HomeFragm
             binding.root.setOnClickListener {
                 val detail = binding.detailText
                 val menu = binding.longclickMenu
+                val chipContainer = binding.reminderChipContainer
+
                 if(menu.visibility == View.GONE){
                     fragment.clearAllSelections()
+                    fragment.clearAllListSelections()
                     if (detail.visibility == View.GONE){
                         detail.visibility = View.VISIBLE
+                        chipContainer.visibility = View.VISIBLE
                     }else{
                         detail.visibility = View.GONE
+                        chipContainer.visibility = View.GONE
                     }
                 }
                 fragment.clearAllListSelections()
@@ -90,6 +132,7 @@ class HomeAdapter (private val dataSet: ArrayList<ToDo>, val fragment: HomeFragm
             }
 
             binding.deleteButton.setOnClickListener {
+                fragment.cancelReminder(task.requestCode)
                 fragment.deleteTask(task, this.absoluteAdapterPosition)
                 fragment.clearAllSelections()
             }
@@ -151,6 +194,7 @@ class HomeAdapter (private val dataSet: ArrayList<ToDo>, val fragment: HomeFragm
                                     filteredList.add(data)
                                 }
                             }
+                            filteredList.reverse()
                             filteredList.addAll(completedList)
                         }else{
                             for (data in dataSet){
@@ -162,6 +206,7 @@ class HomeAdapter (private val dataSet: ArrayList<ToDo>, val fragment: HomeFragm
                                     }
                                 }
                             }
+                            filteredList.reverse()
                             filteredList.addAll(completedList)
                         }
 

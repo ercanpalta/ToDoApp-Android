@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -10,106 +10,165 @@
         android:id="@+id/task_card"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginHorizontal="30dp"
+        android:layout_marginVertical="10dp"
         app:cardBackgroundColor="@color/cardview"
-        app:cardElevation="1dp"
-        app:cardCornerRadius="5dp"
-        android:layout_margin="10dp">
+        app:cardCornerRadius="16dp"
+        app:cardElevation="2dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/check_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
             android:layout_marginVertical="10dp"
+            android:layout_marginStart="10dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/progress_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="5dp"
+                android:text="@string/progress"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
 
             <CheckBox
                 android:id="@+id/checkbox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:buttonTint="@color/list_color_blue"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+                app:layout_constraintTop_toBottomOf="@id/progress_text" />
 
             <TextView
                 android:id="@+id/task_text"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
+                android:textSize="18sp"
+                android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="@id/checkbox"
+                app:layout_constraintEnd_toStartOf="@id/priority_card"
                 app:layout_constraintStart_toEndOf="@id/checkbox"
                 app:layout_constraintTop_toTopOf="@id/checkbox"
-                app:layout_constraintEnd_toStartOf="@id/priority_card"
                 tools:text="Task to do" />
 
             <TextView
                 android:id="@+id/detail_text"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
-                android:layout_marginTop="20dp"
                 android:layout_marginStart="15dp"
+                android:layout_marginTop="20dp"
                 android:paddingBottom="10dp"
-                app:layout_constraintTop_toBottomOf="@id/task_text"
-                app:layout_constraintStart_toStartOf="@id/checkbox"
+                android:visibility="gone"
                 app:layout_constraintEnd_toStartOf="@id/priority_card"
-                tools:text="Details"/>
+                app:layout_constraintStart_toStartOf="@id/checkbox"
+                app:layout_constraintTop_toBottomOf="@id/task_text"
+                tools:text="Details" />
 
-            <androidx.cardview.widget.CardView
+            <FrameLayout
+                android:id="@+id/reminder_chip_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="@id/priority_card"
+                app:layout_constraintTop_toBottomOf="@id/detail_text"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+
+            <com.google.android.material.card.MaterialCardView
                 android:id="@+id/priority_card"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="20dp"
-                app:cardCornerRadius="12dp"
+                app:cardCornerRadius="8dp"
                 app:cardElevation="0dp"
+                app:layout_constraintBottom_toBottomOf="@id/progress_text"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@id/checkbox"
-                app:layout_constraintBottom_toBottomOf="@id/checkbox">
+                app:layout_constraintTop_toTopOf="@id/progress_text">
 
                 <TextView
                     android:id="@+id/priority_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/white"
-                    android:textSize="12sp"
-                    android:layout_marginVertical="5dp"
-                    android:layout_marginHorizontal="10dp"
+                    android:layout_marginHorizontal="6dp"
+                    android:layout_marginVertical="3dp"
                     android:background="@android:color/transparent"
+                    android:textColor="@color/white"
+                    android:textSize="11sp"
                     tools:text="LOW" />
+            </com.google.android.material.card.MaterialCardView>
 
-            </androidx.cardview.widget.CardView>
+            <LinearLayout
+                android:id="@+id/icons_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:translationZ="5dp"
+                android:layout_marginEnd="5dp"
+                app:layout_constraintTop_toTopOf="@id/priority_card"
+                app:layout_constraintBottom_toBottomOf="@id/priority_card"
+                app:layout_constraintEnd_toStartOf="@id/priority_card">
+
+                <ImageView
+                    android:id="@+id/repeat_icon"
+                    android:visibility="gone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_repeat_16"/>
+
+                <ImageView
+                    android:id="@+id/reminder_icon"
+                    android:visibility="gone"
+                    android:layout_marginStart="2dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_alarm_16"/>
+
+            </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
+
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/longclick_menu"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:translationZ="90dp"
-            android:clickable="true"
             android:background="@color/background"
+            android:clickable="true"
+            android:focusable="true"
+            android:translationZ="90dp"
             android:visibility="gone"
-            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
+            app:layout_constraintTop_toTopOf="parent">
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/edit_card"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
-                app:cardCornerRadius="12dp"
                 android:layout_marginEnd="10dp"
                 app:cardBackgroundColor="@color/list_color_blue"
-                app:layout_constraintTop_toTopOf="parent"
+                app:cardCornerRadius="12dp"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/delete_card"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/delete_card">
+                app:layout_constraintTop_toTopOf="parent">
+
                 <ImageButton
                     android:id="@+id/edit_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:backgroundTint="@android:color/transparent"
-                    android:src="@drawable/ic_edit_24"/>
+                    android:contentDescription="@string/edit"
+                    android:src="@drawable/ic_edit_24" />
             </androidx.cardview.widget.CardView>
 
 
@@ -117,18 +176,20 @@
                 android:id="@+id/delete_card"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
-                app:cardCornerRadius="12dp"
                 android:layout_marginEnd="10dp"
                 app:cardBackgroundColor="@color/list_color_red"
-                app:layout_constraintTop_toTopOf="parent"
+                app:cardCornerRadius="12dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/close_card"
-                app:layout_constraintStart_toEndOf="@id/edit_card">
+                app:layout_constraintStart_toEndOf="@id/edit_card"
+                app:layout_constraintTop_toTopOf="parent">
+
                 <ImageButton
                     android:id="@+id/delete_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:backgroundTint="@android:color/transparent"
+                    android:contentDescription="@string/delete"
                     android:src="@drawable/ic_delete_24" />
             </androidx.cardview.widget.CardView>
 
@@ -136,18 +197,20 @@
                 android:id="@+id/close_card"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
-                app:cardCornerRadius="12dp"
                 app:cardBackgroundColor="#656565"
-                app:layout_constraintTop_toTopOf="parent"
+                app:cardCornerRadius="12dp"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/delete_card"
-                app:layout_constraintEnd_toEndOf="parent">
+                app:layout_constraintTop_toTopOf="parent">
+
                 <ImageButton
                     android:id="@+id/close_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:padding="10dp"
                     android:backgroundTint="@android:color/transparent"
+                    android:contentDescription="@string/close"
+                    android:padding="10dp"
                     android:src="@drawable/ic_close_24" />
             </androidx.cardview.widget.CardView>
 
@@ -155,4 +218,4 @@
 
     </androidx.cardview.widget.CardView>
 
-</FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

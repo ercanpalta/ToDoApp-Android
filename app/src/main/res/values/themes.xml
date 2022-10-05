@@ -31,4 +31,29 @@
     <style name="MyDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
         <item name="colorOnPrimary">@color/list_color_red</item>
     </style>
+
+    <!-- Date picker theme. -->
+    <style name="ShapeAppearance.App.SmallComponent" parent="ShapeAppearance.MaterialComponents.SmallComponent">
+        <item name="cornerFamily">rounded</item>
+    </style>
+
+    <style name="ShapeAppearance.App.MediumComponent" parent="ShapeAppearance.MaterialComponents.MediumComponent">
+        <item name="cornerSize">16dp</item>
+    </style>
+
+    <style name="DatePickerTheme" parent="@style/ThemeOverlay.MaterialComponents.MaterialCalendar">
+        <item name="colorPrimary">@color/list_color_blue</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.App.SmallComponent</item>
+        <item name="shapeAppearanceMediumComponent">@style/ShapeAppearance.App.MediumComponent</item>
+    </style>
+
+    <!-- Time picker theme. -->
+
+    <style name="TimePickerTheme" parent="@style/ThemeOverlay.MaterialComponents.TimePicker">
+        <item name="colorPrimary">@color/list_color_blue</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.App.SmallComponent</item>
+        <item name="shapeAppearanceMediumComponent">@style/ShapeAppearance.App.MediumComponent</item>
+    </style>
 </resources>
