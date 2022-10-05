@@ -7,9 +7,11 @@ import android.view.*
 import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.core.view.*
 import androidx.core.widget.addTextChangedListener
+import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.findNavController
@@ -48,6 +50,17 @@ class AddFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        // custom backpress
+        val callback = object : OnBackPressedCallback(false) {
+            override fun handleOnBackPressed() {
+                if (binding.reminderFrame.visibility == View.VISIBLE){
+                    binding.reminderFrame.visibility = View.GONE
+                    isEnabled = false
+                }
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
 
         // to observe tasklist source
         val listList:ArrayList<TaskList> = arrayListOf()
@@ -91,6 +104,7 @@ class AddFragment : Fragment() {
                     R.id.add_reminder -> {
                         if (binding.reminderChipContainer.isEmpty()){
                             binding.reminderFrame.visibility = View.VISIBLE
+                            callback.isEnabled = true
                         }else{
                             Toast.makeText(requireContext(),R.string.already_have_reminder,Toast.LENGTH_LONG).show()
                         }
@@ -170,6 +184,7 @@ class AddFragment : Fragment() {
         }
 
         binding.cancelReminder.setOnClickListener {
+            callback.isEnabled = false
             binding.reminderFrame.visibility = View.GONE
         }
 
@@ -177,6 +192,7 @@ class AddFragment : Fragment() {
             val dateText = binding.dateText.text.toString()
             val timeText = binding.timeText.text.toString()
             if(dateText != "Pick a date" && timeText != "Pick a time"){
+                callback.isEnabled = false
                 val chip = Chip(context)
                 chip.apply {
                     id = View.generateViewId()
