@@ -111,7 +111,7 @@ class EditFragment : Fragment() {
 
                 // to show previous reminder when clicked to the reminder chip
                 previousCalendar.timeInMillis = toDo.remindTimeInMillis
-                binding.dateText.text = dateText(previousCalendar)
+                binding.dateText.text = previousCalendar.time.toString().dropLast(24)
                 var hour = previousCalendar.get(Calendar.HOUR_OF_DAY).toString()
                 var minute = previousCalendar.get(Calendar.MINUTE).toString()
                 if (previousCalendar.get(Calendar.HOUR_OF_DAY) < 10){
@@ -165,7 +165,6 @@ class EditFragment : Fragment() {
             }
 
             // to pick date
-            var date = "date"
             binding.dateText.setOnClickListener {
                 val calendar = Calendar.getInstance()
 
@@ -186,11 +185,10 @@ class EditFragment : Fragment() {
                     calendar.timeInMillis = datePicker.selection!!
                     reminderCalendar.timeInMillis = datePicker.selection!!
 
-                    date = dateText(calendar)
-                    binding.dateText.text = date
+                    binding.dateText.text = calendar.time.toString().dropLast(24)
                 }
                 datePicker.addOnNegativeButtonClickListener {
-                    println("negative")
+
                 }
             }
 
@@ -240,7 +238,7 @@ class EditFragment : Fragment() {
                     val chip = Chip(context)
                     chip.apply {
                         this.id = View.generateViewId()
-                        text = getString(R.string.date_time_format,date,time)
+                        text = reminderCalendar.time.toString().dropLast(18)
                         textSize = 16f
                         isCloseIconVisible = true
                         setOnCloseIconClickListener {
@@ -435,17 +433,6 @@ class EditFragment : Fragment() {
         chipGroup.addView(chipMedium)
         chipGroup.addView(chipHigh)
 
-    }
-
-    fun dateText(calendar: Calendar):String{
-        val monthList = arrayOf("Jan.","Feb.","Mar.", "Apr.", "May", "Jun.", "Jul.",
-            "Aug.", "Sep.", "Oct.", "Nov.",
-            "Dec.")
-        val day = calendar.get(Calendar.DAY_OF_MONTH).toString()
-        val month = monthList[calendar.get(Calendar.MONTH)]
-        val year = calendar.get(Calendar.YEAR).toString()
-
-        return getString(R.string.date_format,day,month,year)
     }
 
     fun getRepeatPosition(repeat:String):Int{

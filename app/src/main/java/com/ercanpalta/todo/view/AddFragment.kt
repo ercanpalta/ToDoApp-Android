@@ -108,7 +108,6 @@ class AddFragment : Fragment() {
 
         // to pick date
         val reminderCalendar = Calendar.getInstance()
-        var date = "date"
         binding.dateText.setOnClickListener {
             val calendar = Calendar.getInstance()
 
@@ -128,15 +127,8 @@ class AddFragment : Fragment() {
             datePicker.addOnPositiveButtonClickListener {
                 calendar.timeInMillis = datePicker.selection!!
                 reminderCalendar.timeInMillis = datePicker.selection!!
-                val monthList = arrayOf("Jan.","Feb.","Mar.", "Apr.", "May", "Jun.", "Jul.",
-                    "Aug.", "Sep.", "Oct.", "Nov.",
-                    "Dec.")
-                val day = calendar.get(Calendar.DAY_OF_MONTH).toString()
-                val month = monthList[calendar.get(Calendar.MONTH)]
-                val year = calendar.get(Calendar.YEAR).toString()
 
-                date = getString(R.string.date_format,day,month,year)
-                binding.dateText.text = date
+                binding.dateText.text = calendar.time.toString().dropLast(24)
             }
             datePicker.addOnNegativeButtonClickListener {
                 println("negative")
@@ -144,7 +136,6 @@ class AddFragment : Fragment() {
         }
 
         // to pick time
-        var time = "time"
         binding.timeText.setOnClickListener {
             val currentCalendar = Calendar.getInstance()
             val picker =
@@ -168,8 +159,7 @@ class AddFragment : Fragment() {
                     minute = "0" + minute
                 }
 
-                time = getString(R.string.time_format,hour,minute)
-                binding.timeText.text = time
+                binding.timeText.text = getString(R.string.time_format,hour,minute)
 
                 reminderCalendar[Calendar.HOUR] = picker.hour
                 reminderCalendar[Calendar.MINUTE] = picker.minute
@@ -190,7 +180,7 @@ class AddFragment : Fragment() {
                 val chip = Chip(context)
                 chip.apply {
                     id = View.generateViewId()
-                    text = getString(R.string.date_time_format,date,time)
+                    text = reminderCalendar.time.toString().dropLast(18)
                     textSize = 16f
                     isCloseIconVisible = true
                     setOnCloseIconClickListener {
