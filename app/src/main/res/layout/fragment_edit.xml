@@ -98,7 +98,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/list_color_all"
-                android:textColor="@color/white"
+                android:textColor="@color/button_text_color"
                 android:padding="10dp"
                 android:text="@string/save"
                 android:layout_marginTop="40dp"
@@ -132,7 +132,7 @@
             android:layout_gravity="center"
             android:layout_marginHorizontal="60dp"
             app:cardCornerRadius="10dp"
-            app:cardBackgroundColor="@color/cardview_light_background">
+            app:cardBackgroundColor="@color/reminder_card_background">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="wrap_content"

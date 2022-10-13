@@ -25,6 +25,9 @@
         <action
             android:id="@+id/action_nav_home_to_reminderFragment"
             app:destination="@id/reminderFragment" />
+        <action
+            android:id="@+id/action_nav_home_to_settingsFragment"
+            app:destination="@id/nav_settings" />
     </fragment>
     <fragment
         android:id="@+id/addFragment"
@@ -89,5 +92,14 @@
         <argument
             android:name="uid"
             app:argType="integer" />
+    </fragment>
+    <fragment
+        android:id="@+id/nav_settings"
+        android:name="com.ercanpalta.todo.view.SettingsFragment"
+        android:label="@string/menu_settings"
+        tools:layout="@layout/fragment_settings">
+        <action
+            android:id="@+id/action_settingsFragment_to_nav_home"
+            app:destination="@id/nav_home" />
     </fragment>
 </navigation>

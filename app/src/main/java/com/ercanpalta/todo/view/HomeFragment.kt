@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -72,7 +73,6 @@ class HomeFragment : Fragment() {
         binding.rvHome.adapter = homeAdapter
         val homeLayoutManager = LinearLayoutManager(this.context, LinearLayoutManager.VERTICAL, false)
         binding.rvHome.layoutManager = homeLayoutManager
-        //binding.rvHome.addItemDecoration(DividerItemDecoration(context,homeLayoutManager.orientation))
 
         val listAdapter = ListAdapter(listList, this@HomeFragment)
         listAdapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
@@ -87,6 +87,17 @@ class HomeFragment : Fragment() {
             findNavController().navigate(action)
         }
         binding.myTasksText.text = getString(R.string.my_tasks_format,homeViewModel.currentListName.lowercase())
+
+        // to set theme when app started
+        val sharedPreferences = requireContext().getSharedPreferences("com.ercanpalta.todo",
+            AppCompatActivity.MODE_PRIVATE
+        )
+        val isDarkModeOpen = sharedPreferences.getBoolean("isDarkModeOpen",false)
+        if (isDarkModeOpen){
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        }else{
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        }
     }
 
     override fun onPause() {

@@ -41,7 +41,6 @@ class HomeViewModel(application: Application) : BaseViewModel(application){
         launch {
             if((GregorianCalendar().get(Calendar.SECOND) - lastUpdateTime) < refreshTime){
                 getDataFromRoom()
-                val listAll = TaskList("All", R.color.list_color_all)
                 println("refreshed from Room")
             }else{
                 getDataFromFirebase()

@@ -9,6 +9,7 @@
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/colorCard"
+        app:cardBackgroundColor="@color/list_card_bg"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:cardCornerRadius="10dp">
@@ -40,7 +41,8 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
+            app:layout_constraintEnd_toEndOf="parent"
+            android:focusable="true">
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/edit_card"

@@ -81,10 +81,11 @@
 
             <com.google.android.material.chip.ChipGroup
                 android:id="@+id/chip_list"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 app:layout_constraintStart_toStartOf="@id/list_header"
+                app:layout_constraintEnd_toEndOf="@id/editField"
                 app:layout_constraintTop_toBottomOf="@id/list_header"
                 app:singleSelection="true" />
 
@@ -104,7 +105,7 @@
                 android:backgroundTint="@color/list_color_all"
                 android:padding="10dp"
                 android:text="@string/add"
-                android:textColor="@color/white"
+                android:textColor="@color/button_text_color"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/chip_list" />
@@ -130,7 +131,7 @@
             android:layout_gravity="center"
             android:layout_marginHorizontal="60dp"
             app:cardCornerRadius="10dp"
-            app:cardBackgroundColor="@color/cardview_light_background">
+            app:cardBackgroundColor="@color/reminder_card_background">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="wrap_content"
