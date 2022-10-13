@@ -4,22 +4,24 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.content.res.Configuration
+import android.content.res.Resources
 import android.os.Bundle
-import android.view.MenuItem
 import android.widget.Toast
-import com.google.android.material.navigation.NavigationView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import androidx.drawerlayout.widget.DrawerLayout
-import androidx.appcompat.app.AppCompatActivity
 import com.ercanpalta.todo.databinding.ActivityMainBinding
-import com.ercanpalta.todo.model.TaskList
 import com.ercanpalta.todo.model.ToDo
 import com.ercanpalta.todo.receiver.ReminderReceiver
 import com.ercanpalta.todo.view.HomeFragmentDirections
+import com.google.android.material.navigation.NavigationView
+import java.util.*
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -106,5 +108,17 @@ class MainActivity : AppCompatActivity() {
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
 
         alarmManager.cancel(pendingIntent)
+    }
+
+    fun setLocale(languageCode: String?) {
+        val locale = Locale(languageCode!!)
+        Locale.setDefault(locale)
+        val resources: Resources = this.resources
+        val config: Configuration = resources.configuration
+        config.setLocale(locale)
+        resources.updateConfiguration(config, resources.displayMetrics)
+        val refresh = Intent(this, MainActivity::class.java);
+        finish()
+        startActivity(refresh)
     }
 }

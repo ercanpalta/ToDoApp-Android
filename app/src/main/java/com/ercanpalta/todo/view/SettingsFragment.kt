@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.navigation.fragment.findNavController
 import com.ercanpalta.todo.databinding.FragmentSettingsBinding
 
 class SettingsFragment : Fragment() {
@@ -30,7 +31,7 @@ class SettingsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.notificationSettings.setOnClickListener {
+        binding.notificationCard.setOnClickListener {
             val settingsIntent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS)
                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 .putExtra(Settings.EXTRA_APP_PACKAGE, requireContext().packageName)
@@ -53,6 +54,11 @@ class SettingsFragment : Fragment() {
                 sharedPreferences.edit().putBoolean("isDarkModeOpen",false).apply()
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
             }
+        }
+
+        binding.languageCard.setOnClickListener {
+            val action = SettingsFragmentDirections.actionNavSettingsToLanguageFragment()
+            findNavController().navigate(action)
         }
     }
 }

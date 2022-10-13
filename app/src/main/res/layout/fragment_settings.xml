@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="30dp"
         android:layout_marginTop="20dp"
-       android:layout_marginBottom="10dp"
+        android:layout_marginBottom="10dp"
         app:cardBackgroundColor="@color/cardview"
         app:cardCornerRadius="16dp"
         app:cardElevation="2dp">

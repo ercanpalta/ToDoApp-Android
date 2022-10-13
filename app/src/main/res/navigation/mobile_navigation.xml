@@ -101,5 +101,19 @@
         <action
             android:id="@+id/action_settingsFragment_to_nav_home"
             app:destination="@id/nav_home" />
+        <action
+            android:id="@+id/action_nav_settings_to_languageFragment"
+            app:destination="@id/languageFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/languageFragment"
+        android:name="com.ercanpalta.todo.view.LanguageFragment"
+        android:label="@string/language"
+        tools:layout="@layout/fragment_language">
+        <action
+            android:id="@+id/action_languageFragment_to_nav_settings"
+            app:destination="@id/nav_settings"
+            app:popUpTo="@id/nav_settings"
+            app:popUpToInclusive="true" />
     </fragment>
 </navigation>
