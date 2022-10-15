@@ -2,18 +2,16 @@ package com.ercanpalta.todo.view
 
 import android.app.AlertDialog
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.ercanpalta.todo.R
-import com.ercanpalta.todo.databinding.FragmentEditBinding
 import com.ercanpalta.todo.databinding.FragmentEditListBinding
-import com.ercanpalta.todo.enums.FilterType
 import com.ercanpalta.todo.model.TaskList
 import com.ercanpalta.todo.viewmodel.HomeViewModel
 
@@ -26,11 +24,10 @@ class EditListFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentEditListBinding.inflate(inflater, container, false)
-        val root: View = binding.root
 
-        return root
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -70,8 +67,7 @@ class EditListFragment : Fragment() {
 
         binding.saveButton.setOnClickListener {
             val listName = binding.listNameText.text.toString()
-            val listColorChipId = binding.colorChipsLayout.colorChipsGroup.checkedChipId
-            val listColor = when(listColorChipId){
+            val listColor = when(binding.colorChipsLayout.colorChipsGroup.checkedChipId){
                 R.id.chip_purple -> R.color.list_color_purple
                 R.id.chip_blue -> R.color.list_color_blue
                 R.id.chip_green -> R.color.list_color_green
@@ -104,13 +100,13 @@ class EditListFragment : Fragment() {
             val builder = AlertDialog.Builder(this.context, R.style.MyDialogTheme)
             builder.setTitle(R.string.delete_list)
             builder.setMessage(R.string.delete_warning)
-            builder.setPositiveButton(R.string.delete) { dialog, i ->
+            builder.setPositiveButton(R.string.delete) { _, _ ->
                 homeViewModel.deleteTaskList(uid)
                 homeViewModel.deleteAllTasksInsideList(taskList.name)
                 val action = EditListFragmentDirections.actionEditListFragmentToNavHome()
                 findNavController().navigate(action)
             }
-            builder.setNegativeButton(R.string.cancel){ dialog, i ->
+            builder.setNegativeButton(R.string.cancel){ _, _ ->
 
             }
             builder.show()

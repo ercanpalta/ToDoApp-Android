@@ -21,18 +21,13 @@ class AddListFragment : Fragment() {
     private val homeViewModel: HomeViewModel by activityViewModels()
 
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentAddListBinding.inflate(inflater, container, false)
-        val root: View = binding.root
 
-        return root
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -40,8 +35,7 @@ class AddListFragment : Fragment() {
 
         binding.addListButton.setOnClickListener {
             val listName = binding.listNameText.text.toString()
-            val listColorChipId = binding.colorChipsLayout.colorChipsGroup.checkedChipId
-            val listColor = when(listColorChipId){
+            val listColor = when(binding.colorChipsLayout.colorChipsGroup.checkedChipId){
                 R.id.chip_purple -> R.color.list_color_purple
                 R.id.chip_blue -> R.color.list_color_blue
                 R.id.chip_green -> R.color.list_color_green

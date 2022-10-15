@@ -1,16 +1,14 @@
 package com.ercanpalta.todo.view
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.fragment.findNavController
+import androidx.fragment.app.Fragment
 import com.ercanpalta.todo.MainActivity
 import com.ercanpalta.todo.R
 import com.ercanpalta.todo.databinding.FragmentLanguageBinding
-import com.ercanpalta.todo.databinding.FragmentSettingsBinding
 
 
 class LanguageFragment : Fragment() {
@@ -21,7 +19,7 @@ class LanguageFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentLanguageBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -32,9 +30,8 @@ class LanguageFragment : Fragment() {
         val sharedPreferences = requireContext().getSharedPreferences("com.ercanpalta.todo",
             AppCompatActivity.MODE_PRIVATE
         )
-        val locale = sharedPreferences.getString("locale","gb")
 
-        when(locale){
+        when(sharedPreferences.getString("locale","gb")){
             "gb" -> binding.checkIconEnglish.setImageResource(R.drawable.ic_checked_24)
             "de" -> binding.checkIconDeutsch.setImageResource(R.drawable.ic_checked_24)
         }

@@ -1,21 +1,17 @@
 package com.ercanpalta.todo.adapter
 
 import android.content.Context
-import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat
-import androidx.core.view.marginTop
-import androidx.core.view.setPadding
 import androidx.recyclerview.widget.RecyclerView
 import com.ercanpalta.todo.R
 import com.ercanpalta.todo.databinding.ListItemBinding
 import com.ercanpalta.todo.enums.FilterType
 import com.ercanpalta.todo.model.TaskList
 import com.ercanpalta.todo.view.HomeFragment
-import kotlin.collections.ArrayList
 
 class ListAdapter(private val dataSet: ArrayList<TaskList>, val fragment: HomeFragment): RecyclerView.Adapter<ListAdapter.ViewHolder>() {
 
@@ -25,12 +21,16 @@ class ListAdapter(private val dataSet: ArrayList<TaskList>, val fragment: HomeFr
         fun bind(list:TaskList, fragment: HomeFragment, context: Context){
             val all = context.getString(R.string.all)
             val newList = context.getString(R.string.new_list)
-            if (list.name == "All"){
-                binding.listText.text = all
-            }else if (list.name == "New List"){
-                binding.listText.text = newList
-            }else{
-                binding.listText.text = list.name
+            when (list.name) {
+                "All" -> {
+                    binding.listText.text = all
+                }
+                "New List" -> {
+                    binding.listText.text = newList
+                }
+                else -> {
+                    binding.listText.text = list.name
+                }
             }
             binding.colorCard.strokeColor = ContextCompat.getColor(context, list.color)
             binding.colorCard.strokeWidth = 6

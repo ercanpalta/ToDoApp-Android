@@ -5,17 +5,18 @@ import android.graphics.Paint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.CheckBox
+import android.widget.Filter
+import android.widget.Filterable
+import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.ercanpalta.todo.MainActivity
 import com.ercanpalta.todo.R
 import com.ercanpalta.todo.databinding.RowItemBinding
 import com.ercanpalta.todo.enums.Priority
 import com.ercanpalta.todo.enums.Repeat
 import com.ercanpalta.todo.model.ToDo
 import com.ercanpalta.todo.view.HomeFragment
-import java.util.Calendar
 
 class HomeAdapter (private val dataSet: ArrayList<ToDo>, val fragment: HomeFragment): RecyclerView.Adapter<HomeAdapter.ViewHolder>(), Filterable {
 

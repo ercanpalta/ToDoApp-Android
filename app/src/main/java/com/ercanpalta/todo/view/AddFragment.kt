@@ -167,10 +167,10 @@ class AddFragment : Fragment() {
                 var hour = picker.hour.toString()
                 var minute = picker.minute.toString()
                 if (picker.hour < 10){
-                    hour = "0" + hour
+                    hour = "0$hour"
                 }
                 if (picker.minute < 10){
-                    minute = "0" + minute
+                    minute = "0$minute"
                 }
 
                 binding.timeText.text = getString(R.string.time_format,hour,minute)

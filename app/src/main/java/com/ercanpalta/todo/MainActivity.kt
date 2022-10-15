@@ -9,7 +9,6 @@ import android.content.res.Resources
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -128,7 +127,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun refresh(){
-        val refresh = Intent(this, MainActivity::class.java);
+        val refresh = Intent(this, MainActivity::class.java)
         finish()
         startActivity(refresh)
     }
@@ -145,10 +144,10 @@ class MainActivity : AppCompatActivity() {
         var minute = calendar.get(Calendar.MINUTE).toString()
 
         if (calendar.get(Calendar.HOUR_OF_DAY) < 10){
-            hour = "0" + hour
+            hour = "0$hour"
         }
         if (calendar.get(Calendar.MINUTE) < 10){
-            minute = "0" + minute
+            minute = "0$minute"
         }
 
         val time = getString(R.string.time_format,hour,minute)

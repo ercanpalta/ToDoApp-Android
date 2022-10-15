@@ -22,8 +22,6 @@ import com.ercanpalta.todo.model.TaskList
 import com.ercanpalta.todo.model.ToDo
 import com.ercanpalta.todo.viewmodel.HomeViewModel
 import com.google.android.material.card.MaterialCardView
-import java.util.*
-import kotlin.collections.ArrayList
 
 class HomeFragment : Fragment() {
 

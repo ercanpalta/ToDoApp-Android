@@ -102,10 +102,10 @@ class EditFragment : Fragment() {
             binding.editField.nameText.setText(it.task)
             binding.editField.descriptionText.setText(it.description)
             val id:Int
-            when(it.priority){
-                Priority.LOW -> id = R.id.chip_low
-                Priority.MEDIUM -> id = R.id.chip_medium
-                Priority.HIGH -> id = R.id.chip_high
+            id = when(it.priority){
+                Priority.LOW -> R.id.chip_low
+                Priority.MEDIUM -> R.id.chip_medium
+                Priority.HIGH -> R.id.chip_high
             }
             binding.priorityChipsGroup.check(id)
 
@@ -127,10 +127,10 @@ class EditFragment : Fragment() {
                 var hour = previousCalendar.get(Calendar.HOUR_OF_DAY).toString()
                 var minute = previousCalendar.get(Calendar.MINUTE).toString()
                 if (previousCalendar.get(Calendar.HOUR_OF_DAY) < 10){
-                    hour = "0" + hour
+                    hour = "0$hour"
                 }
                 if (previousCalendar.get(Calendar.MINUTE) < 10){
-                    minute = "0" + minute
+                    minute = "0$minute"
                 }
                 binding.timeText.text = getString(R.string.time_format,hour,minute)
                 binding.repeatSpinner.setSelection(getRepeatPosition(toDo.repeat))
@@ -223,10 +223,10 @@ class EditFragment : Fragment() {
                     var hour = picker.hour.toString()
                     var minute = picker.minute.toString()
                     if (picker.hour < 10){
-                        hour = "0" + hour
+                        hour = "0$hour"
                     }
                     if (picker.minute < 10){
-                        minute = "0" + minute
+                        minute = "0$minute"
                     }
 
                     val time = getString(R.string.time_format,hour,minute)
@@ -383,11 +383,11 @@ class EditFragment : Fragment() {
 
     }
 
-    fun cancelReminder(requestCode:Int){
+    private fun cancelReminder(requestCode:Int){
         (activity as MainActivity).cancelReminder(requestCode)
     }
 
-    fun alertDialog():AlertDialog.Builder{
+    private fun alertDialog():AlertDialog.Builder{
         val builder = AlertDialog.Builder(this.context, R.style.MyDialogTheme)
         builder.setTitle(R.string.delete_reminder)
         builder.setMessage(R.string.ask_delete)
@@ -398,7 +398,7 @@ class EditFragment : Fragment() {
         return builder
     }
 
-    fun addListChips(listList:ArrayList<TaskList>){
+    private fun addListChips(listList:ArrayList<TaskList>){
         val chipGroup = binding.chipList
         chipGroup.removeAllViews()
         for (list in listList){
@@ -420,7 +420,7 @@ class EditFragment : Fragment() {
         }
     }
 
-    fun addPriorityChips(){
+    private fun addPriorityChips(){
         val chipGroup = binding.priorityChipsGroup
         chipGroup.removeAllViews()
 
@@ -462,17 +462,16 @@ class EditFragment : Fragment() {
 
     }
 
-    fun getRepeatPosition(repeat: Repeat):Int{
-        var position = -1
-        when (repeat) {
-            Repeat.NOT -> position = 0
-            Repeat.DAILY -> position = 1
-            Repeat.WEEKLY -> position = 2
+    private fun getRepeatPosition(repeat: Repeat):Int{
+        val position: Int = when (repeat) {
+            Repeat.NOT -> 0
+            Repeat.DAILY -> 1
+            Repeat.WEEKLY -> 2
         }
         return position
     }
 
-    fun getRepeatEnum(repeat: String): Repeat {
+    private fun getRepeatEnum(repeat: String): Repeat {
         var repeatEnum = Repeat.NOT
         val stringArray = resources.getStringArray(R.array.months)
         when (repeat) {
