@@ -8,9 +8,11 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.ercanpalta.todo.MainActivity
 import com.ercanpalta.todo.R
 import com.ercanpalta.todo.databinding.RowItemBinding
 import com.ercanpalta.todo.enums.Priority
+import com.ercanpalta.todo.enums.Repeat
 import com.ercanpalta.todo.model.ToDo
 import com.ercanpalta.todo.view.HomeFragment
 import java.util.Calendar
@@ -45,20 +47,21 @@ class HomeAdapter (private val dataSet: ArrayList<ToDo>, val fragment: HomeFragm
             if (task.requestCode != -1){
                 binding.reminderIcon.visibility = View.VISIBLE
 
-                if (task.repeat != "Does not repeat"){
+                if (task.repeat != Repeat.NOT){
                     binding.repeatIcon.visibility = View.VISIBLE
                 }else{
                     binding.repeatIcon.visibility = View.GONE
                 }
 
                 // to add reminder time info to the row item
-                val calendar = Calendar.getInstance()
-                calendar.timeInMillis = task.remindTimeInMillis
+                //val calendar = Calendar.getInstance()
+                //calendar.timeInMillis = task.remindTimeInMillis
+
 
                 val reminderText = TextView(context)
                 reminderText.textSize = 12f
                 reminderText.setTextColor(context.getColor(android.R.color.darker_gray))
-                reminderText.text = calendar.time.toString().dropLast(18)
+                reminderText.text = fragment.getFormattedDate(task.remindTimeInMillis)
                 binding.reminderChipContainer.removeAllViews()
                 binding.reminderChipContainer.addView(reminderText)
             }

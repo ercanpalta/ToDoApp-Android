@@ -18,6 +18,7 @@ import com.ercanpalta.todo.MainActivity
 import com.ercanpalta.todo.R
 import com.ercanpalta.todo.databinding.FragmentAddBinding
 import com.ercanpalta.todo.enums.Priority
+import com.ercanpalta.todo.enums.Repeat
 import com.ercanpalta.todo.model.TaskList
 import com.ercanpalta.todo.model.ToDo
 import com.ercanpalta.todo.viewmodel.HomeViewModel
@@ -131,7 +132,7 @@ class AddFragment : Fragment() {
             val datePicker =
                 MaterialDatePicker.Builder.datePicker()
                     .setTheme(R.style.DatePickerTheme)
-                    .setTitleText("Select date")
+                    .setTitleText(this.getString(R.string.select_date))
                     .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
                     .setCalendarConstraints(constraintsBuilder.build())
                     .build()
@@ -141,10 +142,10 @@ class AddFragment : Fragment() {
                 calendar.timeInMillis = datePicker.selection!!
                 reminderCalendar.timeInMillis = datePicker.selection!!
 
-                binding.dateText.text = calendar.time.toString().dropLast(24)
+                binding.dateText.text = (activity as MainActivity).getFormattedDate(calendar.timeInMillis).dropLast(6)
             }
             datePicker.addOnNegativeButtonClickListener {
-                println("negative")
+
             }
         }
 
@@ -156,7 +157,7 @@ class AddFragment : Fragment() {
                     .setTimeFormat(TimeFormat.CLOCK_24H)
                     .setHour(currentCalendar.get(Calendar.HOUR_OF_DAY))
                     .setMinute(currentCalendar.get(Calendar.MINUTE))
-                    .setTitleText("Select time")
+                    .setTitleText(this.getString(R.string.select_time))
                     .setTheme(R.style.TimePickerTheme)
                     .build()
             picker.show(parentFragmentManager, "tag")
@@ -174,11 +175,11 @@ class AddFragment : Fragment() {
 
                 binding.timeText.text = getString(R.string.time_format,hour,minute)
 
-                reminderCalendar[Calendar.HOUR] = picker.hour
+                reminderCalendar[Calendar.HOUR_OF_DAY] = picker.hour
                 reminderCalendar[Calendar.MINUTE] = picker.minute
             }
             picker.addOnNegativeButtonClickListener {
-                println("negative")
+
             }
         }
 
@@ -190,12 +191,12 @@ class AddFragment : Fragment() {
         binding.applyReminder.setOnClickListener {
             val dateText = binding.dateText.text.toString()
             val timeText = binding.timeText.text.toString()
-            if(dateText != "Pick a date" && timeText != "Pick a time"){
+            if(dateText != this.getString(R.string.date) && timeText != this.getString(R.string.time)){
                 callback.isEnabled = false
                 val chip = Chip(context)
                 chip.apply {
                     id = View.generateViewId()
-                    text = reminderCalendar.time.toString().dropLast(18)
+                    text = (activity as MainActivity).getFormattedDate(reminderCalendar.timeInMillis)
                     textSize = 16f
                     isCloseIconVisible = true
                     setOnCloseIconClickListener {
@@ -214,7 +215,7 @@ class AddFragment : Fragment() {
                         }
                         builder.show()
                     }
-                    if(binding.repeatSpinner.selectedItem.toString() != "Does not repeat"){
+                    if(binding.repeatSpinner.selectedItem.toString() != resources.getStringArray(R.array.repeat)[0]){
                         setChipIconResource(R.drawable.ic_repeat_16)
                     }else{
                         setChipIconResource(R.drawable.ic_alarm_16)
@@ -277,7 +278,7 @@ class AddFragment : Fragment() {
                         }
                         sharedPreferences.edit().putInt("requestNumber",requestCode).apply()
 
-                        task.repeat = binding.repeatSpinner.selectedItem.toString()
+                        task.repeat = Repeat.values()[binding.repeatSpinner.selectedItemPosition]
                         task.remindTimeInMillis = reminderCalendar.timeInMillis
                         task.requestCode = requestCode
                         (activity as MainActivity).setReminder(task)

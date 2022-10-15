@@ -54,11 +54,14 @@
     <string name="orange">Orange</string>
     <string name="cancel">Absagen</string>
     <string name="delete_reminder">Erinnerung löschen</string>
+    <string name="reminder_is_set">Erinnerung ist eingestellt</string>
     <string name="color">Farbe</string>
     <string name="list_add">Neue Liste hinzufügen</string>
     <string name="already_have_reminder">Sie haben bereits vorher eine Erinnerung eingestellt!</string>
     <string name="please_enter_task">Bitte Name und Beschreibung eingeben!</string>
     <string name="please_enter_date">Bitte Datum und Uhrzeit auswählen!</string>
+    <string name="select_date">Datum auswählen</string>
+    <string name="select_time">Zeit auswählen</string>
     <string name="ask_delete">Sind Sie sicher, dass Sie löschen möchten?</string>
     <string name="delete">Löschen</string>
     <string name="save">Speichern</string>
@@ -79,6 +82,35 @@
         <item>Täglich</item>
         <item>Wöchentlich</item>
     </string-array>
+
+    <string-array name="months">
+        <item>Jan</item>
+        <item>Feb</item>
+        <item>Mär</item>
+        <item>Apr</item>
+        <item>Mai</item>
+        <item>Jun</item>
+        <item>Jul</item>
+        <item>Aug</item>
+        <item>Sep</item>
+        <item>Okt</item>
+        <item>Nov</item>
+        <item>Dez</item>
+    </string-array>
+
+    <string-array name="days_of_week">
+        <item>Son</item>
+        <item>Mon</item>
+        <item>Die</item>
+        <item>Mit</item>
+        <item>Don</item>
+        <item>Fre</item>
+        <item>Sam</item>
+    </string-array>
+
+
     <string name="english">English</string>
     <string name="deutsch">Deutsch</string>
+    <string name="all">Alle</string>
+    <string name="new_list">Neue Liste</string>
 </resources>

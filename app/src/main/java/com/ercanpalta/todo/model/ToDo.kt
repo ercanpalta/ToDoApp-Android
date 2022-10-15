@@ -4,6 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.ercanpalta.todo.enums.Priority
+import com.ercanpalta.todo.enums.Repeat
 
 @Entity
 data class ToDo(
@@ -18,7 +19,7 @@ data class ToDo(
     @ColumnInfo
     var remindTimeInMillis : Long = 0,
     @ColumnInfo
-    var repeat: String = "Does not repeat",
+    var repeat: Repeat = Repeat.NOT,
     @ColumnInfo
     var requestCode: Int = -1){
     @PrimaryKey(autoGenerate = true)

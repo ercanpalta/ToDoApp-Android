@@ -13,6 +13,7 @@ import androidx.core.app.NotificationCompat
 import com.ercanpalta.todo.MainActivity
 import com.ercanpalta.todo.R
 import com.ercanpalta.todo.database.ToDoDatabase
+import com.ercanpalta.todo.enums.Repeat
 import com.ercanpalta.todo.model.ToDo
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -52,17 +53,17 @@ class ReminderReceiver: BroadcastReceiver() {
         // to update reminder state
         val calendar = Calendar.getInstance()
         calendar.timeInMillis = task.remindTimeInMillis
-        if (task.repeat == "Does not repeat"){
+        if (task.repeat == Repeat.NOT){
             GlobalScope.launch {
                 dao.updateRequestCode(requestCode)
             }
-        }else if (task.repeat == "Daily"){
+        }else if (task.repeat == Repeat.DAILY){
             calendar.add(Calendar.DATE, 1)
             task.remindTimeInMillis = calendar.timeInMillis
             GlobalScope.launch {
                 dao.updateTask(task)
             }
-        }else if (task.repeat == "Weekly"){
+        }else if (task.repeat == Repeat.WEEKLY){
             calendar.add(Calendar.DATE, 7)
             task.remindTimeInMillis = calendar.timeInMillis
             GlobalScope.launch {

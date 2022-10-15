@@ -9,6 +9,7 @@ import android.content.res.Resources
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -16,6 +17,7 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.ercanpalta.todo.databinding.ActivityMainBinding
+import com.ercanpalta.todo.enums.Repeat
 import com.ercanpalta.todo.model.ToDo
 import com.ercanpalta.todo.receiver.ReminderReceiver
 import com.ercanpalta.todo.view.HomeFragmentDirections
@@ -30,6 +32,12 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val sharedPreferences = this.getSharedPreferences("com.ercanpalta.todo",
+            MODE_PRIVATE
+        )
+        val locale = sharedPreferences.getString("locale","gb")
+        setLocale(locale)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -87,18 +95,18 @@ class MainActivity : AppCompatActivity() {
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
 
         when (task.repeat) {
-            "Does not repeat" -> {
+            Repeat.NOT -> {
                 alarmManager.setExact(AlarmManager.RTC_WAKEUP,task.remindTimeInMillis,pendingIntent)
             }
-            "Daily" -> {
+            Repeat.DAILY -> {
                 alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, task.remindTimeInMillis, AlarmManager.INTERVAL_DAY, pendingIntent)
             }
-            "Weekly" -> {
+            Repeat.WEEKLY -> {
                 alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, task.remindTimeInMillis, 1000 * 60 * 60 * 24 * 7, pendingIntent)
             }
         }
 
-        Toast.makeText(this, "Reminder is set", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, R.string.reminder_is_set, Toast.LENGTH_SHORT).show()
     }
 
     fun cancelReminder(requestCode:Int){
@@ -117,8 +125,35 @@ class MainActivity : AppCompatActivity() {
         val config: Configuration = resources.configuration
         config.setLocale(locale)
         resources.updateConfiguration(config, resources.displayMetrics)
+    }
+
+    fun refresh(){
         val refresh = Intent(this, MainActivity::class.java);
         finish()
         startActivity(refresh)
+    }
+
+    fun getFormattedDate(millis:Long):String{
+        val formattedDate: String
+        val calendar = Calendar.getInstance()
+        calendar.timeInMillis = millis
+
+        val month = resources.getStringArray(R.array.months)[calendar.get(Calendar.MONTH)]
+        val dayOfWeek = resources.getStringArray(R.array.days_of_week)[calendar.get(Calendar.DAY_OF_WEEK)-1]
+        val dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH).toString()
+        var hour = calendar.get(Calendar.HOUR_OF_DAY).toString()
+        var minute = calendar.get(Calendar.MINUTE).toString()
+
+        if (calendar.get(Calendar.HOUR_OF_DAY) < 10){
+            hour = "0" + hour
+        }
+        if (calendar.get(Calendar.MINUTE) < 10){
+            minute = "0" + minute
+        }
+
+        val time = getString(R.string.time_format,hour,minute)
+
+        formattedDate = "$dayOfMonth $month $dayOfWeek $time"
+        return formattedDate
     }
 }
