@@ -32,7 +32,7 @@
         app:counterMaxLength="20"
         android:layout_marginHorizontal="20dp"
         app:hintTextColor="@color/header"
-        app:boxBackgroundColor="@color/edit_text"
+        app:boxBackgroundColor="@color/edit_text_bg"
         app:layout_constraintTop_toBottomOf="@id/add_list_header"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
@@ -94,7 +94,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:backgroundTint="@color/list_color_all"
-        android:textColor="@color/white"
+        android:textColor="@color/button_text_color"
         android:padding="10dp"
         android:text="@string/save"
         app:layout_constraintTop_toBottomOf="@+id/divider"

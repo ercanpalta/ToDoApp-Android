@@ -13,15 +13,17 @@ import androidx.core.app.NotificationCompat
 import com.ercanpalta.todo.MainActivity
 import com.ercanpalta.todo.R
 import com.ercanpalta.todo.database.ToDoDatabase
+import com.ercanpalta.todo.enums.Repeat
 import com.ercanpalta.todo.model.ToDo
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import java.util.Calendar
-import java.util.Date
+import java.util.*
 
 class ReminderReceiver: BroadcastReceiver() {
 
+    @OptIn(DelicateCoroutinesApi::class)
     override fun onReceive(p0: Context?, p1: Intent?) {
 
         val notificationManager = p0?.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -52,21 +54,25 @@ class ReminderReceiver: BroadcastReceiver() {
         // to update reminder state
         val calendar = Calendar.getInstance()
         calendar.timeInMillis = task.remindTimeInMillis
-        if (task.repeat == "Does not repeat"){
-            GlobalScope.launch {
-                dao.updateRequestCode(requestCode)
+        when (task.repeat) {
+            Repeat.NOT -> {
+                GlobalScope.launch {
+                    dao.updateRequestCode(requestCode)
+                }
             }
-        }else if (task.repeat == "Daily"){
-            calendar.add(Calendar.DATE, 1)
-            task.remindTimeInMillis = calendar.timeInMillis
-            GlobalScope.launch {
-                dao.updateTask(task)
+            Repeat.DAILY -> {
+                calendar.add(Calendar.DATE, 1)
+                task.remindTimeInMillis = calendar.timeInMillis
+                GlobalScope.launch {
+                    dao.updateTask(task)
+                }
             }
-        }else if (task.repeat == "Weekly"){
-            calendar.add(Calendar.DATE, 7)
-            task.remindTimeInMillis = calendar.timeInMillis
-            GlobalScope.launch {
-                dao.updateTask(task)
+            Repeat.WEEKLY -> {
+                calendar.add(Calendar.DATE, 7)
+                task.remindTimeInMillis = calendar.timeInMillis
+                GlobalScope.launch {
+                    dao.updateTask(task)
+                }
             }
         }
 

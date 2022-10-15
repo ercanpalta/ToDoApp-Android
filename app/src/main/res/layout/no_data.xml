@@ -10,12 +10,12 @@
     <ImageView
         android:id="@+id/no_data"
         android:layout_width="360dp"
-        android:layout_height="270dp"
+        android:layout_height="300dp"
         android:padding="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_empty" />
+        app:srcCompat="@drawable/not_found_ill" />
 
     <TextView
         android:id="@+id/no_data_text"
@@ -34,6 +34,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
+        android:gravity="center_horizontal"
+        android:maxEms="18"
         app:layout_constraintTop_toBottomOf="@id/no_data_text"
         app:layout_constraintStart_toStartOf="@id/no_data_text"
         app:layout_constraintEnd_toEndOf="@id/no_data_text"

@@ -32,7 +32,7 @@
         app:counterMaxLength="20"
         android:layout_marginHorizontal="20dp"
         app:hintTextColor="@color/header"
-        app:boxBackgroundColor="@color/edit_text"
+        app:boxBackgroundColor="@color/edit_text_bg"
         app:layout_constraintTop_toBottomOf="@id/add_list_header"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">

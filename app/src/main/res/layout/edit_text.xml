@@ -15,14 +15,14 @@
         app:counterMaxLength="56"
         app:errorEnabled="true"
         app:hintTextColor="@color/header"
-        app:boxBackgroundColor="@color/edit_text"
+        app:boxBackgroundColor="@color/edit_text_bg"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/name_text"
-            android:textCursorDrawable="@null"
+            android:textCursorDrawable="@drawable/cursor_drawable"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             />
@@ -37,7 +37,7 @@
         android:layout_marginTop="10dp"
         app:hintTextColor="@color/header"
         android:hint="@string/task_description"
-        app:boxBackgroundColor="@color/edit_text"
+        app:boxBackgroundColor="@color/edit_text_bg"
         app:endIconMode="clear_text"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -45,7 +45,7 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/description_text"
-            android:textCursorDrawable="@null"
+            android:textCursorDrawable="@drawable/cursor_drawable"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             />

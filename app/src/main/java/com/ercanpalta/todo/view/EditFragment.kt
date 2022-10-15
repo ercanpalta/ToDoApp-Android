@@ -18,6 +18,7 @@ import com.ercanpalta.todo.MainActivity
 import com.ercanpalta.todo.R
 import com.ercanpalta.todo.databinding.FragmentEditBinding
 import com.ercanpalta.todo.enums.Priority
+import com.ercanpalta.todo.enums.Repeat
 import com.ercanpalta.todo.model.TaskList
 import com.ercanpalta.todo.model.ToDo
 import com.ercanpalta.todo.viewmodel.HomeViewModel
@@ -101,17 +102,16 @@ class EditFragment : Fragment() {
             binding.editField.nameText.setText(it.task)
             binding.editField.descriptionText.setText(it.description)
             val id:Int
-            when(it.priority){
-                Priority.LOW -> id = R.id.chip_low
-                Priority.MEDIUM -> id = R.id.chip_medium
-                Priority.HIGH -> id = R.id.chip_high
+            id = when(it.priority){
+                Priority.LOW -> R.id.chip_low
+                Priority.MEDIUM -> R.id.chip_medium
+                Priority.HIGH -> R.id.chip_high
             }
             binding.priorityChipsGroup.check(id)
 
             val chipListIterator = binding.chipList.iterator()
             while(chipListIterator.hasNext()){
                 val listId = chipListIterator.next().id
-                println(binding.chipList.findViewById<Chip>(listId).text.toString())
                 if(binding.chipList.findViewById<Chip>(listId).text.toString() == it.listName){
                     binding.chipList.check(listId)
                 }
@@ -122,14 +122,15 @@ class EditFragment : Fragment() {
 
                 // to show previous reminder when clicked to the reminder chip
                 previousCalendar.timeInMillis = toDo.remindTimeInMillis
-                binding.dateText.text = previousCalendar.time.toString().dropLast(24)
+                reminderCalendar.timeInMillis = toDo.remindTimeInMillis
+                binding.dateText.text = (activity as MainActivity).getFormattedDate(previousCalendar.timeInMillis).dropLast(6)
                 var hour = previousCalendar.get(Calendar.HOUR_OF_DAY).toString()
                 var minute = previousCalendar.get(Calendar.MINUTE).toString()
                 if (previousCalendar.get(Calendar.HOUR_OF_DAY) < 10){
-                    hour = "0" + hour
+                    hour = "0$hour"
                 }
                 if (previousCalendar.get(Calendar.MINUTE) < 10){
-                    minute = "0" + minute
+                    minute = "0$minute"
                 }
                 binding.timeText.text = getString(R.string.time_format,hour,minute)
                 binding.repeatSpinner.setSelection(getRepeatPosition(toDo.repeat))
@@ -138,7 +139,7 @@ class EditFragment : Fragment() {
                 val chip = Chip(context)
                 chip.apply {
                     this.id = View.generateViewId()
-                    text = previousCalendar.time.toString().dropLast(18)
+                    text = (activity as MainActivity).getFormattedDate(previousCalendar.timeInMillis)
                     textSize = 16f
                     isCloseIconVisible = true
                     setOnCloseIconClickListener {
@@ -153,7 +154,7 @@ class EditFragment : Fragment() {
                         builder.show()
 
                     }
-                    if(toDo.repeat != "Does not repeat"){
+                    if(toDo.repeat != Repeat.NOT){
                         setChipIconResource(R.drawable.ic_repeat_16)
                     }else{
                         setChipIconResource(R.drawable.ic_alarm_16)
@@ -169,7 +170,7 @@ class EditFragment : Fragment() {
 
                 binding.reminderChipContainer.addView(chip)
             }else{
-                previousCalendar.timeInMillis = System.currentTimeMillis()
+                //previousCalendar.timeInMillis = System.currentTimeMillis()
                 binding.reminderChipContainer.removeAllViews()
                 binding.dateText.text = getString(R.string.date)
                 binding.timeText.text = getString(R.string.time)
@@ -178,7 +179,6 @@ class EditFragment : Fragment() {
 
             // to pick date
             binding.dateText.setOnClickListener {
-                val calendar = Calendar.getInstance()
 
                 val constraintsBuilder =
                     CalendarConstraints.Builder()
@@ -187,17 +187,19 @@ class EditFragment : Fragment() {
                 val datePicker =
                     MaterialDatePicker.Builder.datePicker()
                         .setTheme(R.style.DatePickerTheme)
-                        .setTitleText("Select date")
-                        .setSelection(previousCalendar.timeInMillis)
+                        .setTitleText(this.getString(R.string.select_date))
+                        .setSelection(reminderCalendar.timeInMillis)
                         .setCalendarConstraints(constraintsBuilder.build())
                         .build()
                 datePicker.show(parentFragmentManager, "tag")
 
                 datePicker.addOnPositiveButtonClickListener {
+                    val calendar = Calendar.getInstance()
                     calendar.timeInMillis = datePicker.selection!!
-                    reminderCalendar.timeInMillis = datePicker.selection!!
-
-                    binding.dateText.text = calendar.time.toString().dropLast(24)
+                    reminderCalendar[Calendar.YEAR] = calendar[Calendar.YEAR]
+                    reminderCalendar[Calendar.MONTH] = calendar[Calendar.MONTH]
+                    reminderCalendar[Calendar.DAY_OF_MONTH] = calendar[Calendar.DAY_OF_MONTH]
+                    binding.dateText.text = (activity as MainActivity).getFormattedDate(reminderCalendar.timeInMillis).dropLast(6)
                 }
                 datePicker.addOnNegativeButtonClickListener {
 
@@ -205,14 +207,13 @@ class EditFragment : Fragment() {
             }
 
             // to pick time
-            var time = "time"
             binding.timeText.setOnClickListener {
                 val picker =
                     MaterialTimePicker.Builder()
                         .setTimeFormat(TimeFormat.CLOCK_24H)
-                        .setHour(previousCalendar.get(Calendar.HOUR_OF_DAY))
-                        .setMinute(previousCalendar.get(Calendar.MINUTE))
-                        .setTitleText("Select time")
+                        .setHour(reminderCalendar.get(Calendar.HOUR_OF_DAY))
+                        .setMinute(reminderCalendar.get(Calendar.MINUTE))
+                        .setTitleText(this.getString(R.string.select_time))
                         .setTheme(R.style.TimePickerTheme)
                         .build()
                 picker.show(parentFragmentManager, "tag")
@@ -222,37 +223,40 @@ class EditFragment : Fragment() {
                     var hour = picker.hour.toString()
                     var minute = picker.minute.toString()
                     if (picker.hour < 10){
-                        hour = "0" + hour
+                        hour = "0$hour"
                     }
                     if (picker.minute < 10){
-                        minute = "0" + minute
+                        minute = "0$minute"
                     }
 
-                    time = getString(R.string.time_format,hour,minute)
+                    val time = getString(R.string.time_format,hour,minute)
                     binding.timeText.text = time
 
-                    reminderCalendar[Calendar.HOUR] = picker.hour
+                    reminderCalendar[Calendar.HOUR_OF_DAY] = picker.hour
                     reminderCalendar[Calendar.MINUTE] = picker.minute
                 }
                 picker.addOnNegativeButtonClickListener {
-                    println("negative")
+
                 }
             }
 
             binding.cancelReminder.setOnClickListener {
                 callback.isEnabled = false
+                reminderCalendar.timeInMillis = previousCalendar.timeInMillis
+                binding.dateText.text = (activity as MainActivity).getFormattedDate(reminderCalendar.timeInMillis).dropLast(6)
+                binding.timeText.text = (activity as MainActivity).getFormattedDate(reminderCalendar.timeInMillis).takeLast(5)
                 binding.reminderFrame.visibility = View.GONE
             }
 
             binding.applyReminder.setOnClickListener {
                 val dateText = binding.dateText.text.toString()
                 val timeText = binding.timeText.text.toString()
-                if(dateText != "Pick a date" && timeText != "Pick a time"){
+                if(dateText != this.getString(R.string.date) && timeText != this.getString(R.string.time)){
                     callback.isEnabled = false
                     val chip = Chip(context)
                     chip.apply {
                         this.id = View.generateViewId()
-                        text = reminderCalendar.time.toString().dropLast(18)
+                        text = (activity as MainActivity).getFormattedDate(reminderCalendar.timeInMillis)
                         textSize = 16f
                         isCloseIconVisible = true
                         setOnCloseIconClickListener {
@@ -262,7 +266,7 @@ class EditFragment : Fragment() {
                             }
                             builder.show()
                         }
-                        if(binding.repeatSpinner.selectedItem.toString() != "Does not repeat"){
+                        if(binding.repeatSpinner.selectedItem.toString() != resources.getStringArray(R.array.repeat)[0]){
                             setChipIconResource(R.drawable.ic_repeat_16)
                         }else{
                             setChipIconResource(R.drawable.ic_alarm_16)
@@ -333,25 +337,33 @@ class EditFragment : Fragment() {
 
 
             if (name.isNotEmpty() && description.isNotEmpty()){
+                val prevReminder = previousCalendar.timeInMillis
+                val nowReminder = reminderCalendar.timeInMillis
                 if (name.length <= 56){
                     if(binding.reminderChipContainer.isNotEmpty()){ // if reminder set with add button
-                        // to generate request code
-                        val sharedPreferences = requireContext().getSharedPreferences("com.ercanpalta.todo",
-                            Context.MODE_PRIVATE
-                        )
-                        var requestCode = sharedPreferences.getInt("requestNumber",0)
+                        toDo.repeat = getRepeatEnum(binding.repeatSpinner.selectedItem.toString())
+                        if (toDo.requestCode == -1){
+                            // to generate request code
+                            val sharedPreferences = requireContext().getSharedPreferences("com.ercanpalta.todo",
+                                Context.MODE_PRIVATE
+                            )
+                            var requestCode = sharedPreferences.getInt("requestNumber",0)
 
-                        if(requestCode < 9999){
-                            requestCode += 1
-                        }else{
-                            requestCode = 1
+                            if(requestCode < 9999){
+                                requestCode += 1
+                            }else{
+                                requestCode = 1
+                            }
+                            sharedPreferences.edit().putInt("requestNumber",requestCode).apply()
+                            toDo.requestCode = requestCode
+
+                            toDo.remindTimeInMillis = reminderCalendar.timeInMillis
+                            (activity as MainActivity).setReminder(toDo)
+                        }else if (prevReminder != nowReminder){
+                            toDo.remindTimeInMillis = reminderCalendar.timeInMillis
+                            (activity as MainActivity).cancelReminder(toDo.requestCode)
+                            (activity as MainActivity).setReminder(toDo)
                         }
-                        sharedPreferences.edit().putInt("requestNumber",requestCode).apply()
-
-                        toDo.repeat = binding.repeatSpinner.selectedItem.toString()
-                        toDo.remindTimeInMillis = reminderCalendar.timeInMillis
-                        toDo.requestCode = requestCode
-                        (activity as MainActivity).setReminder(toDo)
                     }
 
                     homeViewModel.updateTask(toDo)
@@ -371,11 +383,11 @@ class EditFragment : Fragment() {
 
     }
 
-    fun cancelReminder(requestCode:Int){
+    private fun cancelReminder(requestCode:Int){
         (activity as MainActivity).cancelReminder(requestCode)
     }
 
-    fun alertDialog():AlertDialog.Builder{
+    private fun alertDialog():AlertDialog.Builder{
         val builder = AlertDialog.Builder(this.context, R.style.MyDialogTheme)
         builder.setTitle(R.string.delete_reminder)
         builder.setMessage(R.string.ask_delete)
@@ -386,7 +398,7 @@ class EditFragment : Fragment() {
         return builder
     }
 
-    fun addListChips(listList:ArrayList<TaskList>){
+    private fun addListChips(listList:ArrayList<TaskList>){
         val chipGroup = binding.chipList
         chipGroup.removeAllViews()
         for (list in listList){
@@ -408,7 +420,7 @@ class EditFragment : Fragment() {
         }
     }
 
-    fun addPriorityChips(){
+    private fun addPriorityChips(){
         val chipGroup = binding.priorityChipsGroup
         chipGroup.removeAllViews()
 
@@ -450,13 +462,24 @@ class EditFragment : Fragment() {
 
     }
 
-    fun getRepeatPosition(repeat:String):Int{
-        var position = -1
-        when (repeat) {
-            "Does not repeat" -> position = 0
-            "Daily" -> position = 1
-            "Weekly" -> position = 2
+    private fun getRepeatPosition(repeat: Repeat):Int{
+        val position: Int = when (repeat) {
+            Repeat.NOT -> 0
+            Repeat.DAILY -> 1
+            Repeat.WEEKLY -> 2
         }
         return position
+    }
+
+    private fun getRepeatEnum(repeat: String): Repeat {
+        var repeatEnum = Repeat.NOT
+        val stringArray = resources.getStringArray(R.array.months)
+        when (repeat) {
+            stringArray[0] -> repeatEnum = Repeat.NOT
+            stringArray[1] -> repeatEnum = Repeat.DAILY
+            stringArray[2] -> repeatEnum = Repeat.WEEKLY
+
+        }
+        return repeatEnum
     }
 }

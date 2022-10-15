@@ -1,13 +1,11 @@
 package com.ercanpalta.todo.view
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import com.ercanpalta.todo.R
-import com.ercanpalta.todo.databinding.FragmentAddBinding
 import com.ercanpalta.todo.databinding.FragmentReminderBinding
 import com.ercanpalta.todo.model.ToDo
 import com.ercanpalta.todo.viewmodel.HomeViewModel
@@ -21,7 +19,7 @@ class ReminderFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentReminderBinding.inflate(inflater, container, false)
         return binding.root
     }

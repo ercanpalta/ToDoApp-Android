@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -21,7 +22,6 @@ import com.ercanpalta.todo.model.TaskList
 import com.ercanpalta.todo.model.ToDo
 import com.ercanpalta.todo.viewmodel.HomeViewModel
 import com.google.android.material.card.MaterialCardView
-import kotlin.collections.ArrayList
 
 class HomeFragment : Fragment() {
 
@@ -72,7 +72,6 @@ class HomeFragment : Fragment() {
         binding.rvHome.adapter = homeAdapter
         val homeLayoutManager = LinearLayoutManager(this.context, LinearLayoutManager.VERTICAL, false)
         binding.rvHome.layoutManager = homeLayoutManager
-        //binding.rvHome.addItemDecoration(DividerItemDecoration(context,homeLayoutManager.orientation))
 
         val listAdapter = ListAdapter(listList, this@HomeFragment)
         listAdapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
@@ -86,7 +85,18 @@ class HomeFragment : Fragment() {
             val action = HomeFragmentDirections.actionNavHomeToAddFragment()
             findNavController().navigate(action)
         }
-        binding.myTasksText.text = getString(R.string.my_tasks_format,homeViewModel.currentListName.lowercase())
+        binding.myTasksText.text = getString(R.string.my_tasks_format,this.getString(R.string.all).lowercase())
+
+        // to set theme when app started
+        val sharedPreferences = requireContext().getSharedPreferences("com.ercanpalta.todo",
+            AppCompatActivity.MODE_PRIVATE
+        )
+        val isDarkModeOpen = sharedPreferences.getBoolean("isDarkModeOpen",false)
+        if (isDarkModeOpen){
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        }else{
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        }
     }
 
     override fun onPause() {
@@ -114,14 +124,19 @@ class HomeFragment : Fragment() {
     }
 
     fun changeCurrentListName(listName:String){
+        var name = listName
         homeViewModel.currentListName = listName
-        binding.myTasksText.text = getString(R.string.my_tasks_format,listName.lowercase())
+        if (listName == "All"){
+            name = context?.getString(R.string.all) ?: "All"
+        }
+        binding.myTasksText.text = getString(R.string.my_tasks_format,name.lowercase())
     }
 
     fun cancelReminder(requestCode:Int){
         (activity as MainActivity).cancelReminder(requestCode)
         homeViewModel.updateRequestCode(requestCode)
     }
+
 
 
     fun filterList(filterText:String, filterType: FilterType){
@@ -210,6 +225,10 @@ class HomeFragment : Fragment() {
                 cardView.strokeWidth = 6
             }
         }
+    }
+
+    fun getFormattedDate(millis:Long):String{
+        return (activity as MainActivity).getFormattedDate(millis)
     }
 
     override fun onDestroyView() {
