@@ -1,6 +1,7 @@
 package com.ercanpalta.todo.adapter
 
 import android.content.Context
+import android.graphics.Color
 import android.graphics.Paint
 import android.view.LayoutInflater
 import android.view.View
@@ -9,14 +10,18 @@ import android.widget.CheckBox
 import android.widget.Filter
 import android.widget.Filterable
 import android.widget.TextView
+import android.widget.Toast
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.ercanpalta.todo.R
 import com.ercanpalta.todo.databinding.RowItemBinding
 import com.ercanpalta.todo.enums.Priority
 import com.ercanpalta.todo.enums.Repeat
+import com.ercanpalta.todo.enums.TrackerType
 import com.ercanpalta.todo.model.ToDo
 import com.ercanpalta.todo.view.HomeFragment
+import java.util.Calendar
 
 class HomeAdapter (private val dataSet: ArrayList<ToDo>, val fragment: HomeFragment): RecyclerView.Adapter<HomeAdapter.ViewHolder>(), Filterable {
 
@@ -45,6 +50,34 @@ class HomeAdapter (private val dataSet: ArrayList<ToDo>, val fragment: HomeFragm
                 binding.progressText.setText(R.string.progress)
             }
 
+            // to check if streak continue then if not counter will be zero
+            val canStreakCont = fragment.CanStreakCont(task.tracker.trackerTimeInMillis, task.tracker.trackerCounter)
+            if (canStreakCont == -1){
+                task.tracker.trackerCounter = 0
+                fragment.updateTask(task)
+            }
+
+            // to show tracker icons
+            if(task.tracker.trackerType == TrackerType.STREAK){
+                binding.trackerLayout.visibility = View.VISIBLE
+                val counter = task.tracker.trackerCounter
+                val max = task.tracker.trackerMax
+                binding.trackerCounterText.text = counter.toString()
+                binding.trackerMaxText.text = context.getString(R.string.tracker_max_format, max)
+                if (counter == 0){
+                    binding.trackerIcon.setImageResource(R.drawable.fire0_ill)
+                }else if (counter < 7){
+                    binding.trackerIcon.setImageResource(R.drawable.fire1_ill)
+                }
+                else if (counter < 14){
+                    binding.trackerIcon.setImageResource(R.drawable.fire2_ill)
+                }else{
+                    binding.trackerIcon.setImageResource(R.drawable.fire3_ill)
+                }
+            }else{
+                binding.trackerLayout.visibility = View.GONE
+            }
+
             if (task.requestCode != -1){
                 binding.reminderIcon.visibility = View.VISIBLE
 
@@ -55,21 +88,18 @@ class HomeAdapter (private val dataSet: ArrayList<ToDo>, val fragment: HomeFragm
                 }
 
                 // to add reminder time info to the row item
-                //val calendar = Calendar.getInstance()
-                //calendar.timeInMillis = task.remindTimeInMillis
-
 
                 val reminderText = TextView(context)
                 reminderText.textSize = 12f
                 reminderText.setTextColor(context.getColor(android.R.color.darker_gray))
                 reminderText.text = fragment.getFormattedDate(task.remindTimeInMillis)
-                binding.reminderChipContainer.removeAllViews()
-                binding.reminderChipContainer.addView(reminderText)
+                binding.reminderDateContainer.removeAllViews()
+                binding.reminderDateContainer.addView(reminderText)
             }
             else{
                 binding.reminderIcon.visibility = View.GONE
                 binding.repeatIcon.visibility = View.GONE
-                binding.reminderChipContainer.removeAllViews()
+                binding.reminderDateContainer.removeAllViews()
             }
 
             binding.checkbox.setOnClickListener {
@@ -80,7 +110,7 @@ class HomeAdapter (private val dataSet: ArrayList<ToDo>, val fragment: HomeFragm
                         fragment.cancelReminder(task.requestCode)
                         binding.reminderIcon.visibility = View.GONE
                         binding.repeatIcon.visibility = View.GONE
-                        binding.reminderChipContainer.removeAllViews()
+                        binding.reminderDateContainer.removeAllViews()
                         task.requestCode = -1
 
                         // to update completion from ui and database
@@ -104,17 +134,24 @@ class HomeAdapter (private val dataSet: ArrayList<ToDo>, val fragment: HomeFragm
             binding.root.setOnClickListener {
                 val detail = binding.detailText
                 val menu = binding.longclickMenu
-                val chipContainer = binding.reminderChipContainer
+                val dateContainer = binding.reminderDateContainer
+                val addFireIcon = binding.addFireIcon
+                val trackerMax = binding.trackerMaxText
 
                 if(menu.visibility == View.GONE){
                     fragment.clearAllSelections()
                     fragment.clearAllListSelections()
                     if (detail.visibility == View.GONE){
                         detail.visibility = View.VISIBLE
-                        chipContainer.visibility = View.VISIBLE
+                        dateContainer.visibility = View.VISIBLE
+                        addFireIcon.visibility = View.VISIBLE
+                        trackerMax.visibility = View.VISIBLE
+
                     }else{
                         detail.visibility = View.GONE
-                        chipContainer.visibility = View.GONE
+                        dateContainer.visibility = View.GONE
+                        addFireIcon.visibility = View.GONE
+                        trackerMax.visibility = View.GONE
                     }
                 }
                 fragment.clearAllListSelections()
@@ -129,6 +166,22 @@ class HomeAdapter (private val dataSet: ArrayList<ToDo>, val fragment: HomeFragm
                     menu.visibility = View.VISIBLE
                 }
                 return@setOnLongClickListener true
+            }
+
+            binding.addFireIcon.setOnClickListener {
+                val canStreakContinue = fragment.CanStreakCont(task.tracker.trackerTimeInMillis, task.tracker.trackerCounter)
+                if (canStreakContinue == 1){
+                    task.tracker.trackerCounter += 1
+                    if (task.tracker.trackerCounter > task.tracker.trackerMax){
+                        task.tracker.trackerMax = task.tracker.trackerCounter
+                        binding.trackerMaxText.text = context.getString(R.string.tracker_max_format, task.tracker.trackerMax)
+                    }
+                    task.tracker.trackerTimeInMillis = Calendar.getInstance().timeInMillis
+                    binding.trackerCounterText.text = task.tracker.trackerCounter.toString()
+                    fragment.updateTask(task)
+                }else{
+                    Toast.makeText(context, R.string.tracked_before, Toast.LENGTH_LONG).show()
+                }
             }
 
             binding.closeButton.setOnClickListener {
@@ -235,5 +288,4 @@ class HomeAdapter (private val dataSet: ArrayList<ToDo>, val fragment: HomeFragm
 
         }
     }
-
 }

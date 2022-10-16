@@ -22,6 +22,8 @@ import com.ercanpalta.todo.model.TaskList
 import com.ercanpalta.todo.model.ToDo
 import com.ercanpalta.todo.viewmodel.HomeViewModel
 import com.google.android.material.card.MaterialCardView
+import java.util.*
+import kotlin.collections.ArrayList
 
 class HomeFragment : Fragment() {
 
@@ -156,6 +158,10 @@ class HomeFragment : Fragment() {
         homeViewModel.updateCompletion(uid, isCompleted)
     }
 
+    fun updateTask(task: ToDo){
+        homeViewModel.updateTask(task)
+    }
+
     fun updateListToDo(task: ToDo, isCompleted: Boolean){
         for (todo in listToDo){
             if (todo == task){
@@ -225,6 +231,35 @@ class HomeFragment : Fragment() {
                 cardView.strokeWidth = 6
             }
         }
+    }
+
+    /*
+    * Return 1 then streak can increase by one
+    * Return 0 then streak increased today show toast
+    * Return -1 then streak cannot continue, reset counter
+    * */
+    fun CanStreakCont(trackedDayMillis:Long, counter:Int):Int{
+        val calendar = Calendar.getInstance()
+        val today = calendar.get(Calendar.DAY_OF_MONTH)
+        val thisMonth = calendar.get(Calendar.MONTH)
+        calendar.timeInMillis = trackedDayMillis
+        val trackerDay = calendar.get(Calendar.DAY_OF_MONTH)
+        val trackerMonth = calendar.get(Calendar.MONTH)
+        var value:Int = 0
+
+        if (counter == 0){
+            value = 1
+        }else if (thisMonth == trackerMonth){
+            if (today == trackerDay){
+                value = 0
+            }
+            else if (today == trackerDay + 1){
+                value = 1
+            }else{
+                value = -1
+            }
+        }
+        return  value
     }
 
     fun getFormattedDate(millis:Long):String{

@@ -86,7 +86,10 @@
 
     <string name="english">English</string>
     <string name="deutsch">Deutsch</string>
-
+    <string name="day_streak">Day streak</string>
+    <string name="tracker">Tracker</string>
+    <string name="tracked_before">Already completed today</string>
+    <string name="tracker_max_format">/%1$d</string>
 
 
     <string-array name="repeat">

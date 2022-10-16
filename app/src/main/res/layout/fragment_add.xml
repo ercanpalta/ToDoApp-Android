@@ -39,18 +39,39 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/add_image" />
 
-
             <TextView
-                android:id="@+id/priority_header"
+                android:id="@+id/tracker_header"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="40dp"
-                android:text="@string/priority"
+                android:text="@string/tracker"
                 android:textColor="@color/header"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="@+id/editField"
                 app:layout_constraintTop_toBottomOf="@+id/editField" />
+
+            <include
+                android:id="@+id/tracker_layout"
+                layout="@layout/tracker_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                app:layout_constraintStart_toStartOf="@id/tracker_header"
+                app:layout_constraintTop_toBottomOf="@id/tracker_header"/>
+
+
+            <TextView
+                android:id="@+id/priority_header"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="@string/priority"
+                android:textColor="@color/header"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="@+id/tracker_layout"
+                app:layout_constraintTop_toBottomOf="@+id/tracker_layout" />
 
 
             <com.google.android.material.chip.ChipGroup
@@ -66,7 +87,7 @@
                 android:id="@+id/list_header"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="40dp"
+                android:layout_marginTop="20dp"
                 android:text="@string/list"
                 android:textColor="@color/header"
                 android:textSize="16sp"
