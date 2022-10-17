@@ -133,4 +133,10 @@ class HomeViewModel(application: Application) : BaseViewModel(application){
             dao.updateRequestCode(requestCode)
         }
     }
+
+    fun updateTracker(task:ToDo){
+        launch {
+            dao.updateTask(task)
+        }
+    }
 }

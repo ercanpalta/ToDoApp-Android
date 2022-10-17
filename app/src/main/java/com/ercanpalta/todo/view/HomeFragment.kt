@@ -87,7 +87,14 @@ class HomeFragment : Fragment() {
             val action = HomeFragmentDirections.actionNavHomeToAddFragment()
             findNavController().navigate(action)
         }
-        binding.myTasksText.text = getString(R.string.my_tasks_format,this.getString(R.string.all).lowercase())
+
+        // to set my..task header from beginning
+        val currentList = if (homeViewModel.currentListName == "All"){
+            getString(R.string.all)
+        } else {
+            homeViewModel.currentListName
+        }
+        binding.myTasksText.text = getString(R.string.my_tasks_format,currentList.lowercase())
 
         // to set theme when app started
         val sharedPreferences = requireContext().getSharedPreferences("com.ercanpalta.todo",
@@ -158,8 +165,8 @@ class HomeFragment : Fragment() {
         homeViewModel.updateCompletion(uid, isCompleted)
     }
 
-    fun updateTask(task: ToDo){
-        homeViewModel.updateTask(task)
+    fun updateTracker(task: ToDo){
+        homeViewModel.updateTracker(task)
     }
 
     fun updateListToDo(task: ToDo, isCompleted: Boolean){
@@ -238,25 +245,28 @@ class HomeFragment : Fragment() {
     * Return 0 then streak increased today show toast
     * Return -1 then streak cannot continue, reset counter
     * */
-    fun CanStreakCont(trackedDayMillis:Long, counter:Int):Int{
+    fun canStreakCont(trackedDayMillis:Long, counter:Int):Int{
         val calendar = Calendar.getInstance()
         val today = calendar.get(Calendar.DAY_OF_MONTH)
         val thisMonth = calendar.get(Calendar.MONTH)
         calendar.timeInMillis = trackedDayMillis
         val trackerDay = calendar.get(Calendar.DAY_OF_MONTH)
         val trackerMonth = calendar.get(Calendar.MONTH)
-        var value:Int = 0
+        var value = 0
 
         if (counter == 0){
             value = 1
         }else if (thisMonth == trackerMonth){
-            if (today == trackerDay){
-                value = 0
-            }
-            else if (today == trackerDay + 1){
-                value = 1
-            }else{
-                value = -1
+            value = when (today) {
+                trackerDay -> {
+                    0
+                }
+                trackerDay + 1 -> {
+                    1
+                }
+                else -> {
+                    -1
+                }
             }
         }
         return  value

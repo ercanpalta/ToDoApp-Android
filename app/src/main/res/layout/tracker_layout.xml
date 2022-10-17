@@ -22,7 +22,7 @@
             android:layout_height="wrap_content"
             android:text="@string/day_streak"
             android:textSize="12sp"
-            app:icon="@drawable/fire1_ill"
+            app:icon="@drawable/heat_1"
             style="@style/Widget.App.Button.OutlinedButton.IconOnly"/>
     </com.google.android.material.button.MaterialButtonToggleGroup>
 </FrameLayout>

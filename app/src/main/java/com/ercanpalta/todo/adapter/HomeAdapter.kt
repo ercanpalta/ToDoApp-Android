@@ -1,17 +1,11 @@
 package com.ercanpalta.todo.adapter
 
 import android.content.Context
-import android.graphics.Color
 import android.graphics.Paint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.CheckBox
-import android.widget.Filter
-import android.widget.Filterable
-import android.widget.TextView
-import android.widget.Toast
-import androidx.appcompat.content.res.AppCompatResources
+import android.widget.*
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.ercanpalta.todo.R
@@ -21,7 +15,7 @@ import com.ercanpalta.todo.enums.Repeat
 import com.ercanpalta.todo.enums.TrackerType
 import com.ercanpalta.todo.model.ToDo
 import com.ercanpalta.todo.view.HomeFragment
-import java.util.Calendar
+import java.util.*
 
 class HomeAdapter (private val dataSet: ArrayList<ToDo>, val fragment: HomeFragment): RecyclerView.Adapter<HomeAdapter.ViewHolder>(), Filterable {
 
@@ -51,10 +45,32 @@ class HomeAdapter (private val dataSet: ArrayList<ToDo>, val fragment: HomeFragm
             }
 
             // to check if streak continue then if not counter will be zero
-            val canStreakCont = fragment.CanStreakCont(task.tracker.trackerTimeInMillis, task.tracker.trackerCounter)
+            val canStreakCont = fragment.canStreakCont(task.tracker.trackerTimeInMillis, task.tracker.trackerCounter)
             if (canStreakCont == -1){
                 task.tracker.trackerCounter = 0
-                fragment.updateTask(task)
+                fragment.updateTracker(task)
+            }
+
+            //to set tracker colors
+            fun setTrackerColors(counter:Int){
+                if (counter == 0){
+                    binding.trackerIcon.setImageResource(R.drawable.heat_0)
+                    binding.trackerCounterText.setTextColor(ContextCompat.getColor(context,R.color.heat0))
+                    binding.trackerMaxText.setTextColor(ContextCompat.getColor(context,R.color.heat0))
+                }else if (counter < 7){
+                    binding.trackerIcon.setImageResource(R.drawable.heat_1)
+                    binding.trackerCounterText.setTextColor(ContextCompat.getColor(context,R.color.heat1))
+                    binding.trackerMaxText.setTextColor(ContextCompat.getColor(context,R.color.heat1))
+                }
+                else if (counter < 14){
+                    binding.trackerIcon.setImageResource(R.drawable.heat_2)
+                    binding.trackerCounterText.setTextColor(ContextCompat.getColor(context,R.color.heat2))
+                    binding.trackerMaxText.setTextColor(ContextCompat.getColor(context,R.color.heat2))
+                }else{
+                    binding.trackerIcon.setImageResource(R.drawable.heat_3)
+                    binding.trackerCounterText.setTextColor(ContextCompat.getColor(context,R.color.heat3))
+                    binding.trackerMaxText.setTextColor(ContextCompat.getColor(context,R.color.heat3))
+                }
             }
 
             // to show tracker icons
@@ -64,16 +80,7 @@ class HomeAdapter (private val dataSet: ArrayList<ToDo>, val fragment: HomeFragm
                 val max = task.tracker.trackerMax
                 binding.trackerCounterText.text = counter.toString()
                 binding.trackerMaxText.text = context.getString(R.string.tracker_max_format, max)
-                if (counter == 0){
-                    binding.trackerIcon.setImageResource(R.drawable.fire0_ill)
-                }else if (counter < 7){
-                    binding.trackerIcon.setImageResource(R.drawable.fire1_ill)
-                }
-                else if (counter < 14){
-                    binding.trackerIcon.setImageResource(R.drawable.fire2_ill)
-                }else{
-                    binding.trackerIcon.setImageResource(R.drawable.fire3_ill)
-                }
+                setTrackerColors(counter)
             }else{
                 binding.trackerLayout.visibility = View.GONE
             }
@@ -169,7 +176,7 @@ class HomeAdapter (private val dataSet: ArrayList<ToDo>, val fragment: HomeFragm
             }
 
             binding.addFireIcon.setOnClickListener {
-                val canStreakContinue = fragment.CanStreakCont(task.tracker.trackerTimeInMillis, task.tracker.trackerCounter)
+                val canStreakContinue = fragment.canStreakCont(task.tracker.trackerTimeInMillis, task.tracker.trackerCounter)
                 if (canStreakContinue == 1){
                     task.tracker.trackerCounter += 1
                     if (task.tracker.trackerCounter > task.tracker.trackerMax){
@@ -178,7 +185,8 @@ class HomeAdapter (private val dataSet: ArrayList<ToDo>, val fragment: HomeFragm
                     }
                     task.tracker.trackerTimeInMillis = Calendar.getInstance().timeInMillis
                     binding.trackerCounterText.text = task.tracker.trackerCounter.toString()
-                    fragment.updateTask(task)
+                    setTrackerColors(task.tracker.trackerCounter)
+                    fragment.updateTracker(task)
                 }else{
                     Toast.makeText(context, R.string.tracked_before, Toast.LENGTH_LONG).show()
                 }
