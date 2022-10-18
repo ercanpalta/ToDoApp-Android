@@ -22,7 +22,7 @@
 
     <color name="header">#CCEDEDED</color>
     <color name="edit_text_bg">#59BDBABA</color>
-    <color name="cardview">#BE363636</color>
+    <color name="cardview">#323232</color>
     <color name="background">#CCEDEDED</color>
     <color name="list_card_bg">#000000</color>
     <color name="priority_text">#FFFFFF</color>
