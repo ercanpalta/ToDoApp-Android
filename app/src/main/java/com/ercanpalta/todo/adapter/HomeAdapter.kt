@@ -44,11 +44,16 @@ class HomeAdapter (private val dataSet: ArrayList<ToDo>, val fragment: HomeFragm
                 binding.progressText.setText(R.string.progress)
             }
 
-            // to check if streak continue then if not counter will be zero
-            val canStreakCont = fragment.canStreakCont(task.tracker.trackerTimeInMillis, task.tracker.trackerCounter)
-            if (canStreakCont == -1){
-                task.tracker.trackerCounter = 0
-                fragment.updateTracker(task)
+            //to set activity icon colors
+            fun setActivityIconColors(counter:Int){
+                if (counter < 7){
+                    binding.activityIcon.setImageResource(R.drawable.heat_1_not_completed)
+                }
+                else if (counter < 14){
+                    binding.activityIcon.setImageResource(R.drawable.heat_2_not_completed)
+                }else{
+                    binding.activityIcon.setImageResource(R.drawable.heat_3_not_completed)
+                }
             }
 
             //to set tracker colors
@@ -73,8 +78,24 @@ class HomeAdapter (private val dataSet: ArrayList<ToDo>, val fragment: HomeFragm
                 }
             }
 
+
+
+
             // to show tracker icons
             if(task.tracker.trackerType == TrackerType.STREAK){
+                // to check if streak continue, then if not counter will be zero
+                val canStreakCont = fragment.canStreakCont(task.tracker.trackerTimeInMillis, task.tracker.trackerCounter)
+                if (canStreakCont == -1){
+                    task.tracker.trackerCounter = 0
+                    binding.activityIcon.visibility = View.GONE
+                    fragment.updateTracker(task)
+                }else if(canStreakCont == 0){
+                    binding.activityIcon.visibility = View.GONE
+                } else if(canStreakCont == 1 && task.tracker.trackerCounter != 0){
+                    setActivityIconColors(task.tracker.trackerCounter)
+                    binding.activityIcon.visibility = View.VISIBLE
+                }
+
                 binding.trackerLayout.visibility = View.VISIBLE
                 val counter = task.tracker.trackerCounter
                 val max = task.tracker.trackerMax
@@ -182,6 +203,7 @@ class HomeAdapter (private val dataSet: ArrayList<ToDo>, val fragment: HomeFragm
                 val canStreakContinue = fragment.canStreakCont(task.tracker.trackerTimeInMillis, task.tracker.trackerCounter)
                 if (canStreakContinue == 1){
                     task.tracker.trackerCounter += 1
+                    binding.activityIcon.visibility = View.GONE
                     if (task.tracker.trackerCounter > task.tracker.trackerMax){
                         task.tracker.trackerMax = task.tracker.trackerCounter
                         binding.trackerMaxText.text = context.getString(R.string.tracker_max_format, task.tracker.trackerMax)

@@ -153,7 +153,14 @@
                     android:src="@drawable/ic_fire_add_24"/>
             </LinearLayout>
 
-
+            <ImageView
+                android:id="@+id/activity_icon"
+                android:layout_width="6dp"
+                android:layout_height="6dp"
+                android:layout_marginEnd="4dp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="@id/tracker_layout"
+                app:layout_constraintTop_toTopOf="@id/tracker_layout"/>
 
             <LinearLayout
                 android:id="@+id/icons_layout"
