@@ -39,6 +39,27 @@
                 app:layout_constraintEnd_toEndOf="parent" />
 
             <TextView
+                android:id="@+id/tracker_header"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:text="@string/tracker"
+                android:textColor="@color/header"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="@+id/editField"
+                app:layout_constraintTop_toBottomOf="@+id/editField" />
+
+            <include
+                android:id="@+id/tracker_layout"
+                layout="@layout/tracker_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                app:layout_constraintStart_toStartOf="@id/tracker_header"
+                app:layout_constraintTop_toBottomOf="@id/tracker_header"/>
+
+            <TextView
                 android:id="@+id/priority_header"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -47,8 +68,8 @@
                 android:textStyle="bold"
                 android:textSize="16sp"
                 android:text="@string/priority"
-                app:layout_constraintStart_toStartOf="@+id/editField"
-                app:layout_constraintTop_toBottomOf="@+id/editField" />
+                app:layout_constraintStart_toStartOf="@+id/tracker_layout"
+                app:layout_constraintTop_toBottomOf="@+id/tracker_layout" />
 
 
             <com.google.android.material.chip.ChipGroup

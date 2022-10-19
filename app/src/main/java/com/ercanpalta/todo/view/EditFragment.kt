@@ -19,6 +19,7 @@ import com.ercanpalta.todo.R
 import com.ercanpalta.todo.databinding.FragmentEditBinding
 import com.ercanpalta.todo.enums.Priority
 import com.ercanpalta.todo.enums.Repeat
+import com.ercanpalta.todo.enums.TrackerType
 import com.ercanpalta.todo.model.TaskList
 import com.ercanpalta.todo.model.ToDo
 import com.ercanpalta.todo.viewmodel.HomeViewModel
@@ -101,6 +102,15 @@ class EditFragment : Fragment() {
             toDo = it
             binding.editField.nameText.setText(it.task)
             binding.editField.descriptionText.setText(it.description)
+
+            // to select one from tracker buttons
+            when(it.tracker.trackerType){
+                TrackerType.NON -> binding.trackerLayout.trackersToggleGroup.check(R.id.no_tracker_button)
+                TrackerType.STREAK -> binding.trackerLayout.trackersToggleGroup.check(R.id.streak_tracker_button)
+                else -> {}
+            }
+
+            // to select priority chip
             val id:Int
             id = when(it.priority){
                 Priority.LOW -> R.id.chip_low
@@ -109,6 +119,7 @@ class EditFragment : Fragment() {
             }
             binding.priorityChipsGroup.check(id)
 
+            // to select list chip
             val chipListIterator = binding.chipList.iterator()
             while(chipListIterator.hasNext()){
                 val listId = chipListIterator.next().id
@@ -363,6 +374,22 @@ class EditFragment : Fragment() {
                             toDo.remindTimeInMillis = reminderCalendar.timeInMillis
                             (activity as MainActivity).cancelReminder(toDo.requestCode)
                             (activity as MainActivity).setReminder(toDo)
+                        }
+                    }
+
+                    when(binding.trackerLayout.trackersToggleGroup.checkedButtonId){
+                        R.id.streak_tracker_button ->  {
+                            if(toDo.tracker.trackerType == TrackerType.NON){
+                                toDo.tracker.trackerType = TrackerType.STREAK
+                                toDo.tracker.trackerTimeInMillis = Calendar.getInstance().timeInMillis
+                            }
+                        }
+                        R.id.no_tracker_button ->  {
+                            if(toDo.tracker.trackerType == TrackerType.STREAK){
+                                toDo.tracker.trackerType = TrackerType.NON
+                                toDo.tracker.trackerTimeInMillis = 0
+                                toDo.tracker.trackerCounter = 0
+                            }
                         }
                     }
 
