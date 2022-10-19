@@ -113,4 +113,8 @@
     <string name="deutsch">Deutsch</string>
     <string name="all">Alle</string>
     <string name="new_list">Neue Liste</string>
+    <string name="day_streak">Tagesserie</string>
+    <string name="tracker">Tracker</string>
+    <string name="tracked_before">Heute schon fertig</string>
+    <string name="tracker_max_format">/%1$d</string>
 </resources>

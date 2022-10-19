@@ -8,13 +8,21 @@
     <color name="white">#FFFFFFFF</color>
 
 
-    <color name="low">#FFCBF078</color>
-    <color name="medium">#FFF1B963</color>
-    <color name="high">#FFE46161</color>
+    <color name="low">#FF06d6a0</color>
+    <color name="medium">#FFff7d00</color>
+    <color name="high">#ef476f</color>
+
+    <color name="heat0">#A2A2A2</color>
+    <color name="heat1">#118AB2</color>
+    <color name="heat2">#FF7D00</color>
+    <color name="heat3">#EF476F</color>
+    <color name="fire_add_icon">#D1D1D1</color>
+    <color name="ill_outer">#FFFFFF</color>
+    <color name="ill_inner">#ffd166</color>
 
     <color name="header">#CCEDEDED</color>
     <color name="edit_text_bg">#59BDBABA</color>
-    <color name="cardview">#BE575757</color>
+    <color name="cardview">#323232</color>
     <color name="background">#CCEDEDED</color>
     <color name="list_card_bg">#000000</color>
     <color name="priority_text">#FFFFFF</color>

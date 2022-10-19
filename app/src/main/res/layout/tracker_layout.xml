@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <com.google.android.material.button.MaterialButtonToggleGroup
+        android:id="@+id/trackers_toggle_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:checkedButton="@id/no_tracker_button"
+        app:selectionRequired="true"
+        app:singleSelection="true">
+        <Button
+            android:id="@+id/no_tracker_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:icon="@drawable/ic_not_24"
+            style="@style/Widget.App.Button.OutlinedButton.IconOnly"/>
+        <Button
+            android:id="@+id/streak_tracker_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/day_streak"
+            android:textSize="12sp"
+            app:icon="@drawable/heat_1"
+            style="@style/Widget.App.Button.OutlinedButton.IconOnly"/>
+    </com.google.android.material.button.MaterialButtonToggleGroup>
+</FrameLayout>

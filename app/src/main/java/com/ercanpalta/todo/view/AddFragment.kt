@@ -19,6 +19,7 @@ import com.ercanpalta.todo.R
 import com.ercanpalta.todo.databinding.FragmentAddBinding
 import com.ercanpalta.todo.enums.Priority
 import com.ercanpalta.todo.enums.Repeat
+import com.ercanpalta.todo.enums.TrackerType
 import com.ercanpalta.todo.model.TaskList
 import com.ercanpalta.todo.model.ToDo
 import com.ercanpalta.todo.viewmodel.HomeViewModel
@@ -261,6 +262,12 @@ class AddFragment : Fragment() {
 
             val task = ToDo(name,priority,false,listChip)
             task.description = description
+            when(binding.trackerLayout.trackersToggleGroup.checkedButtonId){
+                R.id.streak_tracker_button ->  {
+                    task.tracker.trackerType = TrackerType.STREAK
+                    task.tracker.trackerTimeInMillis = Calendar.getInstance().timeInMillis
+                }
+            }
 
 
             if (name.isNotEmpty() && description.isNotEmpty()){

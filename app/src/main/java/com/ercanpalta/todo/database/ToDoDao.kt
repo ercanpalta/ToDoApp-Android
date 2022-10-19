@@ -16,9 +16,6 @@ interface ToDoDao {
     @Insert
     suspend fun  insertList(list : TaskList):Long
 
-    @Insert
-    suspend fun  insertAllLists(vararg lists: TaskList) : List<Long>
-
     @Query("SELECT * FROM todo WHERE uid= :uid")
     suspend fun getTask(uid: Int): ToDo
 

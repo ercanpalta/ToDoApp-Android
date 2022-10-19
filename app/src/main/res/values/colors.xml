@@ -8,9 +8,17 @@
     <color name="white">#FFFFFFFF</color>
 
 
-    <color name="low">#FFCBF078</color>
-    <color name="medium">#FFF1B963</color>
+    <color name="low">#FF06d6a0</color>
+    <color name="medium">#FFff7d00</color>
     <color name="high">#FFE46161</color>
+
+    <color name="heat0">#B34C4C4C</color>
+    <color name="heat1">#B3118ab2</color>
+    <color name="heat2">#B3FF7D00</color>
+    <color name="heat3">#B3EF476F</color>
+    <color name="fire_add_icon">#5E5E5E</color>
+    <color name="ill_outer">#0984E3</color>
+    <color name="ill_inner">#FBC02D</color>
 
     <color name="header">#2D2D2D</color>
     <color name="edit_text_bg">#10716C6C</color>
