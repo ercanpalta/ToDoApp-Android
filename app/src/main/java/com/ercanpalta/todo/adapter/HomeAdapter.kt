@@ -104,6 +104,7 @@ class HomeAdapter (private val dataSet: ArrayList<ToDo>, val fragment: HomeFragm
                 setTrackerColors(counter)
             }else{
                 binding.trackerLayout.visibility = View.GONE
+                binding.activityIcon.visibility = View.GONE
             }
 
             if (task.requestCode != -1){
