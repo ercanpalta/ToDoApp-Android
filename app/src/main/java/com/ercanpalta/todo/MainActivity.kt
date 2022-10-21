@@ -9,6 +9,8 @@ import android.content.res.Resources
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.core.content.ContextCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -130,6 +132,15 @@ class MainActivity : AppCompatActivity() {
         val refresh = Intent(this, MainActivity::class.java)
         finish()
         startActivity(refresh)
+    }
+
+    fun changeToolbarColor(isSearchViewOpened:Boolean){
+        if (isSearchViewOpened){
+            binding.appBarMain.toolbar.setBackgroundColor(ContextCompat.getColor(this,R.color.searchview_background))
+        }else{
+            binding.appBarMain.toolbar.setBackgroundColor(ContextCompat.getColor(this, R.color.toolbar_background))
+        }
+
     }
 
     fun getFormattedDate(millis:Long):String{

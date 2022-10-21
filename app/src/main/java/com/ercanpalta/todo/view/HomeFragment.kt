@@ -2,13 +2,19 @@ package com.ercanpalta.todo.view
 
 import android.app.AlertDialog
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import android.widget.EditText
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.appcompat.widget.SearchView
+import androidx.core.content.ContextCompat
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuItemCompat
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -23,7 +29,7 @@ import com.ercanpalta.todo.model.ToDo
 import com.ercanpalta.todo.viewmodel.HomeViewModel
 import com.google.android.material.card.MaterialCardView
 import java.util.*
-import kotlin.collections.ArrayList
+
 
 class HomeFragment : Fragment() {
 
@@ -46,6 +52,56 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        // to add appbar menu icon
+        val menuHost: MenuHost = requireActivity()
+        menuHost.addMenuProvider(object : MenuProvider {
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menuInflater.inflate(R.menu.search_menu, menu)
+                val searchItem = menu.findItem(R.id.toolbar_search)
+                if(searchItem != null){
+                    val searchView = searchItem.actionView as SearchView
+                    val editText = searchView.findViewById<EditText>(androidx.appcompat.R.id.search_src_text)
+                    editText.hint = context?.getString(R.string.search_here)
+
+                    // to change toolbars color when searchview opened
+                    MenuItemCompat.setOnActionExpandListener(
+                        searchItem,
+                        object : MenuItemCompat.OnActionExpandListener {
+                            override fun onMenuItemActionExpand(item: MenuItem?): Boolean {
+                                (activity as MainActivity).changeToolbarColor(true)
+                                return true
+                            }
+
+                            override fun onMenuItemActionCollapse(item: MenuItem?): Boolean {
+                                (activity as MainActivity).changeToolbarColor(false)
+                                return true
+                            }
+                        })
+
+                    searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
+                        override fun onQueryTextSubmit(query: String?): Boolean {
+                            return true
+                        }
+
+                        override fun onQueryTextChange(newText: String?): Boolean {
+                            return true
+                        }
+
+                    })
+                }
+            }
+
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                // Handle the menu selection
+                return when (menuItem.itemId) {
+                    R.id.toolbar_search -> {
+                        true
+                    }
+                    else -> false
+                }
+            }
+        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
 
         homeViewModel.toDoList.observe(viewLifecycleOwner) {
             listToDo.clear()

@@ -27,6 +27,8 @@
     <color name="list_card_bg">#000000</color>
     <color name="priority_text">#FFFFFF</color>
     <color name="reminder_background">#BE575757</color>
+    <color name="searchview_background">#BE575757</color>
+    <color name="toolbar_background">#BE363636</color>
     <color name="reminder_card_background">#1E1E1E</color>
     <color name="button_text_color">#000000</color>
     <color name="cursor_color">#FFFFFFFF</color>
