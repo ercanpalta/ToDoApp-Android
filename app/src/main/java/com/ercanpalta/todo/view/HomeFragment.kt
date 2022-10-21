@@ -279,6 +279,21 @@ class HomeFragment : Fragment() {
         }
     }
 
+    fun minimizeExpandedRows(){
+        val itemCount = binding.rvHome.adapter?.itemCount
+        for(i in 0..itemCount!!){
+            val holder = binding.rvHome.findViewHolderForAdapterPosition(i)
+            if (holder != null) {
+                val detail = holder.itemView.findViewById<View>(R.id.detail_text)
+                val dateContainer = holder.itemView.findViewById<View>(R.id.reminder_date_container)
+                if (detail.visibility == View.VISIBLE){
+                    detail.visibility = View.GONE
+                    dateContainer.visibility = View.GONE
+                }
+            }
+        }
+    }
+
     fun clearAllListSelections(){
         val itemCount = binding.rvHomeList.adapter?.itemCount
         for(i in 0..itemCount!!){

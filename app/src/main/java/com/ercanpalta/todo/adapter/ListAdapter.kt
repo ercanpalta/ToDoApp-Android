@@ -40,6 +40,7 @@ class ListAdapter(private val dataSet: ArrayList<TaskList>, val fragment: HomeFr
                     fragment.clearAllListSelections()
                 }
                 fragment.clearAllSelections()
+                fragment.minimizeExpandedRows()
                 if(binding.listText.text != context.getString(R.string.new_list)){
                     binding.colorCard.strokeWidth = 8
                     var listText = binding.listText.text.toString()

@@ -174,6 +174,7 @@ class HomeAdapter (private val dataSet: ArrayList<ToDo>, val fragment: HomeFragm
                     fragment.clearAllSelections()
                     fragment.clearAllListSelections()
                     if (detail.visibility == View.GONE){
+                        fragment.minimizeExpandedRows()
                         detail.visibility = View.VISIBLE
                         dateContainer.visibility = View.VISIBLE
                         addFireIcon.visibility = View.VISIBLE
