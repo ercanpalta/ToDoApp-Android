@@ -167,8 +167,7 @@ class HomeAdapter (private val dataSet: ArrayList<ToDo>, val fragment: HomeFragm
                 val menu = binding.longclickMenu
                 val dateContainer = binding.reminderDateContainer
                 val addFireIcon = binding.addFireIcon
-                val trackerCounter= binding.trackerCounterText
-                val trackerMax = binding.trackerMaxText
+                val trackerTextLayout = binding.trackerTextLayout
 
                 if(menu.visibility == View.GONE){
                     fragment.clearAllSelections()
@@ -178,15 +177,13 @@ class HomeAdapter (private val dataSet: ArrayList<ToDo>, val fragment: HomeFragm
                         detail.visibility = View.VISIBLE
                         dateContainer.visibility = View.VISIBLE
                         addFireIcon.visibility = View.VISIBLE
-                        trackerCounter.visibility = View.VISIBLE
-                        trackerMax.visibility = View.VISIBLE
+                        trackerTextLayout.visibility = View.VISIBLE
 
                     }else{
                         detail.visibility = View.GONE
                         dateContainer.visibility = View.GONE
                         addFireIcon.visibility = View.GONE
-                        trackerCounter.visibility = View.GONE
-                        trackerMax.visibility = View.GONE
+                        trackerTextLayout.visibility = View.GONE
                     }
                 }
                 fragment.clearAllListSelections()

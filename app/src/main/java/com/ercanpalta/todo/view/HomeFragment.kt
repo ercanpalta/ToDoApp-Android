@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.*
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.SearchView
@@ -286,9 +287,13 @@ class HomeFragment : Fragment() {
             if (holder != null) {
                 val detail = holder.itemView.findViewById<View>(R.id.detail_text)
                 val dateContainer = holder.itemView.findViewById<View>(R.id.reminder_date_container)
+                val trackerText = holder.itemView.findViewById<LinearLayout>(R.id.tracker_text_layout)
+                val addFireIcon = holder.itemView.findViewById<View>(R.id.add_fire_icon)
                 if (detail.visibility == View.VISIBLE){
                     detail.visibility = View.GONE
                     dateContainer.visibility = View.GONE
+                    trackerText.visibility = View.GONE
+                    addFireIcon.visibility = View.GONE
                 }
             }
         }
