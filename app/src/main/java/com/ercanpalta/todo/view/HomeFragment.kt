@@ -2,6 +2,7 @@ package com.ercanpalta.todo.view
 
 import android.app.AlertDialog
 import android.graphics.Color
+import android.icu.lang.UCharacter.GraphemeClusterBreak.T
 import android.os.Bundle
 import android.view.*
 import android.widget.EditText
@@ -69,18 +70,6 @@ class HomeFragment : Fragment() {
                     editText.setHintTextColor(Color.GRAY)
                     closeButton.setImageResource(R.drawable.ic_search_close)
 
-                    /*// to change toolbars color when searchview opened
-                    MenuItemCompat.setOnActionExpandListener(
-                        searchItem,
-                        object : MenuItemCompat.OnActionExpandListener {
-                            override fun onMenuItemActionExpand(item: MenuItem?): Boolean {
-                                return true
-                            }
-
-                            override fun onMenuItemActionCollapse(item: MenuItem?): Boolean {
-                                return true
-                            }
-                        })*/
 
                     searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
                         override fun onQueryTextSubmit(query: String?): Boolean {
@@ -88,6 +77,10 @@ class HomeFragment : Fragment() {
                         }
 
                         override fun onQueryTextChange(newText: String?): Boolean {
+                            if (newText != null) {
+                                filterList(homeViewModel.currentListName, FilterType.List)
+                                filterList(newText, FilterType.Text)
+                            }
                             return true
                         }
 
