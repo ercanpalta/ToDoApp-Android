@@ -10,6 +10,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.ercanpalta.todo.R
 import com.ercanpalta.todo.databinding.RowItemBinding
+import com.ercanpalta.todo.enums.FilterType
 import com.ercanpalta.todo.enums.Priority
 import com.ercanpalta.todo.enums.Repeat
 import com.ercanpalta.todo.enums.TrackerType
@@ -22,6 +23,7 @@ class HomeAdapter (private val dataSet: ArrayList<ToDo>, val fragment: HomeFragm
     private lateinit var context: Context
     val filteredList = ArrayList<ToDo>()
     val completedList = ArrayList<ToDo>()
+    val queryList = ArrayList<ToDo>()
 
     init {
         filteredList.addAll(dataSet)
@@ -268,15 +270,18 @@ class HomeAdapter (private val dataSet: ArrayList<ToDo>, val fragment: HomeFragm
         return object : Filter(){
             override fun performFiltering(p0: CharSequence?): FilterResults {
                 val filterTextWithType = p0.toString()
-                filteredList.clear()
+
                 completedList.clear()
+                queryList.clear()
 
                 if (filterTextWithType.isEmpty()){
+                    filteredList.clear()
                     filteredList.addAll(dataSet)
                 }else{
                     val filterType = filterTextWithType.get(filterTextWithType.lastIndex)
                     val filterText = filterTextWithType.dropLast(1)
                     if (filterType == 'L'){
+                        filteredList.clear()
                         if(filterText == "All"){
                             for(data in dataSet){
                                 if (data.isCompleted){
@@ -301,6 +306,19 @@ class HomeAdapter (private val dataSet: ArrayList<ToDo>, val fragment: HomeFragm
                             filteredList.addAll(completedList)
                         }
 
+                    }else if(filterType == 'T'){
+                        for (data in filteredList){
+                            if(data.task.lowercase().contains(filterText.lowercase()) || data.description.lowercase().contains(filterText.lowercase())){
+                                if (data.isCompleted){
+                                    completedList.add(data)
+                                }else{
+                                    queryList.add(data)
+                                }
+                            }
+                        }
+                        filteredList.clear()
+                        filteredList.addAll(queryList)
+                        filteredList.addAll(completedList)
                     }
 
                 }

@@ -122,5 +122,7 @@
     <string name="tracker">Tracker</string>
     <string name="tracked_before">Already completed today</string>
     <string name="tracker_max_format">/%1$d</string>
+    <string name="search">Search</string>
+    <string name="search_here">Search here...</string>
 
 </resources>
