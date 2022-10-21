@@ -134,15 +134,6 @@ class MainActivity : AppCompatActivity() {
         startActivity(refresh)
     }
 
-    fun changeToolbarColor(isSearchViewOpened:Boolean){
-        if (isSearchViewOpened){
-            binding.appBarMain.toolbar.setBackgroundColor(ContextCompat.getColor(this,R.color.searchview_background))
-        }else{
-            binding.appBarMain.toolbar.setBackgroundColor(ContextCompat.getColor(this, R.color.toolbar_background))
-        }
-
-    }
-
     fun getFormattedDate(millis:Long):String{
         val formattedDate: String
         val calendar = Calendar.getInstance()

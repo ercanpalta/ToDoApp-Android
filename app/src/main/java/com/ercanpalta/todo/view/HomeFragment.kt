@@ -1,10 +1,11 @@
 package com.ercanpalta.todo.view
 
 import android.app.AlertDialog
+import android.graphics.Color
 import android.os.Bundle
 import android.view.*
 import android.widget.EditText
-import androidx.activity.OnBackPressedCallback
+import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.SearchView
@@ -62,22 +63,24 @@ class HomeFragment : Fragment() {
                 if(searchItem != null){
                     val searchView = searchItem.actionView as SearchView
                     val editText = searchView.findViewById<EditText>(androidx.appcompat.R.id.search_src_text)
+                    val closeButton = searchView.findViewById<ImageView>(androidx.appcompat.R.id.search_close_btn)
+                    editText.setTextColor(ContextCompat.getColor(requireContext(),R.color.searchview_color))
                     editText.hint = context?.getString(R.string.search_here)
+                    editText.setHintTextColor(Color.GRAY)
+                    closeButton.setImageResource(R.drawable.ic_search_close)
 
-                    // to change toolbars color when searchview opened
+                    /*// to change toolbars color when searchview opened
                     MenuItemCompat.setOnActionExpandListener(
                         searchItem,
                         object : MenuItemCompat.OnActionExpandListener {
                             override fun onMenuItemActionExpand(item: MenuItem?): Boolean {
-                                (activity as MainActivity).changeToolbarColor(true)
                                 return true
                             }
 
                             override fun onMenuItemActionCollapse(item: MenuItem?): Boolean {
-                                (activity as MainActivity).changeToolbarColor(false)
                                 return true
                             }
-                        })
+                        })*/
 
                     searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
                         override fun onQueryTextSubmit(query: String?): Boolean {
