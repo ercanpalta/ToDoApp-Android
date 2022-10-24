@@ -138,6 +138,20 @@ class HomeFragment : Fragment() {
             findNavController().navigate(action)
         }
 
+        //to open filter view
+        var isFilterOpen = false
+        binding.filterIcon.setOnClickListener {
+            isFilterOpen = if(isFilterOpen){
+                binding.filterIcon.setImageResource(R.drawable.ic_filter)
+                binding.filterChipInclude.filterChipGroup.visibility = View.GONE
+                false
+            }else{
+                binding.filterIcon.setImageResource(R.drawable.ic_filter_off)
+                binding.filterChipInclude.filterChipGroup.visibility = View.VISIBLE
+                true
+            }
+        }
+
         // to set my..task header from beginning
         val currentList = if (homeViewModel.currentListName == "All"){
             getString(R.string.all)
