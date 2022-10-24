@@ -364,6 +364,23 @@ class HomeAdapter (private val dataSet: ArrayList<ToDo>, val fragment: HomeFragm
                         filteredList.clear()
                         filteredList.addAll(inProgressList)
                         filteredList.addAll(completedList)
+                    }else if(filterType == 'T'){
+                        inProgressList.clear()
+                        if (filterText == "STREAK"){
+                            for (data in currentList){
+                                if(data.tracker.trackerType == TrackerType.STREAK){
+                                    if (data.isCompleted){
+                                        completedList.add(data)
+                                    }else{
+                                        inProgressList.add(data)
+                                    }
+                                }
+                            }
+                        }
+
+                        filteredList.clear()
+                        filteredList.addAll(inProgressList)
+                        filteredList.addAll(completedList)
                     }
 
                 }
