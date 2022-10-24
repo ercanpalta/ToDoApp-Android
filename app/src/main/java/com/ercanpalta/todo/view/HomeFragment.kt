@@ -41,6 +41,7 @@ class HomeFragment : Fragment() {
     private lateinit var homeAdapter: HomeAdapter
     private val listToDo:ArrayList<ToDo> = arrayListOf()
     private  lateinit var searchItem: MenuItem
+    var isFilterOpen = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -78,7 +79,7 @@ class HomeFragment : Fragment() {
 
                     override fun onQueryTextChange(newText: String?): Boolean {
                         if (newText != null) {
-                            filterList(newText, FilterType.Text)
+                            filterList(newText, FilterType.Query)
                         }
                         return true
                     }
@@ -139,16 +140,32 @@ class HomeFragment : Fragment() {
         }
 
         //to open filter view
-        var isFilterOpen = false
         binding.filterIcon.setOnClickListener {
             isFilterOpen = if(isFilterOpen){
                 binding.filterIcon.setImageResource(R.drawable.ic_filter)
+                binding.filterChipInclude.filterChipGroup.clearCheck()
                 binding.filterChipInclude.filterChipGroup.visibility = View.GONE
                 false
             }else{
                 binding.filterIcon.setImageResource(R.drawable.ic_filter_off)
                 binding.filterChipInclude.filterChipGroup.visibility = View.VISIBLE
                 true
+            }
+        }
+
+        binding.filterChipInclude.filterChipGroup.setOnCheckedStateChangeListener { _, checkedIds ->
+            if (checkedIds.isNotEmpty()){
+                if (checkedIds[0] == R.id.low_filter){
+                    filterList("LOW", FilterType.Priority)
+                }else if (checkedIds[0] == R.id.med_filter){
+                    filterList("MED", FilterType.Priority)
+                }else if (checkedIds[0] == R.id.high_filter){
+                    filterList("HIGH", FilterType.Priority)
+                }else if (checkedIds[0] == R.id.streak_filter){
+                    filterList("STREAK", FilterType.Tracker)
+                }
+            }else{
+                filterList(homeViewModel.currentListName, FilterType.List)
             }
         }
 
@@ -203,9 +220,17 @@ class HomeFragment : Fragment() {
             name = context?.getString(R.string.all) ?: "All"
         }
         binding.myTasksText.text = getString(R.string.my_tasks_format,name.lowercase())
+
+        // to close searchview when list changed
         if (searchItem.isActionViewExpanded){
             searchItem.collapseActionView()
         }
+
+        //to close and clear filters
+        binding.filterIcon.setImageResource(R.drawable.ic_filter)
+        binding.filterChipInclude.filterChipGroup.clearCheck()
+        binding.filterChipInclude.filterChipGroup.visibility = View.GONE
+        isFilterOpen = false
     }
 
     fun cancelReminder(requestCode:Int){
@@ -219,7 +244,8 @@ class HomeFragment : Fragment() {
         when(filterType){
             FilterType.List -> homeAdapter.filter.filter(filterText + "L")
             FilterType.Priority -> homeAdapter.filter.filter(filterText + "P")
-            FilterType.Text -> homeAdapter.filter.filter(filterText + "T")
+            FilterType.Query -> homeAdapter.filter.filter(filterText + "Q")
+            FilterType.Tracker -> homeAdapter.filter.filter(filterText + "T")
         }
     }
 

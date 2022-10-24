@@ -1,5 +1,5 @@
 package com.ercanpalta.todo.enums
 
 enum class FilterType {
-    List, Priority, Text
+    List, Priority, Query, Tracker
 }

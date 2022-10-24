@@ -23,7 +23,7 @@ class HomeAdapter (private val dataSet: ArrayList<ToDo>, val fragment: HomeFragm
     val filteredList = ArrayList<ToDo>()
     val completedList = ArrayList<ToDo>()
     val currentList = ArrayList<ToDo>()
-    val queryList = ArrayList<ToDo>()
+    val inProgressList = ArrayList<ToDo>()
 
     init {
         filteredList.addAll(dataSet)
@@ -275,7 +275,7 @@ class HomeAdapter (private val dataSet: ArrayList<ToDo>, val fragment: HomeFragm
                     filteredList.clear()
                     filteredList.addAll(dataSet)
                 }else{
-                    val filterType = filterTextWithType.get(filterTextWithType.lastIndex)
+                    val filterType = filterTextWithType[filterTextWithType.lastIndex]
                     val filterText = filterTextWithType.dropLast(1)
                     if (filterType == 'L'){
                         currentList.clear()
@@ -313,19 +313,56 @@ class HomeAdapter (private val dataSet: ArrayList<ToDo>, val fragment: HomeFragm
                         }
 
 
-                    }else if(filterType == 'T'){
-                        queryList.clear()
+                    }else if(filterType == 'Q'){
+                        inProgressList.clear()
                         for (data in currentList){
                             if(data.task.lowercase().contains(filterText.lowercase()) || data.description.lowercase().contains(filterText.lowercase())){
                                 if (data.isCompleted){
                                     completedList.add(data)
                                 }else{
-                                    queryList.add(data)
+                                    inProgressList.add(data)
                                 }
                             }
                         }
                         filteredList.clear()
-                        filteredList.addAll(queryList)
+                        filteredList.addAll(inProgressList)
+                        filteredList.addAll(completedList)
+                    }else if(filterType == 'P'){
+                        inProgressList.clear()
+                        if(filterText == "LOW"){
+                            for (data in currentList){
+                                if(data.priority == Priority.LOW){
+                                    if (data.isCompleted){
+                                        completedList.add(data)
+                                    }else{
+                                        inProgressList.add(data)
+                                    }
+                                }
+                            }
+                        }else if(filterText == "MED"){
+                            for (data in currentList){
+                                if(data.priority == Priority.MEDIUM){
+                                    if (data.isCompleted){
+                                        completedList.add(data)
+                                    }else{
+                                        inProgressList.add(data)
+                                    }
+                                }
+                            }
+                        }else if(filterText == "HIGH"){
+                            for (data in currentList){
+                                if(data.priority == Priority.HIGH){
+                                    if (data.isCompleted){
+                                        completedList.add(data)
+                                    }else{
+                                        inProgressList.add(data)
+                                    }
+                                }
+                            }
+                        }
+
+                        filteredList.clear()
+                        filteredList.addAll(inProgressList)
                         filteredList.addAll(completedList)
                     }
 
