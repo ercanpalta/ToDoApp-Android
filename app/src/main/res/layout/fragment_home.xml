@@ -52,7 +52,7 @@
         app:srcCompat="@drawable/ic_add_24" />
 
     <include layout="@layout/no_data"
-        android:id="@+id/no_data"
+        android:id="@+id/no_data_include"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="60dp"
