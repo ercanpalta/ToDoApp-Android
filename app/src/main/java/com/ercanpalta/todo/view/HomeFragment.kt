@@ -2,7 +2,6 @@ package com.ercanpalta.todo.view
 
 import android.app.AlertDialog
 import android.graphics.Color
-import android.icu.lang.UCharacter.GraphemeClusterBreak.T
 import android.os.Bundle
 import android.view.*
 import android.widget.EditText
@@ -13,7 +12,6 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.core.view.MenuHost
-import androidx.core.view.MenuItemCompat
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -42,6 +40,7 @@ class HomeFragment : Fragment() {
     private val homeViewModel: HomeViewModel by activityViewModels()
     private lateinit var homeAdapter: HomeAdapter
     private val listToDo:ArrayList<ToDo> = arrayListOf()
+    private  lateinit var searchItem: MenuItem
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -61,32 +60,30 @@ class HomeFragment : Fragment() {
         menuHost.addMenuProvider(object : MenuProvider {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
                 menuInflater.inflate(R.menu.search_menu, menu)
-                val searchItem = menu.findItem(R.id.toolbar_search)
-                if(searchItem != null){
-                    val searchView = searchItem.actionView as SearchView
-                    val editText = searchView.findViewById<EditText>(androidx.appcompat.R.id.search_src_text)
-                    val closeButton = searchView.findViewById<ImageView>(androidx.appcompat.R.id.search_close_btn)
-                    editText.setTextColor(ContextCompat.getColor(requireContext(),R.color.searchview_color))
-                    editText.hint = context?.getString(R.string.search_here)
-                    editText.setHintTextColor(Color.GRAY)
-                    closeButton.setImageResource(R.drawable.ic_search_close)
+                searchItem = menu.findItem(R.id.toolbar_search)
+
+                val searchView = searchItem.actionView as SearchView
+                val editText = searchView.findViewById<EditText>(androidx.appcompat.R.id.search_src_text)
+                val closeButton = searchView.findViewById<ImageView>(androidx.appcompat.R.id.search_close_btn)
+                editText.setTextColor(ContextCompat.getColor(requireContext(),R.color.searchview_color))
+                editText.hint = context?.getString(R.string.search_here)
+                editText.setHintTextColor(Color.GRAY)
+                closeButton.setImageResource(R.drawable.ic_search_close)
 
 
-                    searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
-                        override fun onQueryTextSubmit(query: String?): Boolean {
-                            return true
+                searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
+                    override fun onQueryTextSubmit(query: String?): Boolean {
+                        return true
+                    }
+
+                    override fun onQueryTextChange(newText: String?): Boolean {
+                        if (newText != null) {
+                            filterList(newText, FilterType.Text)
                         }
+                        return true
+                    }
 
-                        override fun onQueryTextChange(newText: String?): Boolean {
-                            if (newText != null) {
-                                filterList(homeViewModel.currentListName, FilterType.List)
-                                filterList(newText, FilterType.Text)
-                            }
-                            return true
-                        }
-
-                    })
-                }
+                })
             }
 
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
@@ -178,11 +175,11 @@ class HomeFragment : Fragment() {
     }
 
     fun showNoDataText(){
-        binding.noData.noDataLayout.visibility = View.VISIBLE
+        binding.noDataInclude.noDataLayout.visibility = View.VISIBLE
     }
 
     fun hideNoDataText(){
-        binding.noData.noDataLayout.visibility = View.INVISIBLE
+        binding.noDataInclude.noDataLayout.visibility = View.GONE
     }
 
     fun changeCurrentListName(listName:String){
@@ -192,6 +189,9 @@ class HomeFragment : Fragment() {
             name = context?.getString(R.string.all) ?: "All"
         }
         binding.myTasksText.text = getString(R.string.my_tasks_format,name.lowercase())
+        if (searchItem.isActionViewExpanded){
+            searchItem.collapseActionView()
+        }
     }
 
     fun cancelReminder(requestCode:Int){

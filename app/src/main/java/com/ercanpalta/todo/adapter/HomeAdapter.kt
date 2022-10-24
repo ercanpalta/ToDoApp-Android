@@ -10,7 +10,6 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.ercanpalta.todo.R
 import com.ercanpalta.todo.databinding.RowItemBinding
-import com.ercanpalta.todo.enums.FilterType
 import com.ercanpalta.todo.enums.Priority
 import com.ercanpalta.todo.enums.Repeat
 import com.ercanpalta.todo.enums.TrackerType
@@ -23,6 +22,7 @@ class HomeAdapter (private val dataSet: ArrayList<ToDo>, val fragment: HomeFragm
     private lateinit var context: Context
     val filteredList = ArrayList<ToDo>()
     val completedList = ArrayList<ToDo>()
+    val currentList = ArrayList<ToDo>()
     val queryList = ArrayList<ToDo>()
 
     init {
@@ -270,7 +270,6 @@ class HomeAdapter (private val dataSet: ArrayList<ToDo>, val fragment: HomeFragm
                 val filterTextWithType = p0.toString()
 
                 completedList.clear()
-                queryList.clear()
 
                 if (filterTextWithType.isEmpty()){
                     filteredList.clear()
@@ -279,33 +278,44 @@ class HomeAdapter (private val dataSet: ArrayList<ToDo>, val fragment: HomeFragm
                     val filterType = filterTextWithType.get(filterTextWithType.lastIndex)
                     val filterText = filterTextWithType.dropLast(1)
                     if (filterType == 'L'){
-                        filteredList.clear()
+                        currentList.clear()
                         if(filterText == "All"){
                             for(data in dataSet){
                                 if (data.isCompleted){
                                     completedList.add(data)
                                 }else{
-                                    filteredList.add(data)
+                                    currentList.add(data)
                                 }
                             }
-                            filteredList.reverse()
-                            filteredList.addAll(completedList)
+                            currentList.reverse()
+                            currentList.addAll(completedList)
                         }else{
                             for (data in dataSet){
                                 if(data.listName == filterText){
                                     if (data.isCompleted){
                                         completedList.add(data)
                                     }else{
-                                        filteredList.add(data)
+                                        currentList.add(data)
                                     }
                                 }
                             }
-                            filteredList.reverse()
-                            filteredList.addAll(completedList)
+                            currentList.reverse()
+                            currentList.addAll(completedList)
                         }
 
+                        filteredList.clear()
+                        filteredList.addAll(currentList)
+
+                        if(filteredList.isEmpty()){
+                            fragment.showNoDataText()
+                        }else{
+                            fragment.hideNoDataText()
+                        }
+
+
                     }else if(filterType == 'T'){
-                        for (data in filteredList){
+                        queryList.clear()
+                        for (data in currentList){
                             if(data.task.lowercase().contains(filterText.lowercase()) || data.description.lowercase().contains(filterText.lowercase())){
                                 if (data.isCompleted){
                                     completedList.add(data)
@@ -319,12 +329,6 @@ class HomeAdapter (private val dataSet: ArrayList<ToDo>, val fragment: HomeFragm
                         filteredList.addAll(completedList)
                     }
 
-                }
-
-                if(filteredList.isEmpty()){
-                    fragment.showNoDataText()
-                }else{
-                    fragment.hideNoDataText()
                 }
 
                 val filterResult = FilterResults()
