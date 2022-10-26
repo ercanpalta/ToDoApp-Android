@@ -149,9 +149,9 @@ class HomeFragment : Fragment() {
             }
 
             if (binding.rvHome.isEmpty() && binding.noDataInclude.noDataLayout.visibility == View.GONE){
-                binding.rvHome.visibility = View.INVISIBLE
+                binding.noResultInclude.noResultLayout.visibility = View.VISIBLE
             }else{
-                binding.rvHome.visibility = View.VISIBLE
+                binding.noResultInclude.noResultLayout.visibility = View.INVISIBLE
             }
         }
 
@@ -232,7 +232,7 @@ class HomeFragment : Fragment() {
 
     fun changeCurrentListName(listName:String){
         var name = listName
-        binding.rvHome.visibility = View.VISIBLE
+        binding.noResultInclude.noResultLayout.visibility = View.INVISIBLE
         homeViewModel.currentListName = listName
         if (listName == "All"){
             name = context?.getString(R.string.all) ?: "All"

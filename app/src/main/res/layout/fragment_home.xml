@@ -56,7 +56,6 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="10dp"
-        android:background="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -87,7 +86,6 @@
         android:id="@+id/no_result_include"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:windowSoftInputMode="adjustResize"
         app:layout_constraintTop_toBottomOf="@id/filter_chip_include"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"/>
