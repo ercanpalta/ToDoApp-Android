@@ -27,9 +27,15 @@
     <string name="menu_home">Heim</string>
     <string name="menu_add">Neue Aufgabe hinzufügen</string>
     <string name="menu_edit">Aufgabe Bearbeiten</string>
+
     <string name="low_priority">NIE</string>
     <string name="medium_priority">MIT</string>
     <string name="high_priority">HOC</string>
+
+    <string name="low_priority_lower">Nie</string>
+    <string name="medium_priority_lower">Mit</string>
+    <string name="high_priority_lower">Hoc</string>
+
     <string name="time_format">%1$s:%2$s</string>
     <string name="date_format">%1$s %2$s %3$s</string>
     <string name="date_time_format">%1$s   %2$s</string>
@@ -118,6 +124,9 @@
     <string name="tracked_before">Heute schon fertig</string>
     <string name="tracker_max_format">/%1$d</string>
     <string name="search">Suche</string>
-    <string name="search_here">Suche hier...</string>
-    <string name="not_found">Nicht gefunden</string>
+    <string name="search_here">Suche hier…</string>
+    <string name="no_result">Kein Ergebnis</string>
+    <string name="no_result_detail">Wir konnten nicht finden, wonach Sie gesucht haben</string>
+    <string name="streak">Tagesserie</string>
+    <string name="filter">filter</string>
 </resources>

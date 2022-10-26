@@ -13,6 +13,7 @@ import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
+import androidx.core.view.isEmpty
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
@@ -41,6 +42,7 @@ class HomeFragment : Fragment() {
     private lateinit var homeAdapter: HomeAdapter
     private val listToDo:ArrayList<ToDo> = arrayListOf()
     private  lateinit var searchItem: MenuItem
+    private var isFilterOpen = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -78,7 +80,7 @@ class HomeFragment : Fragment() {
 
                     override fun onQueryTextChange(newText: String?): Boolean {
                         if (newText != null) {
-                            filterList(newText, FilterType.Text)
+                            filterList(newText, FilterType.Query)
                         }
                         return true
                     }
@@ -138,6 +140,52 @@ class HomeFragment : Fragment() {
             findNavController().navigate(action)
         }
 
+        // to hide fab when recyclerview reached at bottom to make last row more visible
+        binding.rvHome.setOnScrollChangeListener { _, _, _, _, _ ->
+            if (!binding.rvHome.canScrollVertically(1) && binding.rvHome.canScrollVertically(-1)){
+                binding.fab.hide()
+            }else{
+                binding.fab.show()
+            }
+
+            if (binding.rvHome.isEmpty() && binding.noDataInclude.noDataLayout.visibility == View.GONE){
+                binding.rvHome.visibility = View.INVISIBLE
+            }else{
+                binding.rvHome.visibility = View.VISIBLE
+            }
+        }
+
+
+        //to open filter view
+        binding.filterIcon.setOnClickListener {
+            isFilterOpen = if(isFilterOpen){
+                binding.filterIcon.setImageResource(R.drawable.ic_filter)
+                binding.filterChipInclude.filterChipGroup.clearCheck()
+                binding.filterChipInclude.filterChipGroup.visibility = View.GONE
+                false
+            }else{
+                binding.filterIcon.setImageResource(R.drawable.ic_filter_off)
+                binding.filterChipInclude.filterChipGroup.visibility = View.VISIBLE
+                true
+            }
+        }
+
+        binding.filterChipInclude.filterChipGroup.setOnCheckedStateChangeListener { _, checkedIds ->
+            if (checkedIds.isNotEmpty()){
+                if (checkedIds[0] == R.id.low_filter){
+                    filterList("LOW", FilterType.Priority)
+                }else if (checkedIds[0] == R.id.med_filter){
+                    filterList("MED", FilterType.Priority)
+                }else if (checkedIds[0] == R.id.high_filter){
+                    filterList("HIGH", FilterType.Priority)
+                }else if (checkedIds[0] == R.id.streak_filter){
+                    filterList("STREAK", FilterType.Tracker)
+                }
+            }else{
+                filterList(homeViewModel.currentListName, FilterType.List)
+            }
+        }
+
         // to set my..task header from beginning
         val currentList = if (homeViewModel.currentListName == "All"){
             getString(R.string.all)
@@ -184,14 +232,25 @@ class HomeFragment : Fragment() {
 
     fun changeCurrentListName(listName:String){
         var name = listName
+        binding.rvHome.visibility = View.VISIBLE
         homeViewModel.currentListName = listName
         if (listName == "All"){
             name = context?.getString(R.string.all) ?: "All"
         }
         binding.myTasksText.text = getString(R.string.my_tasks_format,name.lowercase())
+
+        // to close searchview when list changed
         if (searchItem.isActionViewExpanded){
             searchItem.collapseActionView()
         }
+    }
+
+    //to close and clear filters
+    fun closeFilters(){
+        binding.filterIcon.setImageResource(R.drawable.ic_filter)
+        binding.filterChipInclude.filterChipGroup.clearCheck()
+        binding.filterChipInclude.filterChipGroup.visibility = View.GONE
+        isFilterOpen = false
     }
 
     fun cancelReminder(requestCode:Int){
@@ -205,7 +264,8 @@ class HomeFragment : Fragment() {
         when(filterType){
             FilterType.List -> homeAdapter.filter.filter(filterText + "L")
             FilterType.Priority -> homeAdapter.filter.filter(filterText + "P")
-            FilterType.Text -> homeAdapter.filter.filter(filterText + "T")
+            FilterType.Query -> homeAdapter.filter.filter(filterText + "Q")
+            FilterType.Tracker -> homeAdapter.filter.filter(filterText + "T")
         }
     }
 

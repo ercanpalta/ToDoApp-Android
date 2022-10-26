@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.chip.ChipGroup
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/filter_chip_group"
+    android:visibility="gone"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:singleLine="true"
+    app:singleSelection="true">
+
+    <com.google.android.material.chip.Chip
+        android:id="@+id/low_filter"
+        style="@style/Widget.MaterialComponents.Chip.Choice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:chipBackgroundColor="@color/low"
+        android:textSize="13sp"
+        android:text="@string/low_priority_lower"/>
+
+    <com.google.android.material.chip.Chip
+        android:id="@+id/med_filter"
+        style="@style/Widget.MaterialComponents.Chip.Choice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="3dp"
+        app:chipBackgroundColor="@color/medium"
+        android:textSize="13sp"
+        android:text="@string/medium_priority_lower"/>
+
+    <com.google.android.material.chip.Chip
+        android:id="@+id/high_filter"
+        style="@style/Widget.MaterialComponents.Chip.Choice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="3dp"
+        app:chipBackgroundColor="@color/high"
+        android:textSize="13sp"
+        android:text="@string/high_priority_lower"/>
+
+    <com.google.android.material.chip.Chip
+        android:id="@+id/streak_filter"
+        style="@style/Widget.MaterialComponents.Chip.Choice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="3dp"
+        app:chipBackgroundColor="@color/list_color_blue"
+        android:textSize="13sp"
+        android:text="@string/streak"/>
+
+</com.google.android.material.chip.ChipGroup>

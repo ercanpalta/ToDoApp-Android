@@ -12,6 +12,10 @@
     <string name="medium_priority">MED</string>
     <string name="high_priority">HIGH</string>
 
+    <string name="low_priority_lower">Low</string>
+    <string name="medium_priority_lower">Med</string>
+    <string name="high_priority_lower">High</string>
+
     <string name="time_format">%1$s:%2$s</string>
     <string name="date_format">%1$s %2$s %3$s</string>
     <string name="date_time_format">%1$s   %2$s</string>
@@ -24,8 +28,9 @@
     <string name="list">List</string>
     <string name="add">Add</string>
     <string name="no_task">No Task Yet</string>
-    <string name="not_found">Not Found</string>
+    <string name="no_result">No Result</string>
     <string name="no_task_detail">Add new todos and keep track on them</string>
+    <string name="no_result_detail">We couldn\'t find what you were looking for</string>
     <string name="list_name">List Name</string>
     <string name="create_new_list">Create New List</string>
     <string name="purple">Purple</string>
@@ -88,6 +93,7 @@
     <string name="english">English</string>
     <string name="deutsch">Deutsch</string>
     <string name="day_streak">Day streak</string>
+    <string name="streak">Streak</string>
     <string name="tracker">Tracker</string>
     <string name="tracked_before">Already completed today</string>
     <string name="tracker_max_format">/%1$d</string>
@@ -125,5 +131,6 @@
         <item>Sat</item>
     </string-array>
     <string name="search">Search</string>
+    <string name="filter">filter</string>
 
 </resources>

@@ -30,6 +30,7 @@
     <color name="searchview_color">#000000</color>
     <color name="reminder_card_background">#FFFFFFFF</color>
     <color name="button_text_color">#FFFFFFFF</color>
+    <color name="filter_icon">#353535</color>
     <color name="cursor_color">#000000</color>
     <color name="drawer_text">#000000</color>
     <color name="drawer_icon">#000000</color>
