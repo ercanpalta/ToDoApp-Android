@@ -128,7 +128,9 @@
     <string name="tracker_max_format">/%1$d</string>
     <string name="search">Search</string>
     <string name="search_here">Search here...</string>
-    <string name="not_found">Not Found</string>
+    <string name="no_result">No Result</string>
+    <string name="no_result_detail">We couldn\'t find what you were looking for</string>
     <string name="streak">Streak</string>
+    <string name="filter">filter</string>
 
 </resources>

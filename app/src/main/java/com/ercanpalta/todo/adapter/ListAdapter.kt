@@ -39,6 +39,7 @@ class ListAdapter(private val dataSet: ArrayList<TaskList>, val fragment: HomeFr
                 if (menu.visibility == View.GONE){
                     fragment.clearAllListSelections()
                 }
+                fragment.closeFilters()
                 fragment.clearAllSelections()
                 fragment.minimizeExpandedRows()
                 if(binding.listText.text != context.getString(R.string.new_list)){

@@ -124,7 +124,9 @@
     <string name="tracked_before">Heute schon fertig</string>
     <string name="tracker_max_format">/%1$d</string>
     <string name="search">Suche</string>
-    <string name="search_here">Suche hier...</string>
-    <string name="not_found">Nicht gefunden</string>
+    <string name="search_here">Suche hier…</string>
+    <string name="no_result">Kein Ergebnis</string>
+    <string name="no_result_detail">Wir konnten nicht finden, wonach Sie gesucht haben</string>
     <string name="streak">Tagesserie</string>
+    <string name="filter">filter</string>
 </resources>

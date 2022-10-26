@@ -13,6 +13,7 @@ import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
+import androidx.core.view.isEmpty
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
@@ -41,7 +42,7 @@ class HomeFragment : Fragment() {
     private lateinit var homeAdapter: HomeAdapter
     private val listToDo:ArrayList<ToDo> = arrayListOf()
     private  lateinit var searchItem: MenuItem
-    var isFilterOpen = false
+    private var isFilterOpen = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -139,6 +140,22 @@ class HomeFragment : Fragment() {
             findNavController().navigate(action)
         }
 
+        // to hide fab when recyclerview reached at bottom to make last row more visible
+        binding.rvHome.setOnScrollChangeListener { _, _, _, _, _ ->
+            if (!binding.rvHome.canScrollVertically(1) && binding.rvHome.canScrollVertically(-1)){
+                binding.fab.hide()
+            }else{
+                binding.fab.show()
+            }
+
+            if (binding.rvHome.isEmpty() && binding.noDataInclude.noDataLayout.visibility == View.GONE){
+                binding.rvHome.visibility = View.INVISIBLE
+            }else{
+                binding.rvHome.visibility = View.VISIBLE
+            }
+        }
+
+
         //to open filter view
         binding.filterIcon.setOnClickListener {
             isFilterOpen = if(isFilterOpen){
@@ -215,6 +232,7 @@ class HomeFragment : Fragment() {
 
     fun changeCurrentListName(listName:String){
         var name = listName
+        binding.rvHome.visibility = View.VISIBLE
         homeViewModel.currentListName = listName
         if (listName == "All"){
             name = context?.getString(R.string.all) ?: "All"
@@ -225,8 +243,10 @@ class HomeFragment : Fragment() {
         if (searchItem.isActionViewExpanded){
             searchItem.collapseActionView()
         }
+    }
 
-        //to close and clear filters
+    //to close and clear filters
+    fun closeFilters(){
         binding.filterIcon.setImageResource(R.drawable.ic_filter)
         binding.filterChipInclude.filterChipGroup.clearCheck()
         binding.filterChipInclude.filterChipGroup.visibility = View.GONE
