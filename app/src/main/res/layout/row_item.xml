@@ -199,7 +199,7 @@
             android:id="@+id/longclick_menu"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/background"
+            android:background="@color/logclick_menu_background"
             android:clickable="true"
             android:focusable="true"
             android:translationZ="90dp"

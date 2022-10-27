@@ -7,6 +7,16 @@
     android:layout_height="match_parent"
     tools:context=".view.EditListFragment">
 
+    <ImageView
+        android:id="@+id/edit_list_image"
+        android:layout_width="300dp"
+        android:layout_height="200dp"
+        android:layout_marginTop="40dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:src="@drawable/edit_list_ill"/>
+
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/list_name_field"
@@ -14,14 +24,13 @@
         android:layout_height="wrap_content"
         app:errorEnabled="true"
         android:hint="@string/list_name"
-        android:layout_marginTop="60dp"
         app:endIconMode="clear_text"
         app:counterEnabled="true"
         app:counterMaxLength="20"
         android:layout_marginHorizontal="20dp"
         app:hintTextColor="@color/header"
         app:boxBackgroundColor="@color/edit_text_bg"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/edit_list_image"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 

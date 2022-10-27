@@ -36,7 +36,7 @@
             android:layout_height="match_parent"
             android:translationZ="90dp"
             android:clickable="true"
-            android:background="@color/background"
+            android:background="@color/logclick_menu_background"
             android:visibility="gone"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
