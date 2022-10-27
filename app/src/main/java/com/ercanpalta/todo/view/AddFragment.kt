@@ -178,6 +178,7 @@ class AddFragment : Fragment() {
 
                 reminderCalendar[Calendar.HOUR_OF_DAY] = picker.hour
                 reminderCalendar[Calendar.MINUTE] = picker.minute
+                reminderCalendar[Calendar.SECOND] = 0
             }
             picker.addOnNegativeButtonClickListener {
 
