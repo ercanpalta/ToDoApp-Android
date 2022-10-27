@@ -2,13 +2,14 @@ package com.ercanpalta.todo.view
 
 import android.app.AlertDialog
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.Toast
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.findNavController
 import com.ercanpalta.todo.R
 import com.ercanpalta.todo.databinding.FragmentEditListBinding
@@ -65,6 +66,37 @@ class EditListFragment : Fragment() {
             }
         }
 
+        // to add appbar menu icon
+        val menuHost: MenuHost = requireActivity()
+        menuHost.addMenuProvider(object : MenuProvider {
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menuInflater.inflate(R.menu.delete_menu, menu)
+            }
+
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                // Handle the menu selection
+                return when (menuItem.itemId) {
+                    R.id.delete_list -> {
+                        val builder = AlertDialog.Builder(requireContext(), R.style.MyDialogTheme)
+                        builder.setTitle(R.string.delete_list)
+                        builder.setMessage(R.string.delete_warning)
+                        builder.setPositiveButton(R.string.delete) { _, _ ->
+                            homeViewModel.deleteTaskList(uid)
+                            homeViewModel.deleteAllTasksInsideList(taskList.name)
+                            val action = EditListFragmentDirections.actionEditListFragmentToNavHome()
+                            findNavController().navigate(action)
+                        }
+                        builder.setNegativeButton(R.string.cancel){ _, _ ->
+
+                        }
+                        builder.show()
+                        true
+                    }
+                    else -> false
+                }
+            }
+        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
+
         binding.saveButton.setOnClickListener {
             val listName = binding.listNameText.text.toString()
             val listColor = when(binding.colorChipsLayout.colorChipsGroup.checkedChipId){
@@ -94,22 +126,6 @@ class EditListFragment : Fragment() {
             }
 
 
-        }
-
-        binding.deleteListButton.setOnClickListener {
-            val builder = AlertDialog.Builder(this.context, R.style.MyDialogTheme)
-            builder.setTitle(R.string.delete_list)
-            builder.setMessage(R.string.delete_warning)
-            builder.setPositiveButton(R.string.delete) { _, _ ->
-                homeViewModel.deleteTaskList(uid)
-                homeViewModel.deleteAllTasksInsideList(taskList.name)
-                val action = EditListFragmentDirections.actionEditListFragmentToNavHome()
-                findNavController().navigate(action)
-            }
-            builder.setNegativeButton(R.string.cancel){ _, _ ->
-
-            }
-            builder.show()
         }
 
     }
