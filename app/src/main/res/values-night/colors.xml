@@ -42,6 +42,7 @@
     <color name="on_button_color">#FFFFFF</color>
 
     <color name="list_color_all">#C6C6C6</color>
+    <color name="list_color_new">#9B9B9B</color>
     <color name="list_color_purple">#FFb388eb</color>
     <color name="list_color_blue">#FF118ab2</color>
     <color name="list_color_green">#FF06d6a0</color>

@@ -27,6 +27,7 @@ class ListAdapter(private val dataSet: ArrayList<TaskList>, val fragment: HomeFr
                 }
                 "New List" -> {
                     binding.listText.text = newList
+                    binding.listText.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_add_18, 0, 0, 0)
                 }
                 else -> {
                     binding.listText.text = list.name

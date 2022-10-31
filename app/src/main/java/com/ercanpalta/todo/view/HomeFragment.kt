@@ -112,7 +112,7 @@ class HomeFragment : Fragment() {
 
         val listList:ArrayList<TaskList> = arrayListOf()
         val listAll = TaskList("All", R.color.list_color_all)
-        val listNew = TaskList("New List", R.color.list_color_yellow)
+        val listNew = TaskList("New List", R.color.list_color_new)
         homeViewModel.listList.observe(viewLifecycleOwner) {
             listList.clear()
             listList.add(listAll)
