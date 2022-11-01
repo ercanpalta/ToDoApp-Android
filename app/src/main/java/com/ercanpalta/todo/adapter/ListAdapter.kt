@@ -31,6 +31,7 @@ class ListAdapter(private val dataSet: ArrayList<TaskList>, val fragment: HomeFr
                 }
                 else -> {
                     binding.listText.text = list.name
+                    binding.listText.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
                 }
             }
             binding.colorCard.strokeColor = ContextCompat.getColor(context, list.color)
