@@ -107,7 +107,6 @@ class EditFragment : Fragment() {
             when(it.tracker.trackerType){
                 TrackerType.NON -> binding.trackerLayout.trackersToggleGroup.check(R.id.no_tracker_button)
                 TrackerType.STREAK -> binding.trackerLayout.trackersToggleGroup.check(R.id.streak_tracker_button)
-                else -> {}
             }
 
             // to select priority chip
@@ -245,6 +244,7 @@ class EditFragment : Fragment() {
 
                     reminderCalendar[Calendar.HOUR_OF_DAY] = picker.hour
                     reminderCalendar[Calendar.MINUTE] = picker.minute
+                    reminderCalendar[Calendar.SECOND] = 0
                 }
                 picker.addOnNegativeButtonClickListener {
 
@@ -352,7 +352,7 @@ class EditFragment : Fragment() {
                 val nowReminder = reminderCalendar.timeInMillis
                 if (name.length <= 56){
                     if(binding.reminderChipContainer.isNotEmpty()){ // if reminder set with add button
-                        toDo.repeat = getRepeatEnum(binding.repeatSpinner.selectedItem.toString())
+                        toDo.repeat = Repeat.values()[binding.repeatSpinner.selectedItemPosition]
                         if (toDo.requestCode == -1){
                             // to generate request code
                             val sharedPreferences = requireContext().getSharedPreferences("com.ercanpalta.todo",
@@ -496,17 +496,5 @@ class EditFragment : Fragment() {
             Repeat.WEEKLY -> 2
         }
         return position
-    }
-
-    private fun getRepeatEnum(repeat: String): Repeat {
-        var repeatEnum = Repeat.NOT
-        val stringArray = resources.getStringArray(R.array.months)
-        when (repeat) {
-            stringArray[0] -> repeatEnum = Repeat.NOT
-            stringArray[1] -> repeatEnum = Repeat.DAILY
-            stringArray[2] -> repeatEnum = Repeat.WEEKLY
-
-        }
-        return repeatEnum
     }
 }

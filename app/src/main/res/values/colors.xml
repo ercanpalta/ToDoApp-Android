@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="purple_200">#FFBB86FC</color>
-    <color name="purple_700">#FF3700B3</color>
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>
     <color name="black">#000000</color>
@@ -23,23 +21,28 @@
     <color name="header">#2D2D2D</color>
     <color name="edit_text_bg">#10716C6C</color>
     <color name="cardview">#FEFBFB</color>
-    <color name="background">#CCEDEDED</color>
+    <color name="logclick_menu_background">#CCEDEDED</color>
     <color name="list_card_bg">#FFFFFFFF</color>
     <color name="priority_text">#FFFFFFFF</color>
     <color name="reminder_background">#BE575757</color>
     <color name="searchview_color">#000000</color>
     <color name="reminder_card_background">#FFFFFFFF</color>
-    <color name="button_text_color">#FFFFFFFF</color>
     <color name="filter_icon">#353535</color>
     <color name="cursor_color">#000000</color>
     <color name="drawer_text">#000000</color>
     <color name="drawer_icon">#000000</color>
     <color name="drawer_selected">#AAAAAA</color>
-    <color name="icon">#B14B4B4B</color>
+
+
+    <color name="icon_light">#B14B4B4B</color>
     <color name="icon_dark">#000000</color>
     <color name="title">#000000</color>
 
+    <color name="button_color">#FF073B4C</color>
+    <color name="on_button_color">#FFFFFF</color>
+
     <color name="list_color_all">#FF073B4C</color>
+    <color name="list_color_new">#C2373738</color>
     <color name="list_color_purple">#FFb388eb</color>
     <color name="list_color_blue">#FF118ab2</color>
     <color name="list_color_green">#FF06d6a0</color>

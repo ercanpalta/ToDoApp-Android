@@ -124,6 +124,8 @@ class HomeAdapter (private val dataSet: ArrayList<ToDo>, val fragment: HomeFragm
                 reminderText.textSize = 12f
                 reminderText.setTextColor(context.getColor(android.R.color.darker_gray))
                 reminderText.text = fragment.getFormattedDate(task.remindTimeInMillis)
+                reminderText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_alarm_12, 0)
+                reminderText.compoundDrawablePadding = 10
                 binding.reminderDateContainer.removeAllViews()
                 binding.reminderDateContainer.addView(reminderText)
             }
@@ -166,6 +168,7 @@ class HomeAdapter (private val dataSet: ArrayList<ToDo>, val fragment: HomeFragm
                 val detail = binding.detailText
                 val menu = binding.longclickMenu
                 val dateContainer = binding.reminderDateContainer
+                val iconsLayout = binding.iconsLayout
                 val addFireIcon = binding.addFireIcon
                 val trackerTextLayout = binding.trackerTextLayout
 
@@ -178,12 +181,14 @@ class HomeAdapter (private val dataSet: ArrayList<ToDo>, val fragment: HomeFragm
                         dateContainer.visibility = View.VISIBLE
                         addFireIcon.visibility = View.VISIBLE
                         trackerTextLayout.visibility = View.VISIBLE
+                        iconsLayout.visibility = View.INVISIBLE
 
                     }else{
                         detail.visibility = View.GONE
                         dateContainer.visibility = View.GONE
                         addFireIcon.visibility = View.GONE
                         trackerTextLayout.visibility = View.GONE
+                        iconsLayout.visibility = View.VISIBLE
                     }
                 }
                 fragment.clearAllListSelections()
